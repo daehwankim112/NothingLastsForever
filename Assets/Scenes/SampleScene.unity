@@ -624,7 +624,7 @@ MonoBehaviour:
   _lutWeight: 1
   _flipLutY: 1
   serializedSurfaceGeometry: []
-  textureOpacity_: 1
+  textureOpacity_: 0
   edgeRenderingEnabled_: 1
   edgeColor_: {r: 0, g: 0, b: 0, a: 1}
   colorMapType: 0
