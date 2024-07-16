@@ -4,59 +4,76 @@ Shader "Custom/SonarEffect"
     {
         _WaveDistance ("Wave Distance", Float) = 1.0
         _Threshold ("Threshold", Float) = 0.1
-        _CameraDepthTexture ("Camera Depth Texture", 2D) = "white" {}
+        _BaseColor ("Base Color", Color) = (0, 0, 0, 1)
     }
+
     SubShader
     {
-        Tags { "RenderType"="Opaque" }
+        Tags { "RenderType" = "Opaque" }
+
+        // Ensure proper blending against transparent background (passthrough)
+        Blend SrcAlpha OneMinusSrcAlpha, One OneMinusSrcAlpha
+
         Pass
         {
-            ZWrite On
             CGPROGRAM
+
+            #pragma multi_compile _ HARD_OCCLUSION SOFT_OCCLUSION
+
             #pragma vertex vert
             #pragma fragment frag
-            #include "UnityCG.cginc"
-            #include "UnityShaderVariables.cginc"
 
-            struct appdata
+            #include "UnityCG.cginc"
+            #include "Packages/com.meta.xr.depthapi/Runtime/BiRP/EnvironmentOcclusionBiRP.cginc"
+
+            struct Attributes
             {
                 float4 vertex : POSITION;
+                float2 uv : TEXCOORD0;
+
                 UNITY_VERTEX_INPUT_INSTANCE_ID
             };
 
-            struct v2f
+            struct Varyings
             {
-                float4 pos : SV_POSITION;
-                float4 worldPos : TEXCOORD0;
+                float4 positionCS : SV_POSITION;
+                float4 worldPos : TEXCOORD1;
+
+                META_DEPTH_VERTEX_OUTPUT(0)
+
+                UNITY_VERTEX_INPUT_INSTANCE_ID
                 UNITY_VERTEX_OUTPUT_STEREO
             };
 
-            sampler2D _CameraDepthTexture;
-            float _WaveDistance;
-            float _Threshold;
+            CBUFFER_START(UnityPerMaterial)
+                half4 _BaseColor;
+                float _WaveDistance;
+                float _Threshold;
+            CBUFFER_END
 
-            v2f vert (appdata v)
+            Varyings vert(Attributes input)
             {
-                v2f o;
-                UNITY_SETUP_INSTANCE_ID(v);
-                UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
-                o.pos = UnityObjectToClipPos(v.vertex);
-                o.worldPos = mul(unity_ObjectToWorld, v.vertex);
-                return o;
+                Varyings output;
+
+                META_DEPTH_INITIALIZE_VERTEX_OUTPUT(output, input.vertex);
+
+                UNITY_SETUP_INSTANCE_ID(input);
+                UNITY_TRANSFER_INSTANCE_ID(input, output);
+                UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(output);
+
+                output.positionCS = UnityObjectToClipPos(input.vertex);
+                output.worldPos = mul(unity_ObjectToWorld, input.vertex);
+
+                return output;
             }
 
-            float SampleLinearDepth(float rawDepth)
-            {
-                float z = rawDepth * 2.0 - 1.0;
-                float linearDepth = (2.0 * _ProjectionParams.y) / (_ProjectionParams.z + _ProjectionParams.w - z * (_ProjectionParams.z - _ProjectionParams.w));
-                return linearDepth;
-            }
-
+            // Easing function for the wave length
             float ease(float x)
             {
                 return x * x * (3.0 - 2.0 * x);
             }
 
+            // Check the distance between depth texture and wave distance
             float waveAlpha(float depth, float waveDist, float threshold)
             {
                 float dist = abs(depth - waveDist);
@@ -64,28 +81,27 @@ Shader "Custom/SonarEffect"
                 return ease(t);
             }
 
-            float2 ComputeReprojectedUV(float4 worldPos, int eyeIndex)
+            half4 frag(Varyings input) : SV_Target
             {
-                float4 clipPos = mul(UNITY_MATRIX_VP, worldPos);
-                float2 ndcPos = clipPos.xy / clipPos.w;
-                return 0.5 * (ndcPos + float2(1.0, 1.0));
-            }
+                UNITY_SETUP_INSTANCE_ID(input);
+                UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(input);
 
-            float4 frag (v2f i) : SV_Target
-            {
-                UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(i);
+                half4 finalColor = _BaseColor;
 
-                float2 uv = ComputeReprojectedUV(i.worldPos, unity_StereoEyeIndex);
-                float depth = SAMPLE_DEPTH_TEXTURE(_CameraDepthTexture, uv);
-                float linearDepth = SampleLinearDepth(depth);
+                float4 depthSpace = mul(_EnvironmentDepthReprojectionMatrices[unity_StereoEyeIndex], float4(input.worldPos.xyz, 1.0));
+                float2 uvCoords = (depthSpace.xy / depthSpace.w + 1.0f) * 0.5f;
+                float linearSceneDepth = SampleEnvironmentDepthLinear_Internal(uvCoords);
 
-                float alpha = waveAlpha(linearDepth, _WaveDistance, _Threshold);
+                float alpha = waveAlpha(linearSceneDepth, _WaveDistance, _Threshold);
+                // finalColor.a *= alpha;
+                finalColor.g = alpha;
 
-                return float4(0, 0, 0, alpha);
+                META_DEPTH_OCCLUDE_OUTPUT_PREMULTIPLY(input, finalColor, 0);
+
+                return finalColor;
             }
 
             ENDCG
         }
     }
-    FallBack "Diffuse"
 }
