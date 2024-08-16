@@ -94,7 +94,8 @@ Shader "Custom/SonarEffect"
 
                 float alpha = waveAlpha(linearSceneDepth, 3 * _WaveDistance, _Threshold);
                 // finalColor.a *= alpha;
-                finalColor.a = alpha;
+                // finalColor.a = alpha;
+                finalColor = float4(0, 1 - linearSceneDepth/1.5, 0, 0.9);
 
                 META_DEPTH_OCCLUDE_OUTPUT_PREMULTIPLY(input, finalColor, 0);
 
