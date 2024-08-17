@@ -16,6 +16,9 @@ using UnityEngine;
 public class BoidManager : MonoBehaviour
 {
     [SerializeField]
+    public float BoidFactor { get; set; } = 1.0f;
+
+    [SerializeField]
     public float SeparationFactor { get; set; } = 1.0f;
 
     [SerializeField]
@@ -23,6 +26,9 @@ public class BoidManager : MonoBehaviour
 
     [SerializeField]
     public float CohesionFactor { get; set; } = 1.0f;
+
+    [SerializeField]
+    public float TargetFactor { get; set; } = 1.0f;
 
     [SerializeField]
     public Transform target { get; set; } = null;
@@ -121,6 +127,18 @@ public class BoidManager : MonoBehaviour
     private void ApplyForcesToBoid(Transform boid)
     {
         if (!boid.TryGetComponent<Rigidbody>(out Rigidbody boidRigidbody)) return;
+
+        Vector3 separtationForce = CalculateSeparationForce(boid);
+        Vector3 alignmentForce = CalculateAlignmentForce(boid);
+        Vector3 cohesionForce = CalculateCohesionForce(boid);
+        Vector3 targetForce = CalculateTargetForce(boid);
+
+        Vector3 totalForce = (SeparationFactor * separtationForce)
+                           + (AlignmentFactor * alignmentForce)
+                           + (CohesionFactor * cohesionForce)
+                           + (TargetFactor * targetForce);
+
+        boidRigidbody.AddForce(BoidFactor * totalForce, ForceMode.Force);
     }
 
 
@@ -130,6 +148,9 @@ public class BoidManager : MonoBehaviour
     /// </summary>
     private void UpdateBoids()
     {
+        foreach (Transform boid in boids)
+        {
 
+        }
     }
 }
