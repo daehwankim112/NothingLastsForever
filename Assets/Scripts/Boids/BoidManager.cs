@@ -22,6 +22,9 @@ public class BoidManager : MonoBehaviour
     public float SeparationFactor { get; set; } = 1.0f;
 
     [SerializeField]
+    public float SeparationDistance { get; set; } = 1.0f;
+
+    [SerializeField]
     public float AlignmentFactor { get; set; } = 1.0f;
 
     [SerializeField]
@@ -35,6 +38,12 @@ public class BoidManager : MonoBehaviour
 
     [SerializeField]
     public List<Transform> boids { get; set; } = new List<Transform>();
+
+
+
+    private Vector3 boidsAveragePosition = Vector3.zero;
+
+    private Vector3 boidsAverageVelocity = Vector3.zero;
 
 
 
@@ -63,7 +72,20 @@ public class BoidManager : MonoBehaviour
     /// </returns>
     private Vector3 CalculateSeparationForce(Transform boid)
     {
-        return Vector3.zero;
+        Vector3 separationForce = Vector3.zero;
+
+        foreach (Transform nearBoid in boids)
+        {
+            // A boid cannot separate from itself
+            if (nearBoid == boid) continue;
+
+            // Ignore boids that are too far away
+            if ((boid.position - nearBoid.position).sqrMagnitude > SeparationDistance * SeparationDistance) continue;
+
+            separationForce -= (nearBoid.position - boid.position);
+        }
+
+        return separationForce;
     }
 
 
@@ -79,7 +101,9 @@ public class BoidManager : MonoBehaviour
     /// </returns>
     private Vector3 CalculateAlignmentForce(Transform boid)
     {
-        return Vector3.zero;
+        if (!boid.TryGetComponent<Rigidbody>(out Rigidbody boidRigidbody)) return Vector3.zero;
+
+        return boidsAverageVelocity - boidRigidbody.velocity;
     }
 
 
@@ -95,7 +119,7 @@ public class BoidManager : MonoBehaviour
     /// </returns>
     private Vector3 CalculateCohesionForce(Transform boid)
     {
-        return Vector3.zero;
+        return boidsAveragePosition - boid.position;
     }
 
 
@@ -148,9 +172,58 @@ public class BoidManager : MonoBehaviour
     /// </summary>
     private void UpdateBoids()
     {
+        boidsAveragePosition = CalculateBoidsAveragePosition();
+        boidsAverageVelocity = CalculateBoidsAverageVelocity();
+
         foreach (Transform boid in boids)
         {
             ApplyForcesToBoid(boid);
         }
+    }
+
+
+
+    /// <summary>
+    /// Calculate the average position of all the boids.
+    /// </summary>
+    /// <returns>
+    /// The average position of the boids.
+    /// </returns>
+    private Vector3 CalculateBoidsAveragePosition()
+    {
+        Vector3 center = Vector3.zero;
+
+        foreach(Transform boid in boids)
+        {
+            center += boid.position;
+        }
+
+        center /= boids.Count;
+
+        return center;
+    }
+
+
+
+    /// <summary>
+    /// Calculate the average velocity of all the boids.
+    /// </summary>
+    /// <returns>
+    /// The average velocity of the boids.
+    /// </returns>
+    private Vector3 CalculateBoidsAverageVelocity()
+    {
+        Vector3 center = Vector3.zero;
+
+        foreach (Transform boid in boids)
+        {
+            if (!boid.TryGetComponent<Rigidbody>(out Rigidbody boidRigidbody)) continue;
+
+            center += boidRigidbody.velocity;
+        }
+
+        center /= boids.Count;
+
+        return center;
     }
 }
