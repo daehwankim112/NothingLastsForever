@@ -16,28 +16,28 @@ using UnityEngine;
 public class BoidManager : MonoBehaviour
 {
     [SerializeField]
-    public float BoidFactor { get; set; } = 1.0f;
+    public float BoidFactor = 1.0f;
 
     [SerializeField]
-    public float SeparationFactor { get; set; } = 1.0f;
+    public float SeparationFactor = 1.0f;
 
     [SerializeField]
-    public float SeparationDistance { get; set; } = 1.0f;
+    public float SeparationDistance = 1.0f;
 
     [SerializeField]
-    public float AlignmentFactor { get; set; } = 1.0f;
+    public float AlignmentFactor = 1.0f;
 
     [SerializeField]
-    public float CohesionFactor { get; set; } = 1.0f;
+    public float CohesionFactor = 1.0f;
 
     [SerializeField]
-    public float TargetFactor { get; set; } = 1.0f;
+    public float TargetFactor = 1.0f;
 
     [SerializeField]
-    public Transform target { get; set; } = null;
+    public Transform target = null;
 
     [SerializeField]
-    public List<Transform> boids { get; set; } = new List<Transform>();
+    public List<Transform> boids = new List<Transform>();
 
 
 
