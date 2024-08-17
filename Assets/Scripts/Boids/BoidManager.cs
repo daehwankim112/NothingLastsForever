@@ -150,7 +150,7 @@ public class BoidManager : MonoBehaviour
     {
         foreach (Transform boid in boids)
         {
-
+            ApplyForcesToBoid(boid);
         }
     }
 }
