@@ -1020,8 +1020,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60a382b112bc1fc48a0d24f214ea3c1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boid: {fileID: 6677586760661799738, guid: 129ac79c073da8f4eae06a18e0c77a23, type: 3}
   numBoids: 0
+  boidDrag: 1
+  boid: {fileID: 6677586760661799738, guid: 129ac79c073da8f4eae06a18e0c77a23, type: 3}
+  boidManager: {fileID: 150876690}
   boids: []
 --- !u!114 &150876690
 MonoBehaviour:
@@ -1035,6 +1037,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d1ab908629309c42b5f9201311d503c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  BoidFactor: 1
+  SeparationFactor: 1
+  SeparationDistance: 1
+  AlignmentFactor: 1
+  AlignmentDistance: 1
+  CohesionFactor: 1
+  CohesionDistance: 1
+  TargetFactor: 1
+  target: {fileID: 1842421998}
+  boids: []
 --- !u!1001 &309821952
 PrefabInstance:
   m_ObjectHideFlags: 0

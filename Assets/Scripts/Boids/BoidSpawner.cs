@@ -5,10 +5,16 @@ using UnityEngine;
 public class BoidSpawner : MonoBehaviour
 {
     [SerializeField]
+    public int numBoids = 0;
+
+    [SerializeField]
+    public float boidDrag = 0.0f;
+
+    [SerializeField]
     private Transform boid;
 
     [SerializeField]
-    public int numBoids = 0;
+    private BoidManager boidManager;
 
     [SerializeField]
     private List<Transform> boids = new List<Transform>();
@@ -23,15 +29,20 @@ public class BoidSpawner : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (numBoids < 0)
+        {
+            numBoids = 0;
+        }    
+
         if (numBoids == boids.Count) return;
 
         if (numBoids < boids.Count)
         {
-            SpawnMoreBoids(boids.Count - numBoids);
+            RemoveBoids(boids.Count - numBoids);
         }
         else if (numBoids > boids.Count)
         {
-            RemoveBoids(numBoids - boids.Count);
+            SpawnMoreBoids(numBoids - boids.Count);
         }
     }
 
@@ -41,7 +52,7 @@ public class BoidSpawner : MonoBehaviour
     {
         for (int i = 0; i < numToSpawn; i++)
         {
-            Vector3 randomLocationOnSphere = Random.onUnitSphere * 2f;
+            Vector3 randomLocationOnSphere = Random.onUnitSphere * 2.0f;
             Quaternion randomRotation = Random.rotation;
             Color randomColor = Random.ColorHSV();
 
@@ -50,7 +61,12 @@ public class BoidSpawner : MonoBehaviour
             newBoid.GetComponent<MeshRenderer>().material.SetColor("_EmissionColor", randomColor);
             newBoid.GetComponent<MeshRenderer>().material.color = randomColor;
 
+            newBoid.GetComponent<Rigidbody>().velocity = Random.onUnitSphere * 5.0f;
+            newBoid.GetComponent<Rigidbody>().drag = boidDrag;
+
             boids.Add(newBoid);
+
+            boidManager.AddBoid(newBoid);
         }
     }
 
@@ -66,7 +82,9 @@ public class BoidSpawner : MonoBehaviour
 
             boids.RemoveAt(indexToRemvove);
 
-            Destroy(boidToRemove);
+            boidManager.RemoveBoid(boidToRemove);
+
+            Destroy(boidToRemove.gameObject);
         }
     }
 }

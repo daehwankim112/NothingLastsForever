@@ -28,7 +28,13 @@ public class BoidManager : MonoBehaviour
     public float AlignmentFactor = 1.0f;
 
     [SerializeField]
+    public float AlignmentDistance = 1.0f;
+
+    [SerializeField]
     public float CohesionFactor = 1.0f;
+
+    [SerializeField]
+    public float CohesionDistance = 1.0f;
 
     [SerializeField]
     public float TargetFactor = 1.0f;
@@ -57,6 +63,36 @@ public class BoidManager : MonoBehaviour
     void Update()
     {
         UpdateBoids();
+    }
+
+
+
+    /// <summary>
+    /// Add a boid.
+    /// </summary>
+    /// <param name="boid">
+    /// The boid to add.
+    /// </param>
+    public void AddBoid(Transform boid)
+    {
+        boids.Add(boid);
+    }
+
+
+
+    /// <summary>
+    /// Remove a boid.
+    /// </summary>
+    /// <param name="boid">
+    /// The boid to remove.
+    /// </param>
+    /// <returns>
+    /// True if the boid was successfully removed.
+    /// False otherwise.
+    /// </returns>
+    public bool RemoveBoid(Transform boid)
+    {
+        return boids.Remove(boid);
     }
 
 
@@ -103,13 +139,42 @@ public class BoidManager : MonoBehaviour
     {
         if (!boid.TryGetComponent<Rigidbody>(out Rigidbody boidRigidbody)) return Vector3.zero;
 
-        return boidsAverageVelocity - boidRigidbody.velocity;
+
+        Vector3 alignmentForce = Vector3.zero;
+
+        Vector3 averageNearbyVelocity = Vector3.zero;
+
+        int numNearbyBoids = 0;
+
+        foreach (Transform nearBoid in boids)
+        {
+            // A boid cannot get closer to itself
+            if (nearBoid == boid) continue;
+
+            if (!nearBoid.TryGetComponent<Rigidbody>(out Rigidbody nearBoidRigidbody)) continue;
+
+            // Ignore boids that are too far away
+            if ((boid.position - nearBoid.position).sqrMagnitude > AlignmentDistance * AlignmentDistance) continue;
+
+            averageNearbyVelocity += nearBoidRigidbody.velocity;
+
+            numNearbyBoids++;
+        }
+
+        if (numNearbyBoids == 0) return Vector3.zero;
+
+        averageNearbyVelocity /= numNearbyBoids;
+
+        alignmentForce = averageNearbyVelocity - boidRigidbody.velocity;
+
+        return alignmentForce;
     }
 
 
 
     /// <summary>
     /// Calculate the cohesion force felt by a boid.
+    /// The force pushing the boid towards nearby boids.
     /// </summary>
     /// <param name="boid">
     /// The boid to calculate the cohesion force of.
@@ -119,7 +184,32 @@ public class BoidManager : MonoBehaviour
     /// </returns>
     private Vector3 CalculateCohesionForce(Transform boid)
     {
-        return boidsAveragePosition - boid.position;
+        Vector3 cohesionForce = Vector3.zero;
+
+        Vector3 averageNearbyPositon = Vector3.zero;
+
+        int numNearbyBoids = 0;
+
+        foreach (Transform nearBoid in boids)
+        {
+            // A boid cannot get closer to itself
+            if (nearBoid == boid) continue;
+
+            // Ignore boids that are too far away
+            if ((boid.position - nearBoid.position).sqrMagnitude > CohesionDistance * CohesionDistance) continue;
+
+            averageNearbyPositon += nearBoid.position;
+
+            numNearbyBoids++;
+        }
+
+        if (numNearbyBoids == 0) return Vector3.zero;
+
+        averageNearbyPositon /= numNearbyBoids;
+
+        cohesionForce = averageNearbyPositon - boid.position;
+
+        return cohesionForce;
     }
 
 
@@ -137,7 +227,7 @@ public class BoidManager : MonoBehaviour
     {
         if (target == null) return Vector3.zero;
 
-        return Vector3.zero;
+        return (target.position - boid.position).normalized;
     }
 
 
@@ -172,8 +262,8 @@ public class BoidManager : MonoBehaviour
     /// </summary>
     private void UpdateBoids()
     {
-        boidsAveragePosition = CalculateBoidsAveragePosition();
-        boidsAverageVelocity = CalculateBoidsAverageVelocity();
+        //boidsAveragePosition = CalculateBoidsAveragePosition();
+        //boidsAverageVelocity = CalculateBoidsAverageVelocity();
 
         foreach (Transform boid in boids)
         {
