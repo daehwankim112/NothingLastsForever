@@ -103,7 +103,7 @@ Shader "Custom/SonarEffectForUnityObjects"
                 return ease(t);
             } */
 
-            float sampleDepthTexture(float2 uv)
+            /*float sampleDepthTexture(float2 uv)
 			{
 // #if defined(REQUIRE_DEPTH_TEXTURE)
 // #if defined(UNITY_STEREO_INSTANCING_ENABLED) || defined(UNITY_STEREO_MULTIVIEW_ENABLED)
@@ -118,7 +118,7 @@ Shader "Custom/SonarEffectForUnityObjects"
                 return depth;
 // #endif
                 // return 0;
-			}
+			}*/
 
             half4 frag(Varyings input) : SV_Target
             {
@@ -143,8 +143,10 @@ Shader "Custom/SonarEffectForUnityObjects"
 #endif
 
                 half depth = LinearEyeDepth(SAMPLE_TEXTURE2D_ARRAY(_CameraDepthTexture, UNITY_PROJ_COORD(input.positionCS))); */
-                half depth = sampleDepthTexture(input.positionCS.xy / input.positionCS.w);
-                fixed4 finalColor = fixed4(depth, depth, depth, 1.0);
+                //half depth = sampleDepthTexture(input.positionCS.xy / input.positionCS.w);
+                //fixed4 finalColor = fixed4(depth, depth, depth, 1.0);
+                fixed4 finalColor = fixed4(1,1,1,1);
+                
 
                 // float4 depthSpace = mul(_EnvironmentDepthReprojectionMatrices[unity_StereoEyeIndex], float4(input.worldPos.xyz, 1.0));
                 // float2 uvCoords = (depthSpace.xy / depthSpace.w + 1.0f) * 0.5f;
