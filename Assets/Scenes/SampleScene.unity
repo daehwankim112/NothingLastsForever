@@ -1104,6 +1104,7 @@ GameObject:
   m_Component:
   - component: {fileID: 150876688}
   - component: {fileID: 150876687}
+  - component: {fileID: 150876689}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -1141,6 +1142,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &150876689
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 150876686}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 520c935c38e19da4f835363e674f8551, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainCamera: {fileID: 1442903321}
 --- !u!1 &215336565
 GameObject:
   m_ObjectHideFlags: 0
@@ -2416,6 +2430,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3773311527833116144, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
   m_PrefabInstance: {fileID: 7042400944557242960}
   m_PrefabAsset: {fileID: 0}
+--- !u!20 &1442903321 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 5651418626666711070, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
+  m_PrefabInstance: {fileID: 7042400944557242960}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1601683151
 GameObject:
   m_ObjectHideFlags: 0
@@ -2757,7 +2776,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: dc4a90b81fc51784fabe0c899d7a9f66, type: 2}
+  - {fileID: 2100000, guid: 85671f3632f348245ae2e36d2b007ee1, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

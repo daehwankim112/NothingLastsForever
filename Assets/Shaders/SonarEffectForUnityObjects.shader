@@ -103,6 +103,23 @@ Shader "Custom/SonarEffectForUnityObjects"
                 return ease(t);
             } */
 
+            float sampleDepthTexture(float2 uv)
+			{
+// #if defined(REQUIRE_DEPTH_TEXTURE)
+// #if defined(UNITY_STEREO_INSTANCING_ENABLED) || defined(UNITY_STEREO_MULTIVIEW_ENABLED)
+				// half depth = LinearEyeDepth(SAMPLE_DEPTH_TEXTURE_PROJ(_CameraDepthTexture, sampler_CameraDepthTexture, uv, unity_StereoEyeIndex).r;
+                half depth = SAMPLE_TEXTURE2D_ARRAY(_CameraDepthTexture, sampler_CameraDepthTexture, uv, unity_StereoEyeIndex).r;
+
+				//half depth = LinearEyeDepth(SAMPLE_TEXTURE2D_ARRAY(_CameraDepthTexture, sampler_CameraDepthTexture, uv, unity_StereoEyeIndex).r;
+// #else
+				// half depth = LinearEyeDepth(SAMPLE_DEPTH_TEXTURE(_CameraDepthTexture, sampler_CameraDepthTexture, UnityStereoTransformScreenSpaceTex(uv));
+                // half depth = LinearEyeDepth(SAMPLE_DEPTH_TEXTURE_PROJ(_CameraDepthTexture, UNITY_PROJ_COORD(input.positionCS)));
+// #endif
+                return depth;
+// #endif
+                // return 0;
+			}
+
             half4 frag(Varyings input) : SV_Target
             {
                 UNITY_SETUP_INSTANCE_ID(input);
@@ -115,7 +132,18 @@ Shader "Custom/SonarEffectForUnityObjects"
                 // float2 ScreenspaceUV = input.ScreenPos.xy / input.ScreenPos.w;
                 // fixed4 finalColor = tex2D(_CameraDepthTexture, ScreenspaceUV);
 
-                float depth = Linear01Depth(SAMPLE_DEPTH_TEXTURE_PROJ(_CameraDepthTexture, UNITY_PROJ_COORD(input.positionCS)));
+                // float depth = Linear01Depth(SAMPLE_DEPTH_TEXTURE_PROJ(_CameraDepthTexture, UNITY_PROJ_COORD(input.positionCS)));
+/* #if defined(REQUIRE_DEPTH_TEXTURE)
+#if defined(UNITY_STEREO_INSTANCING_ENABLED) || defined(UNITY_STEREO_MULTIVIEW_ENABLED)
+				half depth = LinearEyeDepth(SAMPLE_DEPTH_TEXTURE_PROJ(_CameraDepthTexture, UNITY_PROJ_COORD(input.positionCS)));
+				//half depth = LinearEyeDepth(SAMPLE_TEXTURE2D_ARRAY(_CameraDepthTexture, sampler_CameraDepthTexture, uv, unity_StereoEyeIndex).r;
+#else
+				half depth = LinearEyeDepth(SAMPLE_DEPTH_TEXTURE_PROJ(_CameraDepthTexture, UNITY_PROJ_COORD(input.positionCS)));
+#endif
+#endif
+
+                half depth = LinearEyeDepth(SAMPLE_TEXTURE2D_ARRAY(_CameraDepthTexture, UNITY_PROJ_COORD(input.positionCS))); */
+                half depth = sampleDepthTexture(input.positionCS.xy / input.positionCS.w);
                 fixed4 finalColor = fixed4(depth, depth, depth, 1.0);
 
                 // float4 depthSpace = mul(_EnvironmentDepthReprojectionMatrices[unity_StereoEyeIndex], float4(input.worldPos.xyz, 1.0));
