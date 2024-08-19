@@ -43,7 +43,7 @@ public class BoidManager : MonoBehaviour
     public float AlignmentDistance = 1.0f;
 
     [SerializeField]
-    // Will the boids avoid boids they can't see
+    // Will the boids align with boids they can't see
     public bool AlignmentUsesFov = false;
 
 
@@ -56,7 +56,7 @@ public class BoidManager : MonoBehaviour
     public float CohesionDistance = 1.0f;
 
     [SerializeField]
-    // Will the boids avoid boids they can't see
+    // Will the boids go to boids they can't see
     public bool CohesionUsesFov = false;
 
 
@@ -69,7 +69,7 @@ public class BoidManager : MonoBehaviour
     public float MaxTargetDistance = 1.0f;
 
     [SerializeField]
-    // Will the boids avoid boids they can't see
+    // Will the boids go to targets they can't see
     public bool TargetUsesFov = false;
 
     [SerializeField]
@@ -86,11 +86,11 @@ public class BoidManager : MonoBehaviour
     public float AvoidFactor = 1.0f;
 
     [SerializeField]
-    // The max distance for targeting
+    // The max distance for avoiding
     public float MaxAvoidDistance = 1.0f;
 
     [SerializeField]
-    // Will the boids avoid boids they can't see
+    // Will the boids avoid avoids they can't see
     public bool AvoidUsesFov = false;
 
     [SerializeField]
@@ -98,23 +98,25 @@ public class BoidManager : MonoBehaviour
     public BoidRuleMode avoidMode = BoidRuleMode.Average;
 
     [SerializeField]
-    // The targets boids will move away from
+    // The things boids will move away from
     public List<Transform> avoids = new();
 
 
     [SerializeField]
+    // Limit to how far boids can go
     public float boundingDistance = 100.0f;
 
     [SerializeField]
+    // When the boids start turning back to not go too far
     public float boundingEffectDistance = 90.0f;
 
 
     [SerializeField]
-    // The maximum force the boid manager can apply
+    // The maximum force the boid manager will apply
     public float maxForce = 10.0f;
 
     [SerializeField]
-    // The minimum force the boid manager can apply
+    // The minimum force the boid manager will apply
     public float minForce = 1.0f;
 
 
@@ -362,6 +364,15 @@ public class BoidManager : MonoBehaviour
 
 
 
+    /// <summary>
+    /// Calculate the force keeping a boid from going too far
+    /// </summary>
+    /// <param name="boid">
+    /// The boid to bound
+    /// </param>
+    /// <returns>
+    /// The bounding force
+    /// </returns>
     private Vector3 CalculateBoundingForce(int boid)
     {
         Vector3 boidPosition = frameBoidPositions[boid];
@@ -441,6 +452,26 @@ public class BoidManager : MonoBehaviour
 
 
 
+    /// <summary>
+    /// Calculate the average position relative to a boid.
+    /// 
+    /// The weight is linear inverse of distance, 0 at maxDistance, 1 at 0
+    /// </summary>
+    /// <param name="indicies">
+    /// The indicies in the positions list to get the average position of
+    /// </param>
+    /// <param name="positions">
+    /// A list of positions
+    /// </param>
+    /// <param name="boidPosition">
+    /// Boid position
+    /// </param>
+    /// <param name="maxDistance">
+    /// Maximum distance to consider
+    /// </param>
+    /// <returns>
+    /// The weighted average of distance.
+    /// </returns>
     private Vector3 CalculateWeightedAveragePosition(List<int> indicies, List<Vector3> positions, Vector3 boidPosition, float maxDistance)
     {
         Vector3 averageNearbyPositon = Vector3.zero;
@@ -498,6 +529,21 @@ public class BoidManager : MonoBehaviour
 
 
 
+    /// <summary>
+    /// Check if a boid can see a location using boidFov.
+    /// </summary>
+    /// <param name="boidPosition">
+    /// Position of the boid.
+    /// </param>
+    /// <param name="boidForward">
+    /// Direction of the boid.
+    /// </param>
+    /// <param name="checkPosition">
+    /// Position to check if the boid can see.
+    /// </param>
+    /// <returns>
+    /// True if the boid can see checkPosition, false otherwise.
+    /// </returns>
     private bool BoidVisible(Vector3 boidPosition, Vector3 boidForward, Vector3 checkPosition)
     {
         Vector3 otherDirection = (checkPosition - boidPosition);
