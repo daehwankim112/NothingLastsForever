@@ -40,6 +40,15 @@ public class BoidManager : MonoBehaviour
     public float TargetFactor = 1.0f;
 
     [SerializeField]
+    public float maxForce = 10.0f;
+
+    [SerializeField]
+    public float minForce = 1.0f;
+
+    [SerializeField]
+    public float boidFov = 45.0f;
+
+    [SerializeField]
     public Transform target = null;
 
     [SerializeField]
@@ -50,13 +59,6 @@ public class BoidManager : MonoBehaviour
     private Vector3 boidsAveragePosition = Vector3.zero;
 
     private Vector3 boidsAverageVelocity = Vector3.zero;
-
-
-
-    void Start()
-    {
-        
-    }
 
 
 
@@ -118,6 +120,8 @@ public class BoidManager : MonoBehaviour
             // Ignore boids that are too far away
             if ((boid.position - nearBoid.position).sqrMagnitude > SeparationDistance * SeparationDistance) continue;
 
+            if (!BoidVisible(boid, nearBoid)) continue;
+
             separationForce -= (nearBoid.position - boid.position);
         }
 
@@ -144,7 +148,7 @@ public class BoidManager : MonoBehaviour
 
         Vector3 averageNearbyVelocity = Vector3.zero;
 
-        int numNearbyBoids = 0;
+        float weightSum = 0.0f;
 
         foreach (Transform nearBoid in boids)
         {
@@ -156,14 +160,21 @@ public class BoidManager : MonoBehaviour
             // Ignore boids that are too far away
             if ((boid.position - nearBoid.position).sqrMagnitude > AlignmentDistance * AlignmentDistance) continue;
 
-            averageNearbyVelocity += nearBoidRigidbody.velocity;
+            // Ignore boids outside the boid's fov
+            if (!BoidVisible(boid, nearBoid)) continue;
 
-            numNearbyBoids++;
+            float distance = Vector3.Distance(nearBoid.position, boid.position);
+
+            float weight = 1.0f - (distance / AlignmentDistance);
+
+            averageNearbyVelocity += weight * nearBoidRigidbody.velocity;
+
+            weightSum += weight;
         }
 
-        if (numNearbyBoids == 0) return Vector3.zero;
+        if (weightSum < 0.01f) return Vector3.zero;
 
-        averageNearbyVelocity /= numNearbyBoids;
+        averageNearbyVelocity /= weightSum;
 
         alignmentForce = averageNearbyVelocity - boidRigidbody.velocity;
 
@@ -188,7 +199,7 @@ public class BoidManager : MonoBehaviour
 
         Vector3 averageNearbyPositon = Vector3.zero;
 
-        int numNearbyBoids = 0;
+        float weightSum = 0.0f;
 
         foreach (Transform nearBoid in boids)
         {
@@ -198,14 +209,20 @@ public class BoidManager : MonoBehaviour
             // Ignore boids that are too far away
             if ((boid.position - nearBoid.position).sqrMagnitude > CohesionDistance * CohesionDistance) continue;
 
-            averageNearbyPositon += nearBoid.position;
+            if (!BoidVisible(boid, nearBoid)) continue;
 
-            numNearbyBoids++;
+            float distance = Vector3.Distance(nearBoid.position, boid.position);
+
+            float weight = 1.0f - (distance / CohesionDistance);
+
+            averageNearbyPositon += weight * nearBoid.position;
+
+            weightSum += weight;
         }
 
-        if (numNearbyBoids == 0) return Vector3.zero;
+        if (weightSum < 0.01f) return Vector3.zero;
 
-        averageNearbyPositon /= numNearbyBoids;
+        averageNearbyPositon /= weightSum;
 
         cohesionForce = averageNearbyPositon - boid.position;
 
@@ -252,7 +269,20 @@ public class BoidManager : MonoBehaviour
                            + (CohesionFactor * cohesionForce)
                            + (TargetFactor * targetForce);
 
-        boidRigidbody.AddForce(BoidFactor * totalForce, ForceMode.Force);
+        // Bound the force magnitude above
+        Vector3 appliedForce = Vector3.ClampMagnitude(BoidFactor * totalForce, maxForce);
+
+        // Bound the force magnitude below
+        if (appliedForce.sqrMagnitude < 0.001f)
+        {
+            appliedForce = minForce * boidRigidbody.velocity.normalized;
+        }
+        else if (appliedForce.sqrMagnitude < minForce * minForce)
+        {
+            appliedForce = minForce * appliedForce.normalized;
+        }
+
+        boidRigidbody.AddForce(appliedForce, ForceMode.Force);
     }
 
 
@@ -315,5 +345,24 @@ public class BoidManager : MonoBehaviour
         center /= boids.Count;
 
         return center;
+    }
+
+
+
+    private bool BoidVisible(Transform boid, Transform other)
+    {
+        if (other == null) return false;
+
+        if (!boid.TryGetComponent<Rigidbody>(out Rigidbody boidRigidbody)) return false;
+
+        if (other == boid) return true;
+
+        Vector3 otherDirection = (other.position - boid.position);
+
+        Vector3 lookDirection = boidRigidbody.velocity;
+
+        float angle = Vector3.Angle(lookDirection, otherDirection);
+
+        return angle < 0.5f * boidFov;
     }
 }
