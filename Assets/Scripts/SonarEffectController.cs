@@ -1,9 +1,10 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class SonarEffectController : MonoBehaviour
 {
-    public Material sonarMaterial;
+    public List<Material> sonarMaterial;
     public float waveSpeed = 1f;
     public Camera mainCamera;
     [SerializeField] HandPoseDetectionAndPing handPoseDetectionAndPing;
@@ -29,6 +30,7 @@ public class SonarEffectController : MonoBehaviour
         if (pinging)
         {
             currentWaveDistance += waveSpeed * Time.deltaTime;
+            foreach (Material sonarMaterial in sonarMaterial)
             sonarMaterial.SetFloat("_WaveDistance", currentWaveDistance);
             if (currentWaveDistance > 2.5f)
             {
@@ -56,10 +58,5 @@ public class SonarEffectController : MonoBehaviour
         pinging = false;
         handPoseDetectionAndPing.pingGestureActivated = false;
         currentWaveDistance = 999.0f;
-    }
-
-    void OnRenderImage(RenderTexture src, RenderTexture dest)
-    {
-        Graphics.Blit(src, dest, sonarMaterial);
     }
 }

@@ -8,7 +8,6 @@ Shader "Custom/DepthModifier"
     SubShader
     {
         Tags { "RenderType"="Transparent" }
-        LOD 200
 
         Blend SrcAlpha OneMinusSrcAlpha
 
