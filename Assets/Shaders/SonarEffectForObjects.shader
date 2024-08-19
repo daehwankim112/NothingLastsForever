@@ -67,7 +67,7 @@ Shader "Custom/SonarEffectForObjects"
                 output.pos = UnityObjectToClipPos(input.vertex);
                 float zDepth = LinearEyeDepth(output.pos.z / output.pos.w);
 
-                float alpha = waveAlpha(zDepth, 3 * _WaveDistance, _Threshold);
+                float alpha = waveAlpha(zDepth, _WaveDistance, _Threshold);
 
                 output.depth = zDepth;
                 output.color = _BaseColor;

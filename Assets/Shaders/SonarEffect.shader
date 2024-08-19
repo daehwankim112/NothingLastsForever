@@ -92,7 +92,7 @@ Shader "Custom/SonarEffect"
                 float2 uvCoords = (depthSpace.xy / depthSpace.w + 1.0f) * 0.5f;
                 float linearSceneDepth = SampleEnvironmentDepthLinear_Internal(uvCoords);
 
-                float alpha = waveAlpha(linearSceneDepth, 3 * _WaveDistance, _Threshold);
+                float alpha = waveAlpha(linearSceneDepth, _WaveDistance, _Threshold);
                 // finalColor.a *= alpha;
                 finalColor.a = alpha;
                 // finalColor = float4(0, 1 - linearSceneDepth/1.5, 0, 0.9);
