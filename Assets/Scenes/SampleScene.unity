@@ -1020,8 +1020,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60a382b112bc1fc48a0d24f214ea3c1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numBoids: 100
-  boidDrag: 0.2
+  numBoids: 500
+  boidDrag: 1
   boid: {fileID: 6677586760661799738, guid: 129ac79c073da8f4eae06a18e0c77a23, type: 3}
   boidManager: {fileID: 150876690}
   boids: []
@@ -1039,17 +1039,31 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BoidFactor: 1
   SeparationFactor: 15
-  SeparationDistance: 0.5
+  SeparationDistance: 0.05
+  SeparationUsesFov: 0
   AlignmentFactor: 2
   AlignmentDistance: 3
+  AlignmentUsesFov: 1
   CohesionFactor: 5
   CohesionDistance: 20
-  TargetFactor: 0.2
-  maxForce: 10
-  minForce: 0
+  CohesionUsesFov: 1
+  TargetFactor: 0.05
+  MaxTargetDistance: 100000
+  TargetUsesFov: 1
+  targetMode: 1
+  targets:
+  - {fileID: 1842421998}
+  AvoidFactor: 0.1
+  MaxAvoidDistance: 1
+  AvoidUsesFov: 1
+  avoidMode: 0
+  avoids:
+  - {fileID: 797848843}
+  boundingDistance: 30
+  boundingEffectDistance: 20
+  maxForce: 2
+  minForce: 0.5
   boidFov: 75
-  target: {fileID: 1842421998}
-  boids: []
 --- !u!1001 &309821952
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1059,6 +1073,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 1181766254}
     m_Modifications:
     - target: {fileID: 2296141232796561049, guid: cee191920b8eb41b0960b1082a393a3e, type: 3}
+      propertyPath: Colliders
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2296141232796561049, guid: cee191920b8eb41b0960b1082a393a3e, type: 3}
       propertyPath: BorderSize
       value: 0
       objectReference: {fileID: 0}
@@ -1066,6 +1084,10 @@ PrefabInstance:
       propertyPath: MeshMaterial
       value: 
       objectReference: {fileID: 2100000, guid: e66a2a4d9e0fff348996e8745481e8af, type: 2}
+    - target: {fileID: 2296141232796561049, guid: cee191920b8eb41b0960b1082a393a3e, type: 3}
+      propertyPath: SpawnOnStart
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5456522116536683058, guid: cee191920b8eb41b0960b1082a393a3e, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -2410,7 +2432,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7950999700976850951, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
       propertyPath: SceneSettings.DataSource
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7950999700976850951, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
       propertyPath: <SceneLoadedEvent>k__BackingField.m_PersistentCalls.m_Calls.Array.size
