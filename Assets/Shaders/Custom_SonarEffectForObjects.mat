@@ -25,8 +25,8 @@ Material:
     m_TexEnvs: []
     m_Ints: []
     m_Floats:
-    - _Threshold: 1
-    - _WaveDistance: 999.01495
+    - _Threshold: 2
+    - _WaveDistance: 999.04095
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []

@@ -10,6 +10,7 @@ public class SonarEffectController : MonoBehaviour
     [SerializeField] private HandPoseDetectionAndPing handPoseDetectionAndPing;
     [SerializeField] private AudioClip audio;
     [SerializeField] private float pingingCooldown = 2.5f;
+    [SerializeField] private bool debug = false;
 
     private bool pinging = false;
     private AudioSource audioSource;
@@ -19,6 +20,10 @@ public class SonarEffectController : MonoBehaviour
     {
         mainCamera.depthTextureMode |= DepthTextureMode.Depth;
         audioSource = GetComponent<AudioSource>();
+        if (debug)
+        {
+            StartCoroutine(SonarPing());
+        }
     }
 
     void Update()
@@ -35,7 +40,11 @@ public class SonarEffectController : MonoBehaviour
         }*/
         if ((handPoseDetectionAndPing.pingGestureActivated 
             || (OVRInput.GetDown(OVRInput.RawButton.A) || OVRInput.GetDown(OVRInput.RawButton.X))) 
-            && !pinging)
+            && !pinging && !debug)
+        {
+            StartCoroutine(SonarPing());
+        }
+        if (debug && !pinging)
         {
             StartCoroutine(SonarPing());
         }
