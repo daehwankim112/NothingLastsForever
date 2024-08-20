@@ -969,8 +969,8 @@ GameObject:
   m_Component:
   - component: {fileID: 150876688}
   - component: {fileID: 150876687}
-  - component: {fileID: 150876690}
   - component: {fileID: 150876689}
+  - component: {fileID: 150876690}
   - component: {fileID: 150876691}
   m_Layer: 0
   m_Name: Managers
@@ -993,7 +993,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GravitySphere: {fileID: 797848838}
   moonPrefab: {fileID: 6677586760661799738, guid: 129ac79c073da8f4eae06a18e0c77a23, type: 3}
-  numberOfMoon: 15
+  numberOfMoon: 0
 --- !u!4 &150876688
 Transform:
   m_ObjectHideFlags: 0
@@ -1021,8 +1021,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60a382b112bc1fc48a0d24f214ea3c1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numBoids: 10000
-  boidDrag: 1
+  numBoids: 800
+  boidDrag: 0.5
   boid: {fileID: 6677586760661799738, guid: 129ac79c073da8f4eae06a18e0c77a23, type: 3}
   boidManager: {fileID: 150876691}
   boids: []
@@ -1078,32 +1078,32 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BoidFactor: 1
-  SeparationFactor: 1
-  SeparationDistance: 1
+  SeparationFactor: 15
+  SeparationRadius: 0.05
   SeparationUsesFov: 0
-  AlignmentFactor: 1
-  AlignmentDistance: 1
-  AlignmentUsesFov: 0
-  CohesionFactor: 1
-  CohesionDistance: 1
-  CohesionUsesFov: 0
-  TargetFactor: 1
-  MaxTargetDistance: 1
+  AlignmentFactor: 2
+  AlignmentRadius: 3
+  AlignmentUsesFov: 1
+  CohesionFactor: 5
+  CohesionRadius: 20
+  CohesionUsesFov: 1
+  TargetFactor: 0.05
+  TargetRadius: 100000
   TargetUsesFov: 0
   targetMode: 1
   targets:
   - {fileID: 1842421998}
-  AvoidFactor: 1
-  MaxAvoidDistance: 1
-  AvoidUsesFov: 0
-  avoidMode: 1
+  AvoidFactor: 0.1
+  AvoidRadius: 1
+  AvoidUsesFov: 1
+  avoidMode: 0
   avoids:
   - {fileID: 797848843}
-  boundingDistance: 100
-  boundingEffectDistance: 90
+  boundingRadius: 100
+  boundingEffectDistance: 20
   maxForce: 10
   minForce: 1
-  boidFov: 45
+  boidFov: 75
   BoidComputeShader: {fileID: 7200000, guid: b48d0693ac2fa36449ebfa4123ba09c0, type: 3}
 --- !u!1001 &309821952
 PrefabInstance:
@@ -2489,7 +2489,7 @@ PrefabInstance:
       objectReference: {fileID: 309821954}
     - target: {fileID: 7950999700976850951, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
       propertyPath: <SceneLoadedEvent>k__BackingField.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7950999700976850951, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
       propertyPath: <SceneLoadedEvent>k__BackingField.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName

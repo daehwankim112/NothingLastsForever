@@ -26,6 +26,14 @@ float cohesionFactor;
 float targetFactor;
 float avoidFactor;
 
+bool separationFov;
+bool alignmentFov;
+bool cohesionFov;
+bool targetFov;
+bool avoidFov;
+
+float boidFov;
+
 
 
 [numthreads(256,1,1)]
@@ -38,13 +46,20 @@ void CSMain (uint3 id : SV_DispatchThreadID)
     float3 velocity = boidVelocities[thisBoid];
 
 
-    float totalSeparationWeight = 0.0;
-    float totalAlignWeight = 0.0;
-    float totalCohesionWeight = 0.0;
+    float totalSeparationWeight = 0.0f;
+    float totalAlignmentWeight = 0.0f;
+    float totalCohesionWeight = 0.0f;
 
-    float3 separationForce = float3(20, 0, 0);
+    float3 separationForce = float3(0, 0, 0);
     float3 alignmentForce = float3(0, 0, 0);
     float3 cohesionForce = float3(0, 0, 0);
+
+
+    if (length(position) > 10.0f)
+    {
+        boidForces[thisBoid] = -position;
+        return;
+    }
 
 
     for (uint otherBoid = 0; otherBoid < boidPositions.Length; otherBoid++)
@@ -57,16 +72,57 @@ void CSMain (uint3 id : SV_DispatchThreadID)
         float3 toOther = otherPosition - position;
         float distance = length(toOther);
 
+        
+        float angle = acos(dot(velocity, toOther) / (length(velocity) * length(toOther)));
 
-        if (distance < separationRadius)
+        bool otherVisible = angle < 0.5f * boidFov;
+
+
+        // Separation
+        if (distance < separationRadius && (!separationFov || otherVisible))
         {
             float weight = 1.0f - (distance / separationRadius);
 
-            separationForce += toOther / distance;
+            totalSeparationWeight += weight;
+
+            separationForce += weight * -1.0f * toOther;
+        }
+
+
+        // Alignment
+        if (distance < alignmentRadius && (!alignmentFov || otherVisible))
+        {
+            float weight = 1.0f - (distance / alignmentRadius);
+
+            totalAlignmentWeight += weight;
+
+            alignmentForce += weight * otherVelocity;
+        }
+
+
+        // Cohesion
+        if (distance < cohesionRadius && (!cohesionFov || otherVisible))
+        {
+            float weight = 1.0f - (distance / cohesionRadius);
+
+            totalCohesionWeight += weight;
+
+            cohesionForce += weight * toOther;
         }
     }
 
-    boidForces[thisBoid] = float3(10, 0, 0) + (separationFactor * separationForce)
+
+    if (totalSeparationWeight > 0.01f)
+        separationForce /= totalSeparationWeight;
+
+    if (totalAlignmentWeight > 0.01f)
+        alignmentForce = (alignmentForce / totalAlignmentWeight) - velocity;
+
+    if (totalCohesionWeight > 0.01f)
+        cohesionForce /= totalCohesionWeight;
+
+
+    boidForces[thisBoid] = (separationFactor * separationForce)
                          + (alignmentRadius * alignmentForce)
                          + (cohesionRadius * cohesionForce);
 }

@@ -17,7 +17,7 @@ public class BoidManagerCompute : MonoBehaviour
 
     [SerializeField]
     // The distance boids will stay away from each other
-    public float SeparationDistance = 1.0f;
+    public float SeparationRadius = 1.0f;
 
     [SerializeField]
     // Will the boids avoid boids they can't see
@@ -30,7 +30,7 @@ public class BoidManagerCompute : MonoBehaviour
 
     [SerializeField]
     // The max distance for alignment
-    public float AlignmentDistance = 1.0f;
+    public float AlignmentRadius = 1.0f;
 
     [SerializeField]
     // Will the boids align with boids they can't see
@@ -43,7 +43,7 @@ public class BoidManagerCompute : MonoBehaviour
 
     [SerializeField]
     // The max distance for sticking together
-    public float CohesionDistance = 1.0f;
+    public float CohesionRadius = 1.0f;
 
     [SerializeField]
     // Will the boids go to boids they can't see
@@ -56,7 +56,7 @@ public class BoidManagerCompute : MonoBehaviour
 
     [SerializeField]
     // The max distance for targeting
-    public float MaxTargetDistance = 1.0f;
+    public float TargetRadius = 1.0f;
 
     [SerializeField]
     // Will the boids go to targets they can't see
@@ -77,7 +77,7 @@ public class BoidManagerCompute : MonoBehaviour
 
     [SerializeField]
     // The max distance for avoiding
-    public float MaxAvoidDistance = 1.0f;
+    public float AvoidRadius = 1.0f;
 
     [SerializeField]
     // Will the boids avoid avoids they can't see
@@ -94,7 +94,7 @@ public class BoidManagerCompute : MonoBehaviour
 
     [SerializeField]
     // Limit to how far boids can go
-    public float boundingDistance = 100.0f;
+    public float boundingRadius = 100.0f;
 
     [SerializeField]
     // When the boids start turning back to not go too far
@@ -211,6 +211,22 @@ public class BoidManagerCompute : MonoBehaviour
         avoidPositionsBuffer.SetData(frameAvoidPositions.ToArray());
 
 
+        BoidComputeShader.SetFloat("separationRadius", SeparationRadius);
+        BoidComputeShader.SetFloat("alignmentRadius", AlignmentRadius);
+        BoidComputeShader.SetFloat("cohesionRadius", CohesionRadius);
+        BoidComputeShader.SetFloat("targetRadius", TargetRadius);
+        BoidComputeShader.SetFloat("avoidRadius", AvoidRadius);
+
+
+        BoidComputeShader.SetBool("separationFov", SeparationUsesFov);
+        BoidComputeShader.SetBool("alignmentFov", AlignmentUsesFov);
+        BoidComputeShader.SetBool("cohesionFov", CohesionUsesFov);
+        BoidComputeShader.SetBool("targetFov", TargetUsesFov);
+        BoidComputeShader.SetBool("avoidFov", AvoidUsesFov);
+
+        BoidComputeShader.SetFloat("BoidFov", boidFov);
+
+
         BoidComputeShader.SetBuffer(0, "boidPositions", boidPositionsBuffer);
         BoidComputeShader.SetBuffer(0, "boidVelocities", boidVelocitiesBuffer);
         BoidComputeShader.SetBuffer(0, "targetPositions", targetPositionsBuffer);
@@ -228,7 +244,19 @@ public class BoidManagerCompute : MonoBehaviour
 
         for (int boid = 0; boid < numBoids; boid++)
         {
-            boidRigidbodies[boid].AddForce(forces[boid] * BoidFactor, ForceMode.Force);
+            Vector3 boidApplyForce = Vector3.ClampMagnitude(forces[boid] * BoidFactor, maxForce);
+
+
+            if (boidApplyForce.sqrMagnitude < 0.001f)
+            {
+                boidApplyForce = minForce * frameBoidVelocities[boid].normalized;
+            }
+            else if (boidApplyForce.sqrMagnitude < minForce * minForce)
+            {
+                boidApplyForce = minForce * boidApplyForce.normalized;
+            }
+
+            boidRigidbodies[boid].AddForce(boidApplyForce, ForceMode.Force);
         }
     }
 
