@@ -1321,16 +1321,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BoidFactor: 1
-  SeparationFactor: 5
-  SeparationDistance: 1
+  SeparationFactor: 10
+  SeparationDistance: 0.2
   SeparationUsesFov: 0
   AlignmentFactor: 1
-  AlignmentDistance: 2
+  AlignmentDistance: 0.8
   AlignmentUsesFov: 0
   CohesionFactor: 1
-  CohesionDistance: 2
+  CohesionDistance: 0.8
   CohesionUsesFov: 0
-  TargetFactor: 1.5
+  TargetFactor: 1
   MaxTargetDistance: 100000
   TargetUsesFov: 0
   targetMode: 1
@@ -4447,12 +4447,16 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3906733160417276171, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
+      propertyPath: debug
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3906733160417276171, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
       propertyPath: waveSpeed
       value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 3906733160417276171, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
       propertyPath: pingingCooldown
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 3906733160417276171, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
       propertyPath: sonarMaterial.Array.size
@@ -4466,6 +4470,10 @@ PrefabInstance:
       propertyPath: sonarMaterial.Array.data[1]
       value: 
       objectReference: {fileID: 2100000, guid: 0472a6c355be96b4c9d9c6956b5dfb6c, type: 2}
+    - target: {fileID: 6080699922249468945, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
+      propertyPath: overlayType
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6120759425548519856, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

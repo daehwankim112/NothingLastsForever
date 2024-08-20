@@ -46,13 +46,18 @@ public class SonarEffectController : MonoBehaviour
         }
         if (debug && !pinging)
         {
+            currentWaveDistance = 0.0f;
             StartCoroutine(SonarPing());
         }
         if (pinging)
         {
-            currentWaveDistance += waveSpeed * Time.deltaTime;
+            currentWaveDistance += Time.deltaTime;
             foreach (Material sonarMaterial in sonarMaterial)
-            sonarMaterial.SetFloat("_WaveDistance", currentWaveDistance);
+            {
+                sonarMaterial.SetFloat("_WaveDistance", waveSpeed * currentWaveDistance);
+                sonarMaterial.SetFloat("_Threshold", 1);
+                sonarMaterial.SetFloat("_MaxWaveDistance", pingingCooldown);
+            }
             if (currentWaveDistance > pingingCooldown)
             {
                 currentWaveDistance = 999f;
@@ -89,11 +94,10 @@ public class SonarEffectController : MonoBehaviour
     IEnumerator SonarPing()
     {
         pinging = true;
-        currentWaveDistance = 0.0f;
         audioSource.PlayOneShot(audio);
-        yield return new WaitForSeconds(pingingCooldown);
+        yield return new WaitForSeconds(pingingCooldown + 0.1f);
         pinging = false;
         handPoseDetectionAndPing.pingGestureActivated = false;
-        currentWaveDistance = 999.0f;
+        currentWaveDistance = 999f;
     }
 }

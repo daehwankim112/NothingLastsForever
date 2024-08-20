@@ -142,8 +142,6 @@ PlayerSettings:
   bundleVersion: 0.1
   preloadedAssets:
   - {fileID: 11400000, guid: 3ae871fe05cc92e4481d9ad119217b61, type: 2}
-  - {fileID: 966548323782697394, guid: 8448044cf226bf9459f02f0664864dce, type: 2}
-  - {fileID: 11400000, guid: 79eb95d56d862d842a31afafd1571946, type: 2}
   metroInputSource: 0
   wsaTransparentSwapchain: 0
   m_HolographicPauseOnTrackingLoss: 1
@@ -833,7 +831,13 @@ PlayerSettings:
   XboxOneOverrideIdentityPublisher: 
   vrEditorSettings: {}
   cloudServicesEnabled:
+    Build: 0
+    Game Performance: 0
+    Legacy Analytics: 0
+    Purchasing: 0
+    UDP: 0
     UNet: 1
+    Unity Ads: 0
   luminIcon:
     m_Name: 
     m_ModelFolderPath: 
@@ -853,11 +857,11 @@ PlayerSettings:
   apiCompatibilityLevel: 6
   activeInputHandler: 0
   windowsGamepadBackendHint: 0
-  cloudProjectId: 6f0808d7-213c-4165-bfce-73753addc3e2
+  cloudProjectId: 91d6c867-95f3-4741-864f-47b36703296a
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
   projectName: NothingLastsForever
-  organizationId: kdw8731
+  organizationId: nothinglastsforeverxr
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   hmiLoadingImage: {fileID: 0}
