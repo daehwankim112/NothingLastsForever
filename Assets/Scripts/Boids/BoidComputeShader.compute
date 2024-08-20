@@ -1,0 +1,72 @@
+
+#pragma kernel CSMain
+
+
+
+StructuredBuffer<float3> boidPositions;
+StructuredBuffer<float3> boidVelocities;
+
+StructuredBuffer<float3> targetPositions;
+StructuredBuffer<float3> avoidPositions;
+
+
+RWStructuredBuffer<float3> boidForces;
+
+
+
+float separationRadius;
+float alignmentRadius;
+float cohesionRadius;
+float targetRadius;
+float avoidRadius;
+
+float separationFactor;
+float alignmentFactor;
+float cohesionFactor;
+float targetFactor;
+float avoidFactor;
+
+
+
+[numthreads(256,1,1)]
+void CSMain (uint3 id : SV_DispatchThreadID)
+{
+    uint thisBoid = id.x;
+
+
+    float3 position = boidPositions[thisBoid];
+    float3 velocity = boidVelocities[thisBoid];
+
+
+    float totalSeparationWeight = 0.0;
+    float totalAlignWeight = 0.0;
+    float totalCohesionWeight = 0.0;
+
+    float3 separationForce = float3(20, 0, 0);
+    float3 alignmentForce = float3(0, 0, 0);
+    float3 cohesionForce = float3(0, 0, 0);
+
+
+    for (uint otherBoid = 0; otherBoid < boidPositions.Length; otherBoid++)
+    {
+        if (thisBoid == otherBoid) continue;
+
+        float3 otherPosition = boidPositions[otherBoid];
+        float3 otherVelocity = boidVelocities[otherBoid];
+
+        float3 toOther = otherPosition - position;
+        float distance = length(toOther);
+
+
+        if (distance < separationRadius)
+        {
+            float weight = 1.0f - (distance / separationRadius);
+
+            separationForce += toOther / distance;
+        }
+    }
+
+    boidForces[thisBoid] = float3(10, 0, 0) + (separationFactor * separationForce)
+                         + (alignmentRadius * alignmentForce)
+                         + (cohesionRadius * cohesionForce);
+}
