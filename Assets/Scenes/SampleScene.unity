@@ -1021,8 +1021,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60a382b112bc1fc48a0d24f214ea3c1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numBoids: 800
-  boidDrag: 0.5
+  numBoids: 200
+  boidDrag: 1
   boid: {fileID: 6677586760661799738, guid: 129ac79c073da8f4eae06a18e0c77a23, type: 3}
   boidManager: {fileID: 150876691}
   boids: []
@@ -1077,33 +1077,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de964c1f4de50064a9bbe56da134f06f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BoidFactor: 1
-  SeparationFactor: 15
+  BoidFactor: 5
+  MaxSpeed: 1
+  MinSpeed: 0.5
+  SeparationFactor: 1
   SeparationRadius: 0.05
   SeparationUsesFov: 0
-  AlignmentFactor: 2
-  AlignmentRadius: 3
+  AlignmentFactor: 1
+  AlignmentRadius: 1
   AlignmentUsesFov: 1
-  CohesionFactor: 5
-  CohesionRadius: 20
+  CohesionFactor: 1
+  CohesionRadius: 1
   CohesionUsesFov: 1
-  TargetFactor: 0.05
+  TargetFactor: 0.01
   TargetRadius: 100000
   TargetUsesFov: 0
-  targetMode: 1
+  targetMode: 0
   targets:
   - {fileID: 1842421998}
-  AvoidFactor: 0.1
-  AvoidRadius: 1
+  AvoidFactor: 1
+  AvoidRadius: 10
   AvoidUsesFov: 1
   avoidMode: 0
   avoids:
   - {fileID: 797848843}
-  boundingRadius: 100
+  boundingRadius: 1
   boundingEffectDistance: 20
-  maxForce: 10
+  maxForce: 2
   minForce: 1
-  boidFov: 75
+  boidFov: 45
   BoidComputeShader: {fileID: 7200000, guid: b48d0693ac2fa36449ebfa4123ba09c0, type: 3}
 --- !u!1001 &309821952
 PrefabInstance:
@@ -2489,7 +2491,7 @@ PrefabInstance:
       objectReference: {fileID: 309821954}
     - target: {fileID: 7950999700976850951, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
       propertyPath: <SceneLoadedEvent>k__BackingField.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7950999700976850951, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
       propertyPath: <SceneLoadedEvent>k__BackingField.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName

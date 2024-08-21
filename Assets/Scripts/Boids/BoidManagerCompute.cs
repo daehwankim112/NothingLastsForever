@@ -8,111 +8,119 @@ public class BoidManagerCompute : MonoBehaviour
 {
     [SerializeField]
     // Scale the force of the boid manager
-    public float BoidFactor = 1.0f;
+    public float BoidFactor;
+
+    [SerializeField]
+    // Scale the force of the boid manager
+    public float MaxSpeed;
+
+    [SerializeField]
+    // Scale the force of the boid manager
+    public float MinSpeed;
 
 
     [SerializeField]
     // How aggressivly the boids will avoid each other
-    public float SeparationFactor = 1.0f;
+    public float SeparationFactor;
 
     [SerializeField]
     // The distance boids will stay away from each other
-    public float SeparationRadius = 1.0f;
+    public float SeparationRadius;
 
     [SerializeField]
     // Will the boids avoid boids they can't see
-    public bool SeparationUsesFov = false;
+    public bool SeparationUsesFov;
 
 
     [SerializeField]
     // How aggressivly boids will match the velocity of boids around them
-    public float AlignmentFactor = 1.0f;
+    public float AlignmentFactor;
 
     [SerializeField]
     // The max distance for alignment
-    public float AlignmentRadius = 1.0f;
+    public float AlignmentRadius;
 
     [SerializeField]
     // Will the boids align with boids they can't see
-    public bool AlignmentUsesFov = false;
+    public bool AlignmentUsesFov;
 
 
     [SerializeField]
     // How aggressivly boids will stick together
-    public float CohesionFactor = 1.0f;
+    public float CohesionFactor;
 
     [SerializeField]
     // The max distance for sticking together
-    public float CohesionRadius = 1.0f;
+    public float CohesionRadius;
 
     [SerializeField]
     // Will the boids go to boids they can't see
-    public bool CohesionUsesFov = false;
+    public bool CohesionUsesFov;
 
 
     [SerializeField]
     // How aggressivly boids will move towards the target
-    public float TargetFactor = 1.0f;
+    public float TargetFactor;
 
     [SerializeField]
     // The max distance for targeting
-    public float TargetRadius = 1.0f;
+    public float TargetRadius;
 
     [SerializeField]
     // Will the boids go to targets they can't see
-    public bool TargetUsesFov = false;
+    public bool TargetUsesFov;
 
     [SerializeField]
     // Boid target mode
-    public BoidRuleMode targetMode = BoidRuleMode.Average;
+    public BoidRuleMode targetMode;
 
     [SerializeField]
     // The targets boids will move towards
-    public List<Transform> targets = new();
+    public List<Transform> targets;
 
 
     [SerializeField]
     // How aggressivly boids will avoid avoids
-    public float AvoidFactor = 1.0f;
+    public float AvoidFactor;
 
     [SerializeField]
     // The max distance for avoiding
-    public float AvoidRadius = 1.0f;
+    public float AvoidRadius;
 
     [SerializeField]
     // Will the boids avoid avoids they can't see
-    public bool AvoidUsesFov = false;
+    public bool AvoidUsesFov;
 
     [SerializeField]
     // Boid avoid mode
-    public BoidRuleMode avoidMode = BoidRuleMode.Average;
+    public BoidRuleMode avoidMode;
 
     [SerializeField]
     // The things boids will move away from
-    public List<Transform> avoids = new();
+    public List<Transform> avoids;
 
 
     [SerializeField]
     // Limit to how far boids can go
-    public float boundingRadius = 100.0f;
+    public float boundingRadius;
 
     [SerializeField]
     // When the boids start turning back to not go too far
-    public float boundingEffectDistance = 90.0f;
+    public float boundingEffectDistance;
 
 
     [SerializeField]
     // The maximum force the boid manager will apply
-    public float maxForce = 10.0f;
+    public float maxForce;
 
     [SerializeField]
     // The minimum force the boid manager will apply
-    public float minForce = 1.0f;
+    public float minForce;
 
 
     [SerializeField]
     // The range of angles boids will see other boids
-    public float boidFov = 45.0f;
+    public float boidFov;
 
 
     [SerializeField]
@@ -133,6 +141,14 @@ public class BoidManagerCompute : MonoBehaviour
     public ComputeShader BoidComputeShader;
 
     ComputeBuffer boidPositionsBuffer, boidVelocitiesBuffer, targetPositionsBuffer, avoidPositionsBuffer, boidForcesBuffer;
+
+
+
+    //void Start()
+    //{
+    //    boids = new List<Transform>();
+    //    boidRigidbodies = new List<Rigidbody>();
+    //}
 
 
 
@@ -218,13 +234,20 @@ public class BoidManagerCompute : MonoBehaviour
         BoidComputeShader.SetFloat("avoidRadius", AvoidRadius);
 
 
+        BoidComputeShader.SetFloat("separationFactor", SeparationFactor);
+        BoidComputeShader.SetFloat("alignmentFactor", AlignmentFactor);
+        BoidComputeShader.SetFloat("cohesionFactor", CohesionFactor);
+        BoidComputeShader.SetFloat("targetFactor", TargetFactor);
+        BoidComputeShader.SetFloat("avoidFactor", AvoidFactor);
+
+
         BoidComputeShader.SetBool("separationFov", SeparationUsesFov);
         BoidComputeShader.SetBool("alignmentFov", AlignmentUsesFov);
         BoidComputeShader.SetBool("cohesionFov", CohesionUsesFov);
         BoidComputeShader.SetBool("targetFov", TargetUsesFov);
         BoidComputeShader.SetBool("avoidFov", AvoidUsesFov);
 
-        BoidComputeShader.SetFloat("BoidFov", boidFov);
+        BoidComputeShader.SetFloat("halfFovRad", 0.5f * boidFov * Mathf.Deg2Rad);
 
 
         BoidComputeShader.SetBuffer(0, "boidPositions", boidPositionsBuffer);
@@ -244,10 +267,18 @@ public class BoidManagerCompute : MonoBehaviour
 
         for (int boid = 0; boid < numBoids; boid++)
         {
-            Vector3 boidApplyForce = Vector3.ClampMagnitude(forces[boid] * BoidFactor, maxForce);
+            Vector3 boundingForce = Vector3.zero;
+
+            if (Physics.Raycast(boids[boid].position, boids[boid].GetComponent<Rigidbody>().velocity, out RaycastHit hit, boundingRadius))
+            {
+                boundingForce = Vector3.Reflect(hit.normal, frameBoidVelocities[boid]) * maxForce;
+            }
 
 
-            if (boidApplyForce.sqrMagnitude < 0.001f)
+            Vector3 boidApplyForce = Vector3.ClampMagnitude(forces[boid] + boundingForce, maxForce);
+
+
+            if (boidApplyForce.sqrMagnitude < 0.0000001f)
             {
                 boidApplyForce = minForce * frameBoidVelocities[boid].normalized;
             }
@@ -256,7 +287,18 @@ public class BoidManagerCompute : MonoBehaviour
                 boidApplyForce = minForce * boidApplyForce.normalized;
             }
 
-            boidRigidbodies[boid].AddForce(boidApplyForce, ForceMode.Force);
+            //Debug.Log(forces[boid]);
+
+            boidRigidbodies[boid].AddForce(BoidFactor * boidApplyForce, ForceMode.Force);
+
+            Vector3 newVel = Vector3.ClampMagnitude(boidRigidbodies[boid].velocity, MaxSpeed);
+
+            if (newVel.sqrMagnitude < MinSpeed * MinSpeed)
+            {
+                newVel = MinSpeed * newVel.normalized;
+            }
+
+            boidRigidbodies[boid].velocity = newVel;
         }
     }
 

@@ -32,7 +32,27 @@ bool cohesionFov;
 bool targetFov;
 bool avoidFov;
 
-float boidFov;
+float halfFovRad;
+
+
+float3 SteerTowards(float3 localTarget, float3 velocity)
+{
+	float distance = length(localTarget);
+
+	if (distance < 0.0001f)
+		return float3(0, 0, 0);
+
+	localTarget /= distance;
+
+	float dotProduct = dot(localTarget, velocity);
+
+	if (dotProduct > 0.9999f)
+		return float3(0, 0, 0);
+
+	float3 steering = localTarget - velocity;
+
+	return steering;
+}
 
 
 
@@ -43,23 +63,29 @@ void CSMain (uint3 id : SV_DispatchThreadID)
 
 
     float3 position = boidPositions[thisBoid];
+
+
+    if (length(position) > 20.0f)
+    {
+        boidForces[thisBoid] = -position;
+
+        //return;
+    }
+
     float3 velocity = boidVelocities[thisBoid];
 
 
     float totalSeparationWeight = 0.0f;
     float totalAlignmentWeight = 0.0f;
     float totalCohesionWeight = 0.0f;
+    float totalTargetWeight = 0.0f;
+    float totalAvoidWeight = 0.0f;
 
-    float3 separationForce = float3(0, 0, 0);
-    float3 alignmentForce = float3(0, 0, 0);
-    float3 cohesionForce = float3(0, 0, 0);
-
-
-    if (length(position) > 10.0f)
-    {
-        boidForces[thisBoid] = -position;
-        return;
-    }
+    float3 averageSeparationLocation = float3(0, 0, 0);
+    float3 averageAlignmentVelocity = float3(0, 0, 0);
+    float3 averageCohesionLocation = float3(0, 0, 0);
+    float3 averageTargetLocation = float3(0, 0, 0);
+    float3 averageAvoidLocation = float3(0, 0, 0);
 
 
     for (uint otherBoid = 0; otherBoid < boidPositions.Length; otherBoid++)
@@ -70,59 +96,133 @@ void CSMain (uint3 id : SV_DispatchThreadID)
         float3 otherVelocity = boidVelocities[otherBoid];
 
         float3 toOther = otherPosition - position;
-        float distance = length(toOther);
+        float distanceToOther = distance(position, otherPosition);
 
         
-        float angle = acos(dot(velocity, toOther) / (length(velocity) * length(toOther)));
+        float3 toOtherNormalized = normalize(toOther);
+        float3 velocityNormalized = normalize(velocity);
 
-        bool otherVisible = angle < 0.5f * boidFov;
+        float dotProduct = dot(velocityNormalized, toOtherNormalized);
+        dotProduct = clamp(dotProduct, -1.0f, 1.0f);
+        float angle = acos(dotProduct);
+        bool otherVisible = angle < halfFovRad;
 
 
         // Separation
-        if (distance < separationRadius && (!separationFov || otherVisible))
+        if (distanceToOther < separationRadius && (!separationFov || otherVisible))
         {
-            float weight = 1.0f - (distance / separationRadius);
+            float weight = 1.0f;// - (distanceToOther / separationRadius);
 
             totalSeparationWeight += weight;
 
-            separationForce += weight * -1.0f * toOther;
+            averageSeparationLocation += weight * toOther;
         }
 
 
         // Alignment
-        if (distance < alignmentRadius && (!alignmentFov || otherVisible))
+        if (separationRadius < distanceToOther && distanceToOther < alignmentRadius && (!alignmentFov || otherVisible))
         {
-            float weight = 1.0f - (distance / alignmentRadius);
+            float weight = 1.0f;// - (distanceToOther / alignmentRadius);
 
             totalAlignmentWeight += weight;
 
-            alignmentForce += weight * otherVelocity;
+            averageAlignmentVelocity += weight * otherVelocity;
         }
 
 
         // Cohesion
-        if (distance < cohesionRadius && (!cohesionFov || otherVisible))
+        if (separationRadius < distanceToOther && distanceToOther < cohesionRadius && (!cohesionFov || otherVisible))
         {
-            float weight = 1.0f - (distance / cohesionRadius);
+            float weight = 1.0f;// - (distanceToOther / cohesionRadius);
 
             totalCohesionWeight += weight;
 
-            cohesionForce += weight * toOther;
+            averageCohesionLocation += weight * toOther;
         }
     }
 
 
-    if (totalSeparationWeight > 0.01f)
-        separationForce /= totalSeparationWeight;
 
-    if (totalAlignmentWeight > 0.01f)
-        alignmentForce = (alignmentForce / totalAlignmentWeight) - velocity;
+    for (uint target = 0; target < targetPositions.Length; target++)
+    {
+        float3 targetPosition = targetPositions[target];
 
-    if (totalCohesionWeight > 0.01f)
-        cohesionForce /= totalCohesionWeight;
+		float3 toTarget = targetPosition - position;
+		float distanceToTarget = distance(position, targetPosition);
+        
+        float3 toOtherNormalized = normalize(toTarget);
+        float3 velocityNormalized = normalize(velocity);
+
+        float dotProduct = dot(velocityNormalized, toOtherNormalized);
+        dotProduct = clamp(dotProduct, -1.0f, 1.0f);
+        float angle = acos(dotProduct);
+        bool targetVisible = angle < halfFovRad;
+
+		if (distanceToTarget < targetRadius && (!targetFov || targetVisible))
+		{
+			float weight = 1.0f;// - (distanceToTarget / targetRadius);
+
+			totalTargetWeight += weight;
+
+			averageTargetLocation += weight * toTarget;
+		}
+    }
 
 
-    boidForces[thisBoid] = (separationFactor * separationForce)
-                         + (alignmentRadius * alignmentForce)
-                         + (cohesionRadius * cohesionForce);
+
+    for (uint avoid = 0; avoid < avoidPositions.Length; avoid++)
+    {
+        float3 avoidPosition = avoidPositions[target];
+
+		float3 toAvoid = avoidPosition - position;
+		float distanceToAvoid = distance(position, avoidPosition);
+        
+        float3 toOtherNormalized = normalize(toAvoid);
+        float3 velocityNormalized = normalize(velocity);
+
+        float dotProduct = dot(velocityNormalized, toOtherNormalized);
+        dotProduct = clamp(dotProduct, -1.0f, 1.0f);
+        float angle = acos(dotProduct);
+        bool avoidVisible = angle < halfFovRad;
+
+		if (distanceToAvoid < targetRadius && (!avoidFov || avoidVisible))
+		{
+			float weight = 1.0f;// - (distanceToTarget / targetRadius);
+
+			totalAvoidWeight += weight;
+
+			averageAvoidLocation += weight * toAvoid;
+		}
+    }
+
+
+  //  if (totalSeparationWeight > 0.0001f)
+  //      averageSeparationLocation /= totalSeparationWeight;
+  //  else
+		//averageSeparationLocation = float3(0, 0, 0);
+
+    //if (totalAlignmentWeight > 0.01f)
+    //    averageAlignmentVelocity /= totalAlignmentWeight;
+    //else
+    //    averageAlignmentVelocity = float3(0, 0, 0);
+
+    if (totalCohesionWeight > 0.0001f)
+        averageCohesionLocation /= totalCohesionWeight;
+    else
+        averageCohesionLocation = float3(0, 0, 0);
+
+    if (totalTargetWeight > 0.0001f)
+        averageTargetLocation /= totalTargetWeight;
+    else
+        averageTargetLocation = float3(0, 0, 0);
+
+
+    float3 steeringForce = (separationFactor * SteerTowards(-averageSeparationLocation, velocity))
+                         + (alignmentFactor * SteerTowards(averageAlignmentVelocity, velocity))
+                         + (cohesionFactor * SteerTowards(averageCohesionLocation, velocity))
+                         + (targetFactor * SteerTowards(averageTargetLocation, velocity))
+                         + (avoidFactor * SteerTowards(-averageAvoidLocation, velocity));
+
+
+    boidForces[thisBoid] = steeringForce;
 }
