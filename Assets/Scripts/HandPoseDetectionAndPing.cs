@@ -5,8 +5,11 @@ using UnityEngine;
 public class HandPoseDetectionAndPing : MonoBehaviour
 {
     [HideInInspector] public bool pingGestureActivated = false;
-    bool holdingLeftHand = false;
-    bool holdingRightHand = false;
+    [SerializeField] private Transform projectile;
+    [SerializeField] private Transform leftHandPinchArea;
+    [SerializeField] private Transform rightHandPinchArea;
+    private bool holdingLeftHand = false;
+    private bool holdingRightHand = false;
 
     public void LeftPing()
     {
@@ -32,5 +35,17 @@ public class HandPoseDetectionAndPing : MonoBehaviour
         Debug.Log("Right Unping!");
         holdingRightHand = false;
         pingGestureActivated = true;
+    }
+
+    public void LeftFire()
+    {
+        Debug.Log("Left Fire!");
+        Instantiate(projectile, leftHandPinchArea.position, leftHandPinchArea.rotation);
+    }
+
+    public void RightFire()
+    {
+        Debug.Log("Right Fire!");
+        Instantiate(projectile, rightHandPinchArea.position, rightHandPinchArea.rotation);
     }
 }
