@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UIElements;
 using static BoidManager;
 
 public class BoidManagerCompute : MonoBehaviour
@@ -190,6 +191,7 @@ public class BoidManagerCompute : MonoBehaviour
 
 
 
+
     void FixedUpdate()
     {
         UpdateBoids();
@@ -204,7 +206,7 @@ public class BoidManagerCompute : MonoBehaviour
         int numTargets = targets.Count;
         int numAvoids = avoids.Count;
 
-        if (numBoids * numTargets * numAvoids == 0) return;
+        if (numBoids == 0) return;
 
         frameBoids = Enumerable.Range(0, numBoids).ToList();
         frameBoidPositions = boids.Select(boid => boid.position).ToList();
@@ -267,13 +269,8 @@ public class BoidManagerCompute : MonoBehaviour
 
         for (int boid = 0; boid < numBoids; boid++)
         {
-            Vector3 boundingForce = Vector3.zero;
-
-            if (Physics.Raycast(boids[boid].position, boids[boid].GetComponent<Rigidbody>().velocity, out RaycastHit hit, boundingRadius))
-            {
-                boundingForce = Vector3.Reflect(hit.normal, frameBoidVelocities[boid]) * maxForce;
-            }
-
+            Vector3 boundingForce = maxForce * FindSafePath(frameBoidPositions[boid], frameBoidVelocities[boid]);
+            
 
             Vector3 boidApplyForce = Vector3.ClampMagnitude(forces[boid] + boundingForce, maxForce);
 
@@ -300,18 +297,82 @@ public class BoidManagerCompute : MonoBehaviour
 
             boidRigidbodies[boid].velocity = newVel;
         }
+
+        ReleaseBuffers();
+    }
+
+
+    private Vector3 FindSafePath(Vector3 position, Vector3 velocity)
+    {
+        Vector3 safePath = Vector3.zero;
+
+
+        if (!Physics.Raycast(position, velocity, out RaycastHit hit, boundingRadius)) return safePath;
+
+        float farthestDistance = hit.distance;
+
+        Vector3 forwardDirection = velocity.normalized;
+
+        Vector3 orthogonalDirection = Vector3.Cross(forwardDirection, hit.normal);
+
+
+
+        int numSearches = 6;
+        int numDirections = 6;
+        for (int i = numSearches; i > 1; i--)
+        {
+            float searchAngle = (float) ((i + (numSearches / 2)) % numSearches) * 180.0f / (float) numSearches;
+
+            for (int j = 0; j < numDirections; j++)
+            {
+                float searchDirection = (float) j * 360.0f / (float) numDirections;
+
+                Vector3 testDirection = Quaternion.AngleAxis(searchDirection, forwardDirection)
+                                      * (Quaternion.AngleAxis(searchAngle, orthogonalDirection)
+                                      * forwardDirection);
+
+                if (Physics.Raycast(position, testDirection, out RaycastHit randomHit, boundingRadius))
+                {
+                    if (randomHit.distance > farthestDistance)
+                    {
+                        farthestDistance = randomHit.distance;
+                        safePath = testDirection;
+                    }
+                }
+                else
+                {
+                    safePath = testDirection;
+                    break;
+                }
+            }
+        }
+
+        return safePath;
     }
 
 
 
     private void OnDestroy()
     {
-        boidPositionsBuffer.Release();
-        boidVelocitiesBuffer.Release();
+        ReleaseBuffers();
+    }
 
-        targetPositionsBuffer.Release();
-        avoidPositionsBuffer.Release();
-
-        boidForcesBuffer.Release();
+    private void ReleaseBuffers()
+    {
+        if (boidPositionsBuffer != null)
+        {
+            boidPositionsBuffer.Release();
+            boidPositionsBuffer = null;
+        }
+        if (boidVelocitiesBuffer != null)
+        {
+            boidVelocitiesBuffer.Release();
+            boidVelocitiesBuffer = null;
+        }
+        if (boidForcesBuffer != null)
+        {
+            boidForcesBuffer.Release();
+            boidForcesBuffer = null;
+        }
     }
 }

@@ -986,7 +986,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 150876686}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 649afa8163d36f1479bd3edad858d0e8, type: 3}
   m_Name: 
@@ -1021,7 +1021,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60a382b112bc1fc48a0d24f214ea3c1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numBoids: 200
+  numBoids: 2000
   boidDrag: 1
   boid: {fileID: 6677586760661799738, guid: 129ac79c073da8f4eae06a18e0c77a23, type: 3}
   boidManager: {fileID: 150876691}
@@ -1091,17 +1091,17 @@ MonoBehaviour:
   CohesionUsesFov: 1
   TargetFactor: 0.01
   TargetRadius: 100000
-  TargetUsesFov: 0
+  TargetUsesFov: 1
   targetMode: 0
   targets:
   - {fileID: 1842421998}
   AvoidFactor: 1
-  AvoidRadius: 10
+  AvoidRadius: 1
   AvoidUsesFov: 1
   avoidMode: 0
   avoids:
   - {fileID: 797848843}
-  boundingRadius: 1
+  boundingRadius: 2
   boundingEffectDistance: 20
   maxForce: 2
   minForce: 1

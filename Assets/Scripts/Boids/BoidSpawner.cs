@@ -77,7 +77,7 @@ public class BoidSpawner : MonoBehaviour
             newBoid.GetComponent<MeshRenderer>().material.SetColor("_EmissionColor", randomColor);
             newBoid.GetComponent<MeshRenderer>().material.color = randomColor;
 
-            //newBoid.GetComponent<Rigidbody>().velocity = Random.onUnitSphere * 2.0f;
+            newBoid.GetComponent<Rigidbody>().velocity = Random.onUnitSphere * 0.1f;
             newBoid.GetComponent<Rigidbody>().drag = boidDrag;
 
             boids.Add(newBoid);
