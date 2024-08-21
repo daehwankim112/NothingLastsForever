@@ -7,7 +7,7 @@ public class SonarEffectController : MonoBehaviour
     [SerializeField] private List<Material> sonarMaterial;
     [SerializeField] private float waveSpeed = 3f;
     [SerializeField] private Camera mainCamera;
-    [SerializeField] private HandPoseDetectionAndPing handPoseDetectionAndPing;
+    [SerializeField] private HandPoseTrigger handPoseTrigger;
     [SerializeField] private AudioClip audio;
     [SerializeField] private float pingingCooldown = 2.5f;
     [SerializeField] private bool debug = false;
@@ -32,14 +32,39 @@ public class SonarEffectController : MonoBehaviour
 
         // Check if the ping gesture is activated or the A or X button is pressed. RawButton.A and RawButton.X are mapped as Button.One
         // https://developer.oculus.com/documentation/unity/unity-ovrinput/
-        /*if ((handPoseDetectionAndPing.pingGestureActivated 
-            || (OVRInput.GetDown(OVRInput.Button.One))) 
-            && !pinging)
+        /*if (OVRInput.GetDown(OVRInput.Button.One))
         {
-            StartCoroutine(SonarPing());
+            OVRInput.SetControllerVibration(0.5f, 0.5f, OVRInput.Controller.RTouch);
+            OVRInput.SetControllerVibration(0.5f, 0.5f, OVRInput.Controller.LTouch);
+            Debug.Log("One button pressed");
+        }
+        if (OVRInput.GetUp(OVRInput.Button.One))
+        {
+            OVRInput.SetControllerVibration(0, 0, OVRInput.Controller.RTouch);
+            OVRInput.SetControllerVibration(0, 0, OVRInput.Controller.LTouch);
+        }
+        if (OVRInput.Get(OVRInput.RawButton.A))
+        {
+            OVRInput.SetControllerVibration(0.5f, 0.5f, OVRInput.Controller.RTouch);
+            Debug.Log("A button pressed");
+        }
+        else
+        {
+            OVRInput.SetControllerVibration(0, 0, OVRInput.Controller.RTouch);
+        }
+        if (OVRInput.Get(OVRInput.RawButton.X))
+        {
+            OVRInput.SetControllerVibration(0.5f, 0.5f, OVRInput.Controller.LTouch);
+            Debug.Log("X button pressed");
+        }
+        else
+        {
+            OVRInput.SetControllerVibration(0, 0, OVRInput.Controller.LTouch);
         }*/
-        if ((handPoseDetectionAndPing.pingGestureActivated 
-            || (OVRInput.GetDown(OVRInput.RawButton.A) || OVRInput.GetDown(OVRInput.RawButton.X))) 
+
+
+        if ((handPoseTrigger.pingGestureActivated 
+            || (OVRInput.Get(OVRInput.RawButton.A) || OVRInput.Get(OVRInput.RawButton.X))) 
             && !pinging && !debug)
         {
             StartCoroutine(SonarPing());
@@ -56,9 +81,9 @@ public class SonarEffectController : MonoBehaviour
             {
                 sonarMaterial.SetFloat("_WaveDistance", waveSpeed * currentWaveDistance);
                 sonarMaterial.SetFloat("_Threshold", 1);
-                sonarMaterial.SetFloat("_MaxWaveDistance", pingingCooldown);
+                sonarMaterial.SetFloat("_MaxWaveDistance", waveSpeed * pingingCooldown);
             }
-            if (currentWaveDistance > pingingCooldown)
+            if (currentWaveDistance > waveSpeed * pingingCooldown)
             {
                 currentWaveDistance = 999f;
             }
@@ -66,22 +91,6 @@ public class SonarEffectController : MonoBehaviour
         else
         {
             currentWaveDistance = 999f;
-        }
-        if (OVRInput.GetDown(OVRInput.Button.One))
-        {
-            OVRInput.SetControllerVibration(0.5f, 0.5f, OVRInput.Controller.RTouch);
-            OVRInput.SetControllerVibration(0.5f, 0.5f, OVRInput.Controller.LTouch);
-            Debug.Log("One button pressed");
-        }
-        if (OVRInput.GetDown(OVRInput.RawButton.A))
-        {
-            OVRInput.SetControllerVibration(0.5f, 0.5f, OVRInput.Controller.RTouch);
-            Debug.Log("A button pressed");
-        }
-        if (OVRInput.GetDown(OVRInput.RawButton.X))
-        {
-            OVRInput.SetControllerVibration(0.5f, 0.5f, OVRInput.Controller.LTouch);
-            Debug.Log("X button pressed");
         }
     }
 
@@ -97,7 +106,7 @@ public class SonarEffectController : MonoBehaviour
         audioSource.PlayOneShot(audio);
         yield return new WaitForSeconds(pingingCooldown + 0.1f);
         pinging = false;
-        handPoseDetectionAndPing.pingGestureActivated = false;
+        handPoseTrigger.pingGestureActivated = false;
         currentWaveDistance = 999f;
     }
 }

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HandPoseDetectionAndPing : MonoBehaviour
+public class HandPoseTrigger : MonoBehaviour
 {
     [HideInInspector] public bool pingGestureActivated = false;
     [SerializeField] private Transform projectile;
@@ -11,39 +11,39 @@ public class HandPoseDetectionAndPing : MonoBehaviour
     private bool holdingLeftHand = false;
     private bool holdingRightHand = false;
 
-    public void LeftPing()
+    public void LeftHandPing()
     {
         Debug.Log("Left Ping!");
         holdingLeftHand = true;
     }
 
-    public void LeftUnping()
+    public void LeftHandUnping()
     {
         Debug.Log("Left Unping!");
         holdingLeftHand = false;
         pingGestureActivated = true;
     }
 
-    public void RightPing()
+    public void RightHandPing()
     {
         Debug.Log("Right Ping!");
         holdingRightHand = true;
     }
 
-    public void RightUnping()
+    public void RightHandUnping()
     {
         Debug.Log("Right Unping!");
         holdingRightHand = false;
         pingGestureActivated = true;
     }
 
-    public void LeftFire()
+    public void LeftHandFire()
     {
         Debug.Log("Left Fire!");
         Instantiate(projectile, leftHandPinchArea.position, leftHandPinchArea.rotation);
     }
 
-    public void RightFire()
+    public void RightHandFire()
     {
         Debug.Log("Right Fire!");
         Instantiate(projectile, rightHandPinchArea.position, rightHandPinchArea.rotation);
