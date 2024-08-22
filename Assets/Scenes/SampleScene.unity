@@ -1239,8 +1239,8 @@ GameObject:
   - component: {fileID: 150876688}
   - component: {fileID: 150876687}
   - component: {fileID: 150876689}
-  - component: {fileID: 150876691}
   - component: {fileID: 150876690}
+  - component: {fileID: 150876691}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -1255,14 +1255,14 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 150876686}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 649afa8163d36f1479bd3edad858d0e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   GravitySphere: {fileID: 797848838}
-  moonPrefab: {fileID: 3406852209258243453, guid: 7485d9131ac2aff48be6d6810470c5be, type: 3}
-  numberOfMoon: 15
+  moonPrefab: {fileID: 6677586760661799738, guid: 129ac79c073da8f4eae06a18e0c77a23, type: 3}
+  numberOfMoon: 0
 --- !u!4 &150876688
 Transform:
   m_ObjectHideFlags: 0
@@ -1303,9 +1303,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60a382b112bc1fc48a0d24f214ea3c1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numBoids: 100
-  boidDrag: 2
-  boid: {fileID: 3406852209258243453, guid: 7485d9131ac2aff48be6d6810470c5be, type: 3}
+  numBoids: 2000
+  boidDrag: 1
+  boid: {fileID: 7311501369167484682, guid: 8f8e48919d877c44a8e15b1e8035c573, type: 3}
   boidManager: {fileID: 150876691}
   boids: []
 --- !u!114 &150876691
@@ -1315,7 +1315,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 150876686}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5d1ab908629309c42b5f9201311d503c, type: 3}
   m_Name: 
@@ -1347,8 +1347,48 @@ MonoBehaviour:
   maxForce: 0.5
   minForce: 0.1
   boidFov: 75
---- !u!1 &175985410
-GameObject:
+--- !u!114 &150876691
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 150876686}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de964c1f4de50064a9bbe56da134f06f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionAvoidanceFactor: 5
+  CollisionAvoidanceRadius: 0.5
+  FramesBetweenCollisionChecks: 10
+  boidSettings:
+    MaxSpeed: 1
+    MinSpeed: 0.1
+    MaxTurning: 5
+    boidFov: 90
+    SeparationFactor: 2
+    SeparationRadius: 0.05
+    SeparationUsesFov: 0
+    AlignmentFactor: 1
+    AlignmentRadius: 1
+    AlignmentUsesFov: 1
+    CohesionFactor: 1
+    CohesionRadius: 1
+    CohesionUsesFov: 1
+    TargetFactor: 0.01
+    TargetRadius: 1000
+    TargetUsesFov: 1
+    AvoidFactor: 1
+    AvoidRadius: 0.25
+    AvoidUsesFov: 1
+  targets:
+  - {fileID: 1842421998}
+  avoids:
+  - {fileID: 797848843}
+  BoidComputeShader: {fileID: 7200000, guid: b48d0693ac2fa36449ebfa4123ba09c0, type: 3}
+--- !u!1001 &309821952
+PrefabInstance:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}

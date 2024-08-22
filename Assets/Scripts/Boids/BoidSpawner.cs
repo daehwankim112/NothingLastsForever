@@ -14,7 +14,7 @@ public class BoidSpawner : MonoBehaviour
     private Transform boid;
 
     [SerializeField]
-    private BoidManager boidManager;
+    private BoidManagerCompute boidManager;
 
     [SerializeField]
     private List<Transform> boids = new List<Transform>();
@@ -32,7 +32,23 @@ public class BoidSpawner : MonoBehaviour
         if (numBoids < 0)
         {
             numBoids = 0;
-        }    
+        }
+
+        for (int i = 0; i < boids.Count; i++)
+        {
+            Transform boid = boids[i];
+
+            if (boid.position.sqrMagnitude > 100.0f)
+            {
+                Transform boidToRemove = boids[i];
+
+                boids.RemoveAt(i);
+
+                boidManager.RemoveBoid(boidToRemove);
+
+                Destroy(boidToRemove.gameObject);
+            }
+        }
 
         if (numBoids == boids.Count) return;
 
@@ -52,7 +68,7 @@ public class BoidSpawner : MonoBehaviour
     {
         for (int i = 0; i < numToSpawn; i++)
         {
-            Vector3 randomLocationOnSphere = Random.onUnitSphere * 2.0f;
+            Vector3 randomLocationOnSphere = Random.onUnitSphere * 0.5f;
             Quaternion randomRotation = Random.rotation;
             Color randomColor = Random.ColorHSV();
 
@@ -67,7 +83,7 @@ public class BoidSpawner : MonoBehaviour
 
             boids.Add(newBoid);
 
-            boidManager.AddBoid(newBoid);
+            boidManager.AddBoid(newBoid, Random.onUnitSphere * 0.1f);
         }
     }
 

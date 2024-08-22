@@ -147,7 +147,7 @@ public class BoidManager : MonoBehaviour
 
 
 
-    void Update()
+    void FixedUpdate()
     {
         UpdateBoids();
     }
