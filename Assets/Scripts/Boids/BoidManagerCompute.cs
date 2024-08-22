@@ -171,8 +171,6 @@ public class BoidManagerCompute : MonoBehaviour
 
         boidBuffer = new ComputeBuffer(numBoids, Marshal.SizeOf(typeof(BufferBoid)));
         settingsBuffer = new ComputeBuffer(1, Marshal.SizeOf(typeof(BoidSettings)));
-        targetPositionsBuffer = new ComputeBuffer(numTargets, sizeof(float) * 3);
-        avoidPositionsBuffer = new ComputeBuffer(numAvoids, sizeof(float) * 3);
 
 
         BufferBoid[] bufferBoids = new BufferBoid[boids.Count];
@@ -192,21 +190,23 @@ public class BoidManagerCompute : MonoBehaviour
 
         if (numTargets > 0)
         {
+            targetPositionsBuffer = new ComputeBuffer(numTargets, sizeof(float) * 3);
             targetPositionsBuffer.SetData(targets.Select(target => target.position).ToArray());
         }
         else
         {
-            // Optionally, set the buffer with a default value or handle the empty case
+            targetPositionsBuffer = new ComputeBuffer(1, sizeof(float) * 3);
             targetPositionsBuffer.SetData(new Vector3[1] { new(1e15f, 1e15f, 1e15f) });
         }
 
         if (numAvoids > 0)
         {
+            avoidPositionsBuffer = new ComputeBuffer(numAvoids, sizeof(float) * 3);
             avoidPositionsBuffer.SetData(avoids.Select(avoid => avoid.position).ToArray());
         }
         else
         {
-            // Optionally, set the buffer with a default value or handle the empty case
+            avoidPositionsBuffer = new ComputeBuffer(1, sizeof(float) * 3);
             avoidPositionsBuffer.SetData(new Vector3[1] { new(1e15f, 1e15f, 1e15f) });
         }
 
