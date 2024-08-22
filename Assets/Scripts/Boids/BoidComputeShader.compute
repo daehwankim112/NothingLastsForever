@@ -9,7 +9,7 @@ struct Boid
     float3 velocity;
 
     float3 force;
-}
+};
 
 
 
@@ -41,7 +41,7 @@ struct BoidSettings
     float AvoidFactor;
     float AvoidRadius;
     bool AvoidUsesFov;
-}
+};
 
 
 

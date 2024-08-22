@@ -1077,35 +1077,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de964c1f4de50064a9bbe56da134f06f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BoidFactor: 5
-  MaxSpeed: 1
-  MinSpeed: 0.5
-  SeparationFactor: 1
-  SeparationRadius: 0.05
-  SeparationUsesFov: 0
-  AlignmentFactor: 1
-  AlignmentRadius: 1
-  AlignmentUsesFov: 1
-  CohesionFactor: 1
-  CohesionRadius: 1
-  CohesionUsesFov: 1
-  TargetFactor: 0.01
-  TargetRadius: 100000
-  TargetUsesFov: 1
-  targetMode: 0
+  CollisionAvoidanceFactor: 5
+  CollisionAvoidanceRadius: 0.5
+  FramesBetweenCollisionChecks: 30
+  boidSettings:
+    BoidFactor: 1
+    MaxSpeed: 2
+    MinSpeed: 0.5
+    MaxTurning: 2
+    boidFov: 90
+    SeparationFactor: 1
+    SeparationRadius: 0.05
+    SeparationUsesFov: 0
+    AlignmentFactor: 1
+    AlignmentRadius: 1
+    AlignmentUsesFov: 1
+    CohesionFactor: 1
+    CohesionRadius: 1
+    CohesionUsesFov: 1
+    TargetFactor: 0.01
+    TargetRadius: 1000
+    TargetUsesFov: 1
+    AvoidFactor: 1
+    AvoidRadius: 0.25
+    AvoidUsesFov: 1
   targets:
   - {fileID: 1842421998}
-  AvoidFactor: 1
-  AvoidRadius: 1
-  AvoidUsesFov: 1
-  avoidMode: 0
   avoids:
   - {fileID: 797848843}
-  boundingRadius: 2
-  boundingEffectDistance: 20
-  maxForce: 2
-  minForce: 1
-  boidFov: 45
   BoidComputeShader: {fileID: 7200000, guid: b48d0693ac2fa36449ebfa4123ba09c0, type: 3}
 --- !u!1001 &309821952
 PrefabInstance:

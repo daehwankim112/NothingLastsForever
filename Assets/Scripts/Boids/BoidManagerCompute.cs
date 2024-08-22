@@ -13,21 +13,21 @@ public class BoidManagerCompute : MonoBehaviour
 {
     private struct Boid
     {
-        protected Vector3 position;
-        protected Vector3 velocity;
-        protected Vector3 AvoidCollisionDirection;
-        protected int FramesSinceLastCollisionCheck;
-        protected Transform transform;
+        public Vector3 position;
+        public Vector3 velocity;
+        public Vector3 AvoidCollisionDirection;
+        public int FramesSinceLastCollisionCheck;
+        public Transform transform;
     }
 
 
 
     private struct BufferBoid
     {
-        protected Vector3 position;
-        protected Vector3 velocity;
+        public Vector3 position;
+        public Vector3 velocity;
 
-        protected Vector3 force;
+        public Vector3 force;
     }
 
 
@@ -63,9 +63,9 @@ public class BoidManagerCompute : MonoBehaviour
     }
 
 
-    public float collisionAvoidanceFactor;
-    public float collisionAvoidanceRadius;
-    public int framesBetweenCollisionChecks;
+    public float CollisionAvoidanceFactor;
+    public float CollisionAvoidanceRadius;
+    public int FramesBetweenCollisionChecks;
     private int collisionCheckStagger = 0;
 
 
@@ -74,6 +74,7 @@ public class BoidManagerCompute : MonoBehaviour
     public List<Transform> targets;
     public List<Transform> avoids;
 
+    [SerializeField]
     private readonly List<Boid> boids = new();
 
     public ComputeShader BoidComputeShader;
@@ -112,7 +113,7 @@ public class BoidManagerCompute : MonoBehaviour
     /// </summary>
     /// <param name="boidTransform">The transform of the boid to add.</param>
     /// <returns>True if the boid was successfully added, false otherwise.</returns>
-    public bool AddBoid(Transform boidTransform)
+    public bool AddBoid(Transform boidTransform, Vector3? initialVelocity = null)
     {
         if (boidTransform == null) return false;
 
@@ -123,10 +124,16 @@ public class BoidManagerCompute : MonoBehaviour
             position = boidTransform.position,
             velocity = Vector3.zero,
             AvoidCollisionDirection = Vector3.zero,
-            FramesSinceLastCollisionCheck = collisionCheckStagger % framesBetweenCollisionChecks,
+            FramesSinceLastCollisionCheck = collisionCheckStagger % FramesBetweenCollisionChecks,
             transform = boidTransform
         };
-        
+
+
+        if (initialVelocity != null)
+        {
+            newBoid.velocity = (Vector3) initialVelocity;
+        }
+
         boids.Add(newBoid);
 
         return true;
@@ -139,9 +146,15 @@ public class BoidManagerCompute : MonoBehaviour
     /// </summary>
     /// <param name="boid">The transform of the boid to be removed.</param>
     /// <returns>True if the boid was successfully removed, false otherwise.</returns>
-    public bool RemoveBoid(Transform boid)
+    public bool RemoveBoid(Transform boid = null)
     {
-        return boids.Remove(boid);
+        if (boid == null)
+        {
+            boids.RemoveAt(boids.Count - 1);
+            return true;
+        }
+
+        return boids.Remove(boids.Find(b => b.transform == boid));
     }
 
 
@@ -220,22 +233,22 @@ public class BoidManagerCompute : MonoBehaviour
 
             boid.FramesSinceLastCollisionCheck++;
             Vector3 avoidCollisionDirection = Vector3.zero;
-            if (boid.FramesSinceLastCollisionCheck >= framesBetweenCollisionChecks)
+            if (boid.FramesSinceLastCollisionCheck >= FramesBetweenCollisionChecks)
             {
                 avoidCollisionDirection = FindSafePath(boid.position, boid.velocity);
                 boid.AvoidCollisionDirection = avoidCollisionDirection;
                 boid.FramesSinceLastCollisionCheck = 0;
             }
             
-            force += boidSettings.collisionAvoidanceFactor * boid.AvoidCollisionDirection;
+            force += CollisionAvoidanceFactor * boid.AvoidCollisionDirection;
             force = Vector3.ClampMagnitude(force, boidSettings.MaxTurning);
 
             // Update the velocity of the boid
             Vector3 velocity = boid.velocity;
-            velocity += Time.FixedUpdate * force;
+            velocity += Time.fixedDeltaTime * force;
 
             // Calculate the speed of the boid
-            float speed = velocity.Magnitude;
+            float speed = velocity.magnitude;
 
             // Adjust the velocity based on the speed limits
             if (speed <= 0.00001f)
@@ -252,7 +265,7 @@ public class BoidManagerCompute : MonoBehaviour
             }
 
             // Update the position of the boid
-            boid.position += Time.FixedUpdate * velocity;
+            boid.position += Time.fixedDeltaTime * velocity;
         }
     }
 
@@ -271,7 +284,7 @@ public class BoidManagerCompute : MonoBehaviour
         Vector3 safePath = Vector3.zero;
 
         // Check is forward path is safe
-        if (!Physics.Raycast(position, velocity, out RaycastHit hit, boidSettings.collisionAvoidanceRadius))
+        if (!Physics.Raycast(position, velocity, out RaycastHit hit, CollisionAvoidanceRadius))
         {
             return safePath;
         }
@@ -295,7 +308,7 @@ public class BoidManagerCompute : MonoBehaviour
                                       * (Quaternion.AngleAxis(searchAngle, orthogonalDirection)
                                       * forwardDirection);
 
-                if (Physics.Raycast(position, testDirection, out RaycastHit randomHit, boundingRadius))
+                if (Physics.Raycast(position, testDirection, out RaycastHit randomHit, CollisionAvoidanceRadius))
                 {
                     if (randomHit.distance > farthestDistance)
                     {
