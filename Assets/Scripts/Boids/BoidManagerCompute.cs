@@ -189,8 +189,26 @@ public class BoidManagerCompute : MonoBehaviour
 
         boidBuffer.SetData(bufferBoids);
         settingsBuffer.SetData(new BoidSettings[] { boidSettings });
-        targetPositionsBuffer.SetData(targets.Select(target => target.position).ToArray());
-        avoidPositionsBuffer.SetData(avoids.Select(avoid => avoid.position).ToArray());
+
+        if (numTargets > 0)
+        {
+            targetPositionsBuffer.SetData(targets.Select(target => target.position).ToArray());
+        }
+        else
+        {
+            // Optionally, set the buffer with a default value or handle the empty case
+            targetPositionsBuffer.SetData(new Vector3[1] { new(1e15f, 1e15f, 1e15f) });
+        }
+
+        if (numAvoids > 0)
+        {
+            avoidPositionsBuffer.SetData(avoids.Select(avoid => avoid.position).ToArray());
+        }
+        else
+        {
+            // Optionally, set the buffer with a default value or handle the empty case
+            avoidPositionsBuffer.SetData(new Vector3[1] { new(1e15f, 1e15f, 1e15f) });
+        }
 
 
         BoidComputeShader.SetBuffer(0, "boids", boidBuffer);

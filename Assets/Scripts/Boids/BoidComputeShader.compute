@@ -110,7 +110,7 @@ void CSMain (uint3 id : SV_DispatchThreadID)
 
 
         // Separation
-        if (distanceToOther < settings.SeparationRadius && ((settings.SeparationUsesFov != 1) || otherVisible))
+        if (distanceToOther < settings.SeparationRadius && ((settings.SeparationUsesFov != 0) || otherVisible))
         {
             // separationCount++;
             averageSeparationLocation += toOther;
@@ -121,7 +121,7 @@ void CSMain (uint3 id : SV_DispatchThreadID)
 
 
         // Alignment
-        if (distanceToOther < settings.AlignmentRadius && ((settings.AlignmentUsesFov != 1) || otherVisible))
+        if (distanceToOther < settings.AlignmentRadius && ((settings.AlignmentUsesFov != 0) || otherVisible))
         {
             // alignmentCount++;
             averageAlignmentVelocity += otherBoid.velocity;
@@ -129,7 +129,7 @@ void CSMain (uint3 id : SV_DispatchThreadID)
 
 
         // Cohesion
-        if (distanceToOther < settings.CohesionRadius && ((settings.CohesionUsesFov != 1) || otherVisible))
+        if (distanceToOther < settings.CohesionRadius && ((settings.CohesionUsesFov != 0) || otherVisible))
         {
             cohesionCount++;
             averageCohesionLocation += toOther;
@@ -156,7 +156,7 @@ void CSMain (uint3 id : SV_DispatchThreadID)
         float3 targetPosition = targetPositions[target];
 		float3 toTarget = targetPosition - thisBoid.position;
 		float distanceToTarget = length(toTarget);
-        bool targetVisible = (settings.TargetUsesFov != 1) || OtherVisible(forward, toTarget / distanceToTarget);
+        bool targetVisible = (settings.TargetUsesFov != 0) || OtherVisible(forward, toTarget / distanceToTarget);
 
 		if (distanceToTarget < closestTargetDistance && targetVisible)
 		{
@@ -175,7 +175,7 @@ void CSMain (uint3 id : SV_DispatchThreadID)
         float3 avoidPosition = avoidPositions[avoid];
 		float3 toAvoid = avoidPosition - thisBoid.position;
 		float distanceToAvoid = length(toAvoid);
-        bool avoidVisible = (settings.AvoidUsesFov != 1) || OtherVisible(forward, toAvoid / distanceToAvoid);
+        bool avoidVisible = (settings.AvoidUsesFov != 0) || OtherVisible(forward, toAvoid / distanceToAvoid);
 
         if (distanceToAvoid < closestAvoidDistance && avoidVisible)
 		{
