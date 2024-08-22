@@ -15,7 +15,6 @@ struct Boid
 
 struct BoidSettings
 {
-    float BoidFactor;
     float MaxSpeed;
     float MinSpeed;
     float MaxTurning;
@@ -24,23 +23,23 @@ struct BoidSettings
 
     float SeparationFactor;
     float SeparationRadius;
-    bool SeparationUsesFov;
+    int SeparationUsesFov;
 
     float AlignmentFactor;
     float AlignmentRadius;
-    bool AlignmentUsesFov;
+    int AlignmentUsesFov;
 
     float CohesionFactor;
     float CohesionRadius;
-    bool CohesionUsesFov;
+    int CohesionUsesFov;
 
     float TargetFactor;
     float TargetRadius;
-    bool TargetUsesFov;
+    int TargetUsesFov;
 
     float AvoidFactor;
     float AvoidRadius;
-    bool AvoidUsesFov;
+    int AvoidUsesFov;
 };
 
 
@@ -55,7 +54,11 @@ StructuredBuffer<float3> avoidPositions;
 
 float3 SteerTowards(float3 localTarget, float3 velocity)
 {
-    return (boidSettings[0].MaxSpeed * normalize(localTarget)) - velocity;
+    float distance = length(localTarget);
+
+    if (distance < 0.0001) return float3(0, 0, 0);
+
+    return (boidSettings[0].MaxSpeed * (localTarget / distance)) - velocity;
 }
 
 
@@ -77,7 +80,14 @@ void CSMain (uint3 id : SV_DispatchThreadID)
     uint thisBoidIndex = id.x;
     Boid thisBoid = boids[thisBoidIndex];
     float3 velocity = thisBoid.velocity;
-    float3 forward = velocity / length(velocity);
+
+    float speed = length(velocity);
+    float3 forward = float3(1, 0, 0);
+
+    if (speed > 0.0001)
+    {
+		forward = velocity / speed;
+    }
 
 
     // uint separationCount = 0;
@@ -100,7 +110,7 @@ void CSMain (uint3 id : SV_DispatchThreadID)
 
 
         // Separation
-        if (distanceToOther < settings.SeparationRadius && (!settings.SeparationUsesFov || otherVisible))
+        if (distanceToOther < settings.SeparationRadius && ((settings.SeparationUsesFov != 1) || otherVisible))
         {
             // separationCount++;
             averageSeparationLocation += toOther;
@@ -111,7 +121,7 @@ void CSMain (uint3 id : SV_DispatchThreadID)
 
 
         // Alignment
-        if (distanceToOther < settings.AlignmentRadius && (!settings.AlignmentUsesFov || otherVisible))
+        if (distanceToOther < settings.AlignmentRadius && ((settings.AlignmentUsesFov != 1) || otherVisible))
         {
             // alignmentCount++;
             averageAlignmentVelocity += otherBoid.velocity;
@@ -119,7 +129,7 @@ void CSMain (uint3 id : SV_DispatchThreadID)
 
 
         // Cohesion
-        if (distanceToOther < settings.CohesionRadius && (!settings.CohesionUsesFov || otherVisible))
+        if (distanceToOther < settings.CohesionRadius && ((settings.CohesionUsesFov != 1) || otherVisible))
         {
             cohesionCount++;
             averageCohesionLocation += toOther;
@@ -146,7 +156,7 @@ void CSMain (uint3 id : SV_DispatchThreadID)
         float3 targetPosition = targetPositions[target];
 		float3 toTarget = targetPosition - thisBoid.position;
 		float distanceToTarget = length(toTarget);
-        bool targetVisible = !settings.TargetUsesFov || OtherVisible(forward, toTarget / distanceToTarget);
+        bool targetVisible = (settings.TargetUsesFov != 1) || OtherVisible(forward, toTarget / distanceToTarget);
 
 		if (distanceToTarget < closestTargetDistance && targetVisible)
 		{
@@ -165,7 +175,7 @@ void CSMain (uint3 id : SV_DispatchThreadID)
         float3 avoidPosition = avoidPositions[avoid];
 		float3 toAvoid = avoidPosition - thisBoid.position;
 		float distanceToAvoid = length(toAvoid);
-        bool avoidVisible = !settings.AvoidUsesFov || OtherVisible(forward, toAvoid / distanceToAvoid);
+        bool avoidVisible = (settings.AvoidUsesFov != 1) || OtherVisible(forward, toAvoid / distanceToAvoid);
 
         if (distanceToAvoid < closestAvoidDistance && avoidVisible)
 		{
@@ -173,6 +183,10 @@ void CSMain (uint3 id : SV_DispatchThreadID)
             closestAvoidDistance = distanceToAvoid;
 		}
     }
+    
+
+    //boids[thisBoidIndex].force = SteerTowards(-averageSeparationLocation, velocity);
+    //return;
 
 
     // Calculate steering force

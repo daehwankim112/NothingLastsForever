@@ -74,15 +74,9 @@ public class BoidSpawner : MonoBehaviour
 
             Transform newBoid = Instantiate(boid, randomLocationOnSphere, randomRotation);
 
-            newBoid.GetComponent<MeshRenderer>().material.SetColor("_EmissionColor", randomColor);
-            newBoid.GetComponent<MeshRenderer>().material.color = randomColor;
-
-            newBoid.GetComponent<Rigidbody>().velocity = Random.onUnitSphere * 0.1f;
-            newBoid.GetComponent<Rigidbody>().drag = boidDrag;
-
             boids.Add(newBoid);
 
-            boidManager.AddBoid(newBoid);
+            boidManager.AddBoid(newBoid, Random.onUnitSphere * 0.1f);
         }
     }
 

@@ -6,6 +6,7 @@ using System.Runtime.InteropServices;
 
 using UnityEngine;
 using UnityEngine.UIElements;
+using Palmmedia.ReportGenerator.Core;
 
 
 
@@ -35,7 +36,6 @@ public class BoidManagerCompute : MonoBehaviour
     [System.Serializable]
     public struct BoidSettings
     {
-        public float BoidFactor;
         public float MaxSpeed;
         public float MinSpeed;
         public float MaxTurning;
@@ -43,23 +43,23 @@ public class BoidManagerCompute : MonoBehaviour
 
         public float SeparationFactor;
         public float SeparationRadius;
-        public bool SeparationUsesFov;
+        public int SeparationUsesFov;
 
         public float AlignmentFactor;
         public float AlignmentRadius;
-        public bool AlignmentUsesFov;
+        public int AlignmentUsesFov;
 
         public float CohesionFactor;
         public float CohesionRadius;
-        public bool CohesionUsesFov;
+        public int CohesionUsesFov;
 
         public float TargetFactor;
         public float TargetRadius;
-        public bool TargetUsesFov;
+        public int TargetUsesFov;
 
         public float AvoidFactor;
         public float AvoidRadius;
-        public bool AvoidUsesFov;
+        public int AvoidUsesFov;
     }
 
 
@@ -180,7 +180,7 @@ public class BoidManagerCompute : MonoBehaviour
         {
             bufferBoids[i] = new BufferBoid
             {
-                position = boids[i].transform.position,
+                position = boids[i].position,
                 velocity = boids[i].velocity,
                 force = Vector3.zero
             };
@@ -253,6 +253,11 @@ public class BoidManagerCompute : MonoBehaviour
             // Adjust the velocity based on the speed limits
             if (speed <= 0.00001f)
             {
+                if (force.sqrMagnitude <= 0.00001f)
+                {
+                    force = boidSettings.MaxTurning * Random.onUnitSphere;
+                }
+
                 velocity = force;
             }
             else if (speed < boidSettings.MinSpeed)
@@ -265,7 +270,11 @@ public class BoidManagerCompute : MonoBehaviour
             }
 
             // Update the position of the boid
+            boid.velocity = velocity;
             boid.position += Time.fixedDeltaTime * velocity;
+            boid.transform.position = boid.position;
+
+            boids[boidIndex] = boid;
         }
     }
 
@@ -337,6 +346,12 @@ public class BoidManagerCompute : MonoBehaviour
         {
             boidBuffer.Release();
             boidBuffer = null;
+        }
+
+        if (settingsBuffer != null)
+        {
+            settingsBuffer.Release();
+            settingsBuffer = null;
         }
 
         if (targetPositionsBuffer != null)

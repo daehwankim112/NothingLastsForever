@@ -1023,7 +1023,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   numBoids: 2000
   boidDrag: 1
-  boid: {fileID: 6677586760661799738, guid: 129ac79c073da8f4eae06a18e0c77a23, type: 3}
+  boid: {fileID: 7311501369167484682, guid: 8f8e48919d877c44a8e15b1e8035c573, type: 3}
   boidManager: {fileID: 150876691}
   boids: []
 --- !u!114 &150876690
@@ -1079,14 +1079,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CollisionAvoidanceFactor: 5
   CollisionAvoidanceRadius: 0.5
-  FramesBetweenCollisionChecks: 30
+  FramesBetweenCollisionChecks: 10
   boidSettings:
-    BoidFactor: 1
-    MaxSpeed: 2
-    MinSpeed: 0.5
-    MaxTurning: 2
+    MaxSpeed: 1
+    MinSpeed: 0.1
+    MaxTurning: 5
     boidFov: 90
-    SeparationFactor: 1
+    SeparationFactor: 2
     SeparationRadius: 0.05
     SeparationUsesFov: 0
     AlignmentFactor: 1
