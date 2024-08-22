@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Custom_SonarEffect
-  m_Shader: {fileID: 4800000, guid: f6a5ebffac0a3c244a47c8f27de345ae, type: 3}
+  m_Name: Custom_SonarEffectForUnityObjects
+  m_Shader: {fileID: 4800000, guid: 3a95483ebd4971a40a23ed14a2b4e05d, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -25,9 +25,8 @@ Material:
     m_TexEnvs: []
     m_Ints: []
     m_Floats:
-    - _MaxWaveDistance: 8
-    - _Threshold: 1
-    - _WaveDistance: 4.7306404
+    - _Threshold: 0.1
+    - _WaveDistance: 1
     m_Colors:
-    - _BaseColor: {r: 0, g: 0, b: 0, a: 1}
+    - _BaseColor: {r: 1, g: 0, b: 0, a: 1}
   m_BuildTextureStacks: []
