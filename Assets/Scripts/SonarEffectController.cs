@@ -1,36 +1,89 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class SonarEffectController : MonoBehaviour
 {
-    public Material sonarMaterial;
-    public float waveSpeed = 1f;
-    public Camera mainCamera;
-    [SerializeField] HandPoseDetectionAndPing handPoseDetectionAndPing;
-    private bool pinging = false;
-    [SerializeField] AudioClip audio;
-    AudioSource audioSource;
+    [SerializeField] private List<Material> sonarMaterial;
+    [SerializeField] private float waveSpeed = 3f;
+    [SerializeField] private Camera mainCamera;
+    [SerializeField] private HandPoseTrigger handPoseTrigger;
+    [SerializeField] private AudioClip audio;
+    [SerializeField] private float pingingCooldown = 2.5f;
+    [SerializeField] private bool debug = false;
 
-    // public bool 
+    private bool pinging = false;
+    private AudioSource audioSource;
     private float currentWaveDistance = 999f;
 
     void Start()
     {
         mainCamera.depthTextureMode |= DepthTextureMode.Depth;
         audioSource = GetComponent<AudioSource>();
+        if (debug)
+        {
+            StartCoroutine(SonarPing());
+        }
     }
 
     void Update()
     {
-        if (handPoseDetectionAndPing.pingGestureActivated && !pinging)
+        OVRInput.Update();
+
+        // Check if the ping gesture is activated or the A or X button is pressed. RawButton.A and RawButton.X are mapped as Button.One
+        // https://developer.oculus.com/documentation/unity/unity-ovrinput/
+        /*if (OVRInput.GetDown(OVRInput.Button.One))
         {
+            OVRInput.SetControllerVibration(0.5f, 0.5f, OVRInput.Controller.RTouch);
+            OVRInput.SetControllerVibration(0.5f, 0.5f, OVRInput.Controller.LTouch);
+            Debug.Log("One button pressed");
+        }
+        if (OVRInput.GetUp(OVRInput.Button.One))
+        {
+            OVRInput.SetControllerVibration(0, 0, OVRInput.Controller.RTouch);
+            OVRInput.SetControllerVibration(0, 0, OVRInput.Controller.LTouch);
+        }
+        if (OVRInput.Get(OVRInput.RawButton.A))
+        {
+            OVRInput.SetControllerVibration(0.5f, 0.5f, OVRInput.Controller.RTouch);
+            Debug.Log("A button pressed");
+        }
+        else
+        {
+            OVRInput.SetControllerVibration(0, 0, OVRInput.Controller.RTouch);
+        }
+        if (OVRInput.Get(OVRInput.RawButton.X))
+        {
+            OVRInput.SetControllerVibration(0.5f, 0.5f, OVRInput.Controller.LTouch);
+            Debug.Log("X button pressed");
+        }
+        else
+        {
+            OVRInput.SetControllerVibration(0, 0, OVRInput.Controller.LTouch);
+        }*/
+
+
+        if ((handPoseTrigger.pingGestureActivated 
+            || (OVRInput.Get(OVRInput.RawButton.A) || OVRInput.Get(OVRInput.RawButton.X))) 
+            && !pinging && !debug)
+        {
+            StartCoroutine(SonarPing());
+        }
+        if (debug && !pinging)
+        {
+            currentWaveDistance = 0.0f;
             StartCoroutine(SonarPing());
         }
         if (pinging)
         {
-            currentWaveDistance += waveSpeed * Time.deltaTime;
-            sonarMaterial.SetFloat("_WaveDistance", currentWaveDistance);
-            if (currentWaveDistance > 2.5f)
+            currentWaveDistance += Time.deltaTime;
+            foreach (Material sonarMaterial in sonarMaterial)
+            {
+                sonarMaterial.SetFloat("_WaveDistance", waveSpeed * currentWaveDistance);
+                sonarMaterial.SetFloat("_Threshold", 1);
+                sonarMaterial.SetFloat("_MaxWaveDistance", waveSpeed * pingingCooldown);
+            }
+            if (currentWaveDistance > waveSpeed * pingingCooldown)
             {
                 currentWaveDistance = 999f;
             }
@@ -50,16 +103,10 @@ public class SonarEffectController : MonoBehaviour
     IEnumerator SonarPing()
     {
         pinging = true;
-        currentWaveDistance = 0.0f;
         audioSource.PlayOneShot(audio);
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSeconds(pingingCooldown + 0.1f);
         pinging = false;
-        handPoseDetectionAndPing.pingGestureActivated = false;
-        currentWaveDistance = 999.0f;
-    }
-
-    void OnRenderImage(RenderTexture src, RenderTexture dest)
-    {
-        Graphics.Blit(src, dest, sonarMaterial);
+        handPoseTrigger.pingGestureActivated = false;
+        currentWaveDistance = 999f;
     }
 }

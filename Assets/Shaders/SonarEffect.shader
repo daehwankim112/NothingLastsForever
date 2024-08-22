@@ -3,6 +3,7 @@ Shader "Custom/SonarEffect"
     Properties
     {
         _WaveDistance ("Wave Distance", Float) = 1.0
+        _MaxWaveDistance ("Max Wave Distance", Float) = 1.0
         _Threshold ("Threshold", Float) = 0.1
         _BaseColor ("Base Color", Color) = (0, 0, 0, 1)
     }
@@ -47,6 +48,7 @@ Shader "Custom/SonarEffect"
 
             CBUFFER_START(UnityPerMaterial)
                 half4 _BaseColor;
+                float _MaxWaveDistance;
                 float _WaveDistance;
                 float _Threshold;
             CBUFFER_END
@@ -74,11 +76,12 @@ Shader "Custom/SonarEffect"
             }
 
             // Check the distance between depth texture and wave distance
-            float waveAlpha(float depth, float waveDist, float threshold)
+            float waveAlpha(float depth, float waveDist, float threshold, float maxWaveDistance)
             {
                 float dist = abs(depth - waveDist);
+                // float t = saturate(dist / (threshold * ((maxWaveDistance - waveDist) / maxWaveDistance)));
                 float t = saturate(dist / threshold);
-                return ease(t);
+                return ease(t) + (waveDist / maxWaveDistance);
             }
 
             half4 frag(Varyings input) : SV_Target
@@ -92,7 +95,7 @@ Shader "Custom/SonarEffect"
                 float2 uvCoords = (depthSpace.xy / depthSpace.w + 1.0f) * 0.5f;
                 float linearSceneDepth = SampleEnvironmentDepthLinear_Internal(uvCoords);
 
-                float alpha = waveAlpha(linearSceneDepth, 3 * _WaveDistance, _Threshold);
+                float alpha = waveAlpha(linearSceneDepth, _WaveDistance, _Threshold, _MaxWaveDistance);
                 // finalColor.a *= alpha;
                 finalColor.a = alpha;
                 // finalColor = float4(0, 1 - linearSceneDepth/1.5, 0, 0.9);
