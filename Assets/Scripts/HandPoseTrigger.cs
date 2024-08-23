@@ -44,7 +44,7 @@ public class HandPoseTrigger : MonoBehaviour
 
         //SpawnNewProjectile(leftHandPinchArea);
 
-        torpedoManager.ExplodeAllTorpedos(TorpedoManager.TorpedoAlliance.Player);
+        torpedoManager.ExplodeAllTorpedos(Explosions.ExplosionAlliance.Player);
     }
 
     public void RightHandFire()
@@ -58,6 +58,6 @@ public class HandPoseTrigger : MonoBehaviour
     {
         Transform newProjectile = Instantiate(projectile, hand.position, hand.rotation);
 
-        torpedoManager.AddTorpedo(newProjectile, hand.rotation * Vector3.forward, TorpedoManager.TorpedoAlliance.Player);
+        torpedoManager.AddTorpedo(newProjectile, hand.rotation * Vector3.forward, Explosions.ExplosionAlliance.Player);
     }
 }
