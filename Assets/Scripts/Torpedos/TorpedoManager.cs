@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class TorpedoManager : MonoBehaviour
 {
-    public delegate void TorpedoExploded(Vector3 position, float power, TorpedoAlliance torpedoAlliance);
 
     private struct Torpedo
     {
@@ -14,7 +13,7 @@ public class TorpedoManager : MonoBehaviour
 
         public float fuseTimer;
 
-        public TorpedoAlliance alliance;
+        public Explosions.ExplosionAlliance alliance;
 
         public Transform transform;
     }
@@ -36,7 +35,7 @@ public class TorpedoManager : MonoBehaviour
     public TorpedoSettings PlayerTorpedoSettings;
     public TorpedoSettings EnemyTorpedoSettings;
 
-    public event TorpedoExploded OnTorpedoExploded;
+    public event Explosions.ExplosionEvent OnTorpedoExploded;
 
     public List<Transform> Targets;
     public Transform Player;
@@ -48,13 +47,6 @@ public class TorpedoManager : MonoBehaviour
     public GameObject ExplosionEffect;
 
 
-    public enum TorpedoAlliance
-    {
-        Player,
-        Enemy
-    }
-
-
 
     /// <summary>
     /// Add a torpedo to the manager.
@@ -63,11 +55,11 @@ public class TorpedoManager : MonoBehaviour
     /// <param name="initialVelocity">The initial velocity of the torpedo.</param>
     /// <param name="torpedoAlliance">The alliance of the torpedo.</param>
     /// <returns>True if the torpedo was successfully added. Otherwise false.</returns>
-    public bool AddTorpedo(Transform torpedoTransform, Vector3 initialVelocity, TorpedoAlliance torpedoAlliance)
+    public bool AddTorpedo(Transform torpedoTransform, Vector3 initialVelocity, Explosions.ExplosionAlliance torpedoAlliance)
     {
         if (transform == null) return false;
 
-        TorpedoSettings torpedoSettings = (torpedoAlliance == TorpedoAlliance.Player) ? PlayerTorpedoSettings : EnemyTorpedoSettings;
+        TorpedoSettings torpedoSettings = (torpedoAlliance == Explosions.ExplosionAlliance.Player) ? PlayerTorpedoSettings : EnemyTorpedoSettings;
 
         Torpedo newTorpedo = new()
         {
@@ -117,7 +109,7 @@ public class TorpedoManager : MonoBehaviour
 
 
 
-    public void ExplodeAllTorpedos(TorpedoAlliance? alliance = null)
+    public void ExplodeAllTorpedos(Explosions.ExplosionAlliance? alliance = null)
     {
         foreach (Torpedo torpedo in torpedos)
         {
@@ -171,13 +163,12 @@ public class TorpedoManager : MonoBehaviour
             if (torpedo.fuseTimer <= 0.0f)
             {
                 torpedosToExplode.Add(torpedo);
-                Debug.Log($"{(torpedo.alliance == TorpedoAlliance.Player ? "Player" : "Enemy")} torpedo exploded because of fuse timer");
                 continue;
             }
 
             bool withinExplodeRadius = false;
             Vector3 aimDirection = torpedo.velocity.normalized;
-            Vector3? nearestTargetPos = (torpedo.alliance == TorpedoAlliance.Enemy)
+            Vector3? nearestTargetPos = (torpedo.alliance == Explosions.ExplosionAlliance.Enemy)
                                       ? TargetPlayer(torpedo, out withinExplodeRadius)
                                       : GetNearestTargetPosition(torpedo, targetPositions, out withinExplodeRadius);
 
@@ -187,7 +178,6 @@ public class TorpedoManager : MonoBehaviour
                 if (withinExplodeRadius)
                 {
                     torpedosToExplode.Add(torpedo);
-                    Debug.Log($"{(torpedo.alliance == TorpedoAlliance.Player ? "Player" : "Enemy")} torpedo exploded because of target proximity");
                     continue;
                 }
 
@@ -198,7 +188,6 @@ public class TorpedoManager : MonoBehaviour
             if (Physics.Raycast(torpedo.position, aimDirection, out RaycastHit hit, torpedoSettings.SearchRadius))
             {
                 torpedosToExplode.Add(torpedo);
-                Debug.Log($"{(torpedo.alliance == TorpedoAlliance.Player ? "Player" : "Enemy")} torpedo exploded because of collision");
                 continue;
             }
 
@@ -303,8 +292,8 @@ public class TorpedoManager : MonoBehaviour
 
 
 
-    private TorpedoSettings GetTorpedoSettings(TorpedoAlliance torpedoAlliance)
+    private TorpedoSettings GetTorpedoSettings(Explosions.ExplosionAlliance torpedoAlliance)
     {
-        return (torpedoAlliance == TorpedoAlliance.Player) ? PlayerTorpedoSettings : EnemyTorpedoSettings;
+        return (torpedoAlliance == Explosions.ExplosionAlliance.Player) ? PlayerTorpedoSettings : EnemyTorpedoSettings;
     }
 }
