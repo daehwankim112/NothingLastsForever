@@ -66,6 +66,9 @@ public class BoidManager : MonoBehaviour
     public int FramesBetweenCollisionChecks;
     private int collisionCheckStagger = 0;
 
+    public float ExplosionPowerDeathCertainty;
+    public float ExplosionPowerSurvivalCertainty;
+
 
 
     public BoidSettings boidSettings;
@@ -74,6 +77,8 @@ public class BoidManager : MonoBehaviour
 
     [SerializeField]
     private readonly List<Boid> boids = new();
+
+    private readonly List<Boid> deadBoids = new();
 
     public ComputeShader BoidComputeShader;
     private ComputeBuffer settingsBuffer;
@@ -104,6 +109,13 @@ public class BoidManager : MonoBehaviour
         UpdateBoids();
 
         ReleaseBuffers();
+    }
+
+
+
+    private void LateUpdate()
+    {
+        RemoveDeadBoids();
     }
 
 
@@ -145,23 +157,29 @@ public class BoidManager : MonoBehaviour
 
         return true;
     }
-    
+
 
 
     /// <summary>
     /// Removes a boid from the boid manager.
     /// </summary>
-    /// <param name="boid">The transform of the boid to be removed.</param>
+    /// <param name="boid">The transform of the boid to be removed, chooses a boid if not set.</param>
+    /// <param name="destroyGameobject">Whether or not to destroy the gameobject associated with the boid.</param>
     /// <returns>True if the boid was successfully removed, false otherwise.</returns>
-    public bool RemoveBoid(Transform boid = null)
+    public bool RemoveBoid(Transform boid = null, bool destroyGameobject = false)
     {
+        Boid boidToRemove;
+
         if (boid == null)
         {
-            boids.RemoveAt(boids.Count - 1);
-            return true;
+            boidToRemove = boids[^1];
+        }
+        else
+        {
+            boidToRemove = boids.Find(b => b.transform == boid);
         }
 
-        return boids.Remove(boids.Find(b => b.transform == boid));
+        return RemoveBoid(boidToRemove, destroyGameobject);
     }
 
 
@@ -394,6 +412,30 @@ public class BoidManager : MonoBehaviour
 
 
 
+    private void RemoveDeadBoids()
+    {
+        foreach (Boid deadBoid in deadBoids)
+        {
+            RemoveBoid(deadBoid, true);
+        }
+    }
+
+
+
+    private bool RemoveBoid(Boid boid, bool destroyGameobject = false)
+    {
+        bool successful = boids.Remove(boid);
+
+        if (successful && destroyGameobject)
+        {
+            Destroy(boid.transform.gameObject);
+        }
+
+        return successful;
+    }
+
+
+
     private void OnTorpedoExploded(Vector3 position, float power, TorpedoAlliance torpedoAlliance)
     {
         if (torpedoAlliance != TorpedoAlliance.Player) return;
@@ -407,6 +449,8 @@ public class BoidManager : MonoBehaviour
             float explosionPower = power / (distance * distance);
 
             boid.velocity += explosionPower * (boid.position - position).normalized;
+
+            
 
             boids[boidIndex] = boid;
         }
