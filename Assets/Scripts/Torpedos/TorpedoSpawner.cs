@@ -25,7 +25,7 @@ public class TorpedoSpawner : MonoBehaviour
 
             Transform newTorpedo = Instantiate(torpedo, transform.position + (0.2f * Random.onUnitSphere), transform.rotation);
 
-            torpedoManager.AddTorpedo(newTorpedo, 0.1f * Random.onUnitSphere, Explosions.ExplosionAlliance.Enemy);
+            torpedoManager.AddTorpedo(newTorpedo, 0.1f * Random.onUnitSphere, GameManager.Alliance.Enemy);
         }
     }
 }

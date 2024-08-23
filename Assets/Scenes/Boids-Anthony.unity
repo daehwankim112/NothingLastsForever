@@ -968,9 +968,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 150876688}
-  - component: {fileID: 150876694}
   - component: {fileID: 150876693}
   - component: {fileID: 150876692}
+  - component: {fileID: 150876694}
   - component: {fileID: 150876695}
   m_Layer: 0
   m_Name: Managers
@@ -988,7 +988,7 @@ Transform:
   m_GameObject: {fileID: 150876686}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.45, y: 0, z: -2.88}
+  m_LocalPosition: {x: 0, y: 1.09, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1055,31 +1055,31 @@ MonoBehaviour:
   CollisionAvoidanceFactor: 5
   CollisionAvoidanceRadius: 1
   FramesBetweenCollisionChecks: 10
+  ExplosionPowerDeathCertainty: 100
+  ExplosionPowerSurvivalCertainty: 4
   boidSettings:
     MaxSpeed: 1
     MinSpeed: 0.1
-    MaxTurning: 0.5
+    MaxTurning: 2
     boidFov: 90
-    SeparationFactor: 2
+    SeparationFactor: 1
     SeparationRadius: 0.1
     SeparationUsesFov: 0
-    AlignmentFactor: 1
+    AlignmentFactor: 10
     AlignmentRadius: 1
     AlignmentUsesFov: 1
     CohesionFactor: 1
     CohesionRadius: 1
     CohesionUsesFov: 1
-    TargetFactor: 0.5
+    TargetFactor: 1
     TargetRadius: 1
-    TargetUsesFov: 1
-    AvoidFactor: 0.5
+    TargetUsesFov: 0
+    AvoidFactor: 0
     AvoidRadius: 1
     AvoidUsesFov: 1
   targets:
-  - {fileID: 1842421998}
   - {fileID: 1834280387}
-  avoids:
-  - {fileID: 797848843}
+  avoids: []
   BoidComputeShader: {fileID: 7200000, guid: b48d0693ac2fa36449ebfa4123ba09c0, type: 3}
 --- !u!114 &150876695
 MonoBehaviour:
@@ -1093,11 +1093,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60a382b112bc1fc48a0d24f214ea3c1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numBoids: 100
-  boidDrag: 0
+  numBoids: 1000
   boid: {fileID: 7311501369167484682, guid: 8f8e48919d877c44a8e15b1e8035c573, type: 3}
   boidManager: {fileID: 150876694}
-  boids: []
 --- !u!1 &211435741
 GameObject:
   m_ObjectHideFlags: 0
@@ -3046,7 +3044,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7950999700976850951, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
       propertyPath: SceneSettings.DataSource
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7950999700976850951, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
       propertyPath: <SceneLoadedEvent>k__BackingField.m_PersistentCalls.m_Calls.Array.size
@@ -3078,7 +3076,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8249713770714487970, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 3743409223
+      value: 2437146824
       objectReference: {fileID: 0}
     - target: {fileID: 8560995727844593686, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
       propertyPath: _shapes.Array.data[0]

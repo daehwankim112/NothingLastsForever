@@ -11,6 +11,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Torpedos-Anthony.unity
     guid: e742d4755f270fa47a72d7cfad99da0e
+  - enabled: 1
+    path: Assets/Scenes/Boids-Anthony.unity
+    guid: 4d1de1cde39a1d94b86dbefa7af1111e
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 79eb95d56d862d842a31afafd1571946, type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 8448044cf226bf9459f02f0664864dce, type: 2}
