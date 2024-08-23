@@ -14,7 +14,7 @@ public class BoidSpawner : MonoBehaviour
     private Transform boid;
 
     [SerializeField]
-    private BoidManagerCompute boidManager;
+    private BoidManager boidManager;
 
     [SerializeField]
     private List<Transform> boids = new List<Transform>();
