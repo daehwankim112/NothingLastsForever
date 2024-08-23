@@ -13,7 +13,7 @@ public class TorpedoManager : Singleton<TorpedoManager>
 
         public float fuseTimer;
 
-        public Explosions.ExplosionAlliance alliance;
+        public GameManager.Alliance alliance;
 
         public Transform transform;
     }
@@ -55,11 +55,16 @@ public class TorpedoManager : Singleton<TorpedoManager>
     /// <param name="initialVelocity">The initial velocity of the torpedo.</param>
     /// <param name="torpedoAlliance">The alliance of the torpedo.</param>
     /// <returns>True if the torpedo was successfully added. Otherwise false.</returns>
-    public bool AddTorpedo(Transform torpedoTransform, Vector3 initialVelocity, Explosions.ExplosionAlliance torpedoAlliance)
+    public bool AddTorpedo(Transform torpedoTransform, Vector3 initialVelocity, GameManager.Alliance torpedoAlliance)
     {
         if (transform == null) return false;
 
-        TorpedoSettings torpedoSettings = (torpedoAlliance == Explosions.ExplosionAlliance.Player) ? PlayerTorpedoSettings : EnemyTorpedoSettings;
+        TorpedoSettings torpedoSettings = torpedoAlliance switch
+            {
+                GameManager.Alliance.Player => PlayerTorpedoSettings,
+                GameManager.Alliance.Enemy => EnemyTorpedoSettings,
+                _ => new TorpedoSettings()
+            };
 
         Torpedo newTorpedo = new()
         {
@@ -109,7 +114,7 @@ public class TorpedoManager : Singleton<TorpedoManager>
 
 
 
-    public void ExplodeAllTorpedos(Explosions.ExplosionAlliance? alliance = null)
+    public void ExplodeAllTorpedos(GameManager.Alliance? alliance = null)
     {
         foreach (Torpedo torpedo in torpedos)
         {
@@ -168,9 +173,12 @@ public class TorpedoManager : Singleton<TorpedoManager>
 
             bool withinExplodeRadius = false;
             Vector3 aimDirection = torpedo.velocity.normalized;
-            Vector3? nearestTargetPos = (torpedo.alliance == Explosions.ExplosionAlliance.Enemy)
-                                      ? TargetPlayer(torpedo, out withinExplodeRadius)
-                                      : GetNearestTargetPosition(torpedo, targetPositions, out withinExplodeRadius);
+            Vector3? nearestTargetPos = torpedo.alliance switch
+                {
+                    GameManager.Alliance.Player =>  TargetPlayer(torpedo, out withinExplodeRadius),
+                    GameManager.Alliance.Enemy => GetNearestTargetPosition(torpedo, targetPositions, out withinExplodeRadius),
+                    _ => null
+                };
 
             if (nearestTargetPos is not null)
             {
@@ -292,8 +300,13 @@ public class TorpedoManager : Singleton<TorpedoManager>
 
 
 
-    private TorpedoSettings GetTorpedoSettings(Explosions.ExplosionAlliance torpedoAlliance)
+    private TorpedoSettings GetTorpedoSettings(GameManager.Alliance torpedoAlliance)
     {
-        return (torpedoAlliance == Explosions.ExplosionAlliance.Player) ? PlayerTorpedoSettings : EnemyTorpedoSettings;
+        return torpedoAlliance switch
+        {
+            GameManager.Alliance.Player => PlayerTorpedoSettings,
+            GameManager.Alliance.Enemy => EnemyTorpedoSettings,
+            _ => new TorpedoSettings(),
+        };
     }
 }
