@@ -1078,10 +1078,8 @@ MonoBehaviour:
     AvoidRadius: 1
     AvoidUsesFov: 1
   targets:
-  - {fileID: 1842421998}
   - {fileID: 1834280387}
-  avoids:
-  - {fileID: 797848843}
+  avoids: []
   BoidComputeShader: {fileID: 7200000, guid: b48d0693ac2fa36449ebfa4123ba09c0, type: 3}
 --- !u!114 &150876695
 MonoBehaviour:

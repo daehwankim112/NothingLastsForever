@@ -433,9 +433,9 @@ public class BoidManager : MonoBehaviour
 
 
 
-    private void OnTorpedoExploded(Vector3 position, float power, TorpedoAlliance torpedoAlliance)
+    private void OnTorpedoExploded(Vector3 position, float power, Explosions.ExplosionAlliance torpedoAlliance)
     {
-        if (torpedoAlliance != TorpedoAlliance.Player) return;
+        if (torpedoAlliance != Explosions.ExplosionAlliance.Player) return;
 
         for (int boidIndex = 0; boidIndex < boids.Count; boidIndex++)
         {
