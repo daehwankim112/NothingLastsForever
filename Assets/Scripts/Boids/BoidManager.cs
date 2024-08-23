@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
 using UnityEngine;
+using static TorpedoManager;
 
 
 
@@ -80,6 +81,15 @@ public class BoidManager : MonoBehaviour
     private ComputeBuffer targetPositionsBuffer, avoidPositionsBuffer;
 
     private BufferBoid[] bufferBoids;
+
+
+    private void Start()
+    {
+        var torpedoManager = FindObjectOfType<TorpedoManager>();
+        if (torpedoManager == null) return;
+
+        torpedoManager.OnTorpedoExploded += OnTorpedoExploded;
+    }
 
 
 
@@ -379,6 +389,26 @@ public class BoidManager : MonoBehaviour
         {
             avoidPositionsBuffer.Release();
             avoidPositionsBuffer = null;
+        }
+    }
+
+
+
+    private void OnTorpedoExploded(Vector3 position, float power, TorpedoAlliance torpedoAlliance)
+    {
+        if (torpedoAlliance != TorpedoAlliance.Player) return;
+
+        for (int boidIndex = 0; boidIndex < boids.Count; boidIndex++)
+        {
+            Boid boid = boids[boidIndex];
+
+            float distance = Vector3.Distance(position, boid.position);
+
+            float explosionPower = power / (distance * distance);
+
+            boid.velocity += explosionPower * (boid.position - position).normalized;
+
+            boids[boidIndex] = boid;
         }
     }
 }
