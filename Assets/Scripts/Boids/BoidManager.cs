@@ -69,6 +69,8 @@ public class BoidManager : MonoBehaviour
     public float ExplosionPowerDeathCertainty;
     public float ExplosionPowerSurvivalCertainty;
 
+    public int NumBoids => boids.Count;
+
 
 
     public BoidSettings boidSettings;
@@ -189,12 +191,11 @@ public class BoidManager : MonoBehaviour
     /// </summary>
     private void FillBuffers()
     {
-        int numBoids = boids.Count;
         int numTargets = targets.Count;
         int numAvoids = avoids.Count;
 
 
-        boidBuffer = new ComputeBuffer(numBoids, Marshal.SizeOf(typeof(BufferBoid)));
+        boidBuffer = new ComputeBuffer(NumBoids, Marshal.SizeOf(typeof(BufferBoid)));
         settingsBuffer = new ComputeBuffer(1, Marshal.SizeOf(typeof(BoidSettings)));
 
 
@@ -246,14 +247,12 @@ public class BoidManager : MonoBehaviour
 
     private void ComputeBoidShader()
     {
-        int numBoids = boids.Count;
-
         // Calculate the number of thread groups needed based on the number of boids
-        int threadGroups = Mathf.CeilToInt((float) numBoids / 256.0f);
+        int threadGroups = Mathf.CeilToInt((float) NumBoids / 256.0f);
         BoidComputeShader.Dispatch(0, threadGroups, 1, 1);
 
         // Get the data from the boid buffer
-        bufferBoids = new BufferBoid[numBoids];
+        bufferBoids = new BufferBoid[NumBoids];
         boidBuffer.GetData(bufferBoids);
     }
     
@@ -264,10 +263,8 @@ public class BoidManager : MonoBehaviour
     /// </summary>
     private void UpdateBoids()
     {
-        int numBoids = boids.Count;
-
         // Update each boid's position and velocity
-        for (int boidIndex = 0; boidIndex < numBoids; boidIndex++)
+        for (int boidIndex = 0; boidIndex < NumBoids; boidIndex++)
         {
             Boid boid = boids[boidIndex];
 
@@ -416,7 +413,7 @@ public class BoidManager : MonoBehaviour
     {
         foreach (Boid deadBoid in deadBoids)
         {
-            RemoveBoid(deadBoid, false);
+            RemoveBoid(deadBoid, true);
         }
     }
 

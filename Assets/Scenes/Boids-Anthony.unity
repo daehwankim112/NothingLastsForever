@@ -1071,9 +1071,9 @@ MonoBehaviour:
     CohesionFactor: 1
     CohesionRadius: 1
     CohesionUsesFov: 1
-    TargetFactor: 0
+    TargetFactor: 1
     TargetRadius: 1
-    TargetUsesFov: 1
+    TargetUsesFov: 0
     AvoidFactor: 0
     AvoidRadius: 1
     AvoidUsesFov: 1
@@ -1096,10 +1096,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   numBoids: 1000
-  boidDrag: 0
   boid: {fileID: 7311501369167484682, guid: 8f8e48919d877c44a8e15b1e8035c573, type: 3}
   boidManager: {fileID: 150876694}
-  boids: []
 --- !u!1 &211435741
 GameObject:
   m_ObjectHideFlags: 0
