@@ -41,11 +41,11 @@ public class BoidSpawner : MonoBehaviour
     {
         for (int i = 0; i < numToSpawn; i++)
         {
-            Vector3 randomLocationOnSphere = Random.onUnitSphere * 0.5f;
+            Vector3 randomLocationOnSphere = Random.onUnitSphere * 0.25f;
             Quaternion randomRotation = Random.rotation;
             Color randomColor = Random.ColorHSV();
 
-            Transform newBoid = Instantiate(boid, randomLocationOnSphere, randomRotation);
+            Transform newBoid = Instantiate(boid, transform.position + randomLocationOnSphere, randomRotation);
 
             // newBoid.GetComponent<MeshRenderer>().material.SetColor("_EmissionColor", randomColor);
              newBoid.GetComponent<MeshRenderer>().material.SetColor("_BaseColor", randomColor);
