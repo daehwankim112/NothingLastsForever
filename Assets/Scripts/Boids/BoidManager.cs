@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
 using UnityEngine;
-using static TorpedoManager;
 
 
 
@@ -433,9 +432,9 @@ public class BoidManager : MonoBehaviour
 
 
 
-    private void OnTorpedoExploded(Vector3 position, float power, Explosions.ExplosionAlliance torpedoAlliance)
+    private void OnTorpedoExploded(Vector3 position, float power, GameManager.Alliance torpedoAlliance)
     {
-        if (torpedoAlliance != Explosions.ExplosionAlliance.Player) return;
+        if (torpedoAlliance != GameManager.Alliance.Player) return;
 
         for (int boidIndex = 0; boidIndex < boids.Count; boidIndex++)
         {
