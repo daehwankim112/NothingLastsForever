@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class TorpedoManager : MonoBehaviour
+public class TorpedoManager : Singleton<TorpedoManager>
 {
 
     private struct Torpedo
