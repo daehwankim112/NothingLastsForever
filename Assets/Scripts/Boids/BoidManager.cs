@@ -78,7 +78,7 @@ public class BoidManager : MonoBehaviour
     [SerializeField]
     private readonly List<Boid> boids = new();
 
-    private readonly List<Boid> deadBoids = new();
+    private readonly HashSet<Boid> deadBoids = new();
 
     public ComputeShader BoidComputeShader;
     private ComputeBuffer settingsBuffer;
@@ -362,7 +362,7 @@ public class BoidManager : MonoBehaviour
 
                 if (Physics.Raycast(position, testDirection, out RaycastHit randomHit, CollisionAvoidanceRadius))
                 {
-                    if (randomHit.distance > farthestDistance)
+                    if (Vector3.Dot(randomHit.normal, forwardDirection) <= 0 && randomHit.distance > farthestDistance)
                     {
                         farthestDistance = randomHit.distance;
                         safePath = testDirection;
@@ -416,7 +416,7 @@ public class BoidManager : MonoBehaviour
     {
         foreach (Boid deadBoid in deadBoids)
         {
-            RemoveBoid(deadBoid, true);
+            RemoveBoid(deadBoid, false);
         }
     }
 
@@ -450,7 +450,12 @@ public class BoidManager : MonoBehaviour
 
             boid.velocity += explosionPower * (boid.position - position).normalized;
 
-            
+            float survivalChance = Random.value;
+
+            if (survivalChance < Mathf.InverseLerp(ExplosionPowerSurvivalCertainty, ExplosionPowerDeathCertainty, explosionPower))
+            {
+                deadBoids.Add(boid);
+            }
 
             boids[boidIndex] = boid;
         }
