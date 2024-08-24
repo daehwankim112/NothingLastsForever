@@ -3,22 +3,24 @@ using UnityEngine;
 
 public class TorpedoExposionRecieverTest : MonoBehaviour
 {
+    private GameManager gameManager => GameManager.Instance;
+
+
+
     private void Start()
     {
-        TorpedoManager torpedoManager = FindObjectOfType<TorpedoManager>();
-
-        if (torpedoManager == null) return;
-
-        torpedoManager.OnTorpedoExploded += OnTorpedoExploded;
+        gameManager.OnExplosion += OnTorpedoExploded;
     }
 
-    private void OnTorpedoExploded(Vector3 position, float power, GameManager.Alliance alliance)
+
+
+    private void OnTorpedoExploded(object sender, GameManager.OnExplosionArgs explosionArgs)//Vector3 position, float power, GameManager.Alliance alliance)
     {
-        float distance = Vector3.Distance(position, transform.position);
+        float distance = Vector3.Distance(explosionArgs.Position, transform.position);
 
-        float explosionPower = power / (distance * distance);
+        float explosionPower = explosionArgs.Power / (distance * distance);
 
-        Debug.Log($"Torpedo of type {(alliance == GameManager.Alliance.Player ? "Player" : "Enemy")} exploded at {position} with power {power}, felt as {explosionPower:F2} {distance:F2} meters away");
+        Debug.Log($"Torpedo of type {(explosionArgs.ExplosionAlliance == GameManager.Alliance.Player ? "Player" : "Enemy")} exploded at {explosionArgs.Position} with power {explosionArgs.Power}, felt as {explosionPower:F2} {distance:F2} meters away");
     }
 
 
@@ -27,6 +29,6 @@ public class TorpedoExposionRecieverTest : MonoBehaviour
         var torpedoManager = FindObjectOfType<TorpedoManager>();
         if (torpedoManager == null) return;
 
-        torpedoManager.OnTorpedoExploded -= OnTorpedoExploded;
+        gameManager.OnExplosion -= OnTorpedoExploded;
     }
 }
