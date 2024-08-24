@@ -1,0 +1,203 @@
+
+#pragma kernel CSMain
+
+
+
+struct Boid
+{
+    float3 position;
+    float3 velocity;
+
+    float3 force;
+};
+
+
+
+struct BoidSettings
+{
+    float MaxSpeed;
+    float MinSpeed;
+    float MaxTurning;
+
+    float boidFov;
+
+    float SeparationFactor;
+    float SeparationRadius;
+    int SeparationUsesFov;
+
+    float AlignmentFactor;
+    float AlignmentRadius;
+    int AlignmentUsesFov;
+
+    float CohesionFactor;
+    float CohesionRadius;
+    int CohesionUsesFov;
+
+    float TargetFactor;
+    float TargetRadius;
+    int TargetUsesFov;
+
+    float AvoidFactor;
+    float AvoidRadius;
+    int AvoidUsesFov;
+};
+
+
+
+RWStructuredBuffer<Boid> boids;
+
+StructuredBuffer<BoidSettings> boidSettings;
+StructuredBuffer<float3> targetPositions;
+StructuredBuffer<float3> avoidPositions;
+
+
+
+float3 SteerTowards(float3 localTarget, float3 velocity)
+{
+    float distance = length(localTarget);
+
+    if (distance < 0.0001) return float3(0, 0, 0);
+
+    return (boidSettings[0].MaxSpeed * (localTarget / distance)) - velocity;
+}
+
+
+
+bool OtherVisible(float3 direction, float3 toOtherDirection)
+{
+    float dotProduct = dot(direction, toOtherDirection);
+    dotProduct = clamp(dotProduct, -1.0, 1.0);
+    float angle = acos(dotProduct);
+    return angle < 0.008726646260 * boidSettings[0].boidFov;
+}
+
+
+
+[numthreads(256,1,1)]
+void CSMain (uint3 id : SV_DispatchThreadID)
+{
+    BoidSettings settings = boidSettings[0];
+    uint thisBoidIndex = id.x;
+    Boid thisBoid = boids[thisBoidIndex];
+    float3 velocity = thisBoid.velocity;
+
+    float speed = length(velocity);
+    float3 forward = float3(1, 0, 0);
+
+    if (speed > 0.0001)
+    {
+		forward = velocity / speed;
+    }
+
+
+    // uint separationCount = 0;
+    // uint alignmentCount = 0;
+    uint cohesionCount = 0;
+    float3 averageSeparationLocation = float3(0, 0, 0);
+    float3 averageAlignmentVelocity = float3(0, 0, 0);
+    float3 averageCohesionLocation = float3(0, 0, 0);
+
+
+    // Loop through every boid and sum relevent properties
+    for (uint otherBoidIndex = 0; otherBoidIndex < boids.Length; otherBoidIndex++)
+    {
+        if (thisBoidIndex == otherBoidIndex) continue;
+
+        Boid otherBoid = boids[otherBoidIndex];
+        float3 toOther = otherBoid.position - thisBoid.position;
+        float distanceToOther = length(toOther);
+        bool otherVisible = OtherVisible(forward, toOther / distanceToOther);
+
+
+        // Separation
+        if (distanceToOther < settings.SeparationRadius && (!settings.SeparationUsesFov || otherVisible))
+        {
+            // separationCount++;
+            averageSeparationLocation += toOther;
+            
+            // Don't align or cohese with boids that are too close
+            continue;
+        }
+
+
+        // Alignment
+        if (distanceToOther < settings.AlignmentRadius && (!settings.AlignmentUsesFov || otherVisible))
+        {
+            // alignmentCount++;
+            averageAlignmentVelocity += otherBoid.velocity;
+        }
+
+
+        // Cohesion
+        if (distanceToOther < settings.CohesionRadius && (!settings.CohesionUsesFov || otherVisible))
+        {
+            cohesionCount++;
+            averageCohesionLocation += toOther;
+        }
+    }
+
+    // Normalize averages if counts are greater than zero
+    // if (separationCount > 0)
+    //     averageCohesionLocation /= separationCount;
+
+    // if (alignmentCount > 0)
+    //     averageCohesionLocation /= alignmentCount;
+
+    if (cohesionCount > 0)
+        averageCohesionLocation /= cohesionCount;
+
+
+    // Get the location of the closest target
+    float3 closestTargetPosition = thisBoid.position;
+    float closestTargetDistance = settings.TargetRadius;
+
+    for (uint target = 0; target < targetPositions.Length; target++)
+    {
+        float3 targetPosition = targetPositions[target];
+		float3 toTarget = targetPosition - thisBoid.position;
+		float distanceToTarget = length(toTarget);
+        bool targetVisible = !settings.TargetUsesFov || OtherVisible(forward, toTarget / distanceToTarget);
+
+		if (distanceToTarget < closestTargetDistance && targetVisible)
+		{
+            closestTargetPosition = toTarget;
+            closestTargetDistance = distanceToTarget;
+		}
+    }
+
+
+    // Get the location of the closest avoid
+    float3 closestAvoidPosition = float3(0, 0, 0);
+    float closestAvoidDistance = settings.AvoidRadius;
+
+    for (uint avoid = 0; avoid < avoidPositions.Length; avoid++)
+    {
+        float3 avoidPosition = avoidPositions[avoid];
+		float3 toAvoid = avoidPosition - thisBoid.position;
+		float distanceToAvoid = length(toAvoid);
+        bool avoidVisible = !settings.AvoidUsesFov || OtherVisible(forward, toAvoid / distanceToAvoid);
+
+        if (distanceToAvoid < closestAvoidDistance && avoidVisible)
+		{
+            closestAvoidPosition = toAvoid;
+            closestAvoidDistance = distanceToAvoid;
+		}
+    }
+    
+
+    //boids[thisBoidIndex].force = SteerTowards(-averageSeparationLocation, velocity);
+    //return;
+
+
+    // Calculate steering force
+    float3 steeringForce = (settings.SeparationFactor * SteerTowards(-averageSeparationLocation, velocity))
+                         + (settings.AlignmentFactor * SteerTowards(averageAlignmentVelocity, velocity))
+                         + (settings.CohesionFactor * SteerTowards(averageCohesionLocation, velocity))
+                         + (settings.TargetFactor * SteerTowards(closestTargetPosition, velocity))
+                         + (settings.AvoidFactor * SteerTowards(-closestAvoidPosition, velocity));
+
+
+    // Assign the calculated force to the boid
+    thisBoid.force = steeringForce;
+    boids[thisBoidIndex] = thisBoid;
+}
