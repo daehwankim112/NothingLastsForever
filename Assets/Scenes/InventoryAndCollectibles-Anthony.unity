@@ -234,7 +234,7 @@ Transform:
   m_GameObject: {fileID: 94348890}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.956, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -267,8 +267,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ThingThatDiesPrefab: {fileID: 3335846474247184016, guid: ddbcf450feb9a8b4886a1808178437e4, type: 3}
   SpawnInterval: 1
-  LeftToSpawn: 10
-  SpawnRadius: 10
+  LeftToSpawn: 2
+  SpawnRadius: 0.5
 --- !u!114 &94348895
 MonoBehaviour:
   m_ObjectHideFlags: 0

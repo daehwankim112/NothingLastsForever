@@ -15,6 +15,11 @@ public class CollectablesManager : Singleton<CollectablesManager>
     void Start()
     {
         gameManager.OnDeath += OnDeath;
+
+        if (TorpedoCollectablePrefab == null)
+        {
+            Debug.LogError("TorpedoCollectablePrefab is not set in the CollectablesManager");
+        }
     }
 
 
