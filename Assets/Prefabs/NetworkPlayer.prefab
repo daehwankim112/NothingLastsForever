@@ -4174,7 +4174,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1737607485010611831}
   - component: {fileID: 8249713770714487970}
-  - component: {fileID: 4845681321731003099}
   m_Layer: 0
   m_Name: OVRCameraRigInteraction
   m_TagString: Untagged
@@ -4198,7 +4197,9 @@ Transform:
   - {fileID: 2700857942261891779}
   - {fileID: 3773311527833116144}
   - {fileID: 5959017234078184645}
+  - {fileID: 7633797538053654289}
   - {fileID: 6235083888960491105}
+  - {fileID: 5578262442579203631}
   m_Father: {fileID: 6120759425548519856}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8249713770714487970
@@ -4222,18 +4223,6 @@ MonoBehaviour:
   SpawnWithObservers: 1
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
---- !u!114 &4845681321731003099
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 732929504460201279}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 617fe84e45475234e8eba252fba9768f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &734055837192597505
 GameObject:
   m_ObjectHideFlags: 0
@@ -27250,6 +27239,128 @@ Transform:
   - {fileID: 117416519238274901}
   m_Father: {fileID: 6673236213788025995}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &4242492839056358365
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7633797538053654289}
+  - component: {fileID: 8560995727844593686}
+  - component: {fileID: 5611420969024166657}
+  - component: {fileID: 518260815019805543}
+  - component: {fileID: 1694365762080836684}
+  m_Layer: 0
+  m_Name: HandPoseLeftFire
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7633797538053654289
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4242492839056358365}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1737607485010611831}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8560995727844593686
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4242492839056358365}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08f7cfb1f9629da4494ac0840f3a3cfd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _hand: {fileID: 395449241246526767}
+  _fingerFeatureStateProvider: {fileID: 2053929295003256291}
+  _shapes:
+  - {fileID: 11400000, guid: 55734ff6ac9c48443ab37831fdd69d7b, type: 2}
+--- !u!114 &5611420969024166657
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4242492839056358365}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aebd5da9a8bd22243b407f1927f4965b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _activeStates:
+  - {fileID: 8560995727844593686}
+  _logicOperator: 0
+--- !u!114 &518260815019805543
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4242492839056358365}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1cd9780be7e512049b4d33d5c9d0ac92, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _activeState: {fileID: 5611420969024166657}
+--- !u!114 &1694365762080836684
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4242492839056358365}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de76f7169412b8f4896235a1585d8939, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _selector: {fileID: 518260815019805543}
+  _whenSelected:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 5235231245023041029}
+        m_TargetAssemblyTypeName: HandPoseDetectionAndPing, Assembly-CSharp
+        m_MethodName: LeftPing
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  _whenUnselected:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 5235231245023041029}
+        m_TargetAssemblyTypeName: HandPoseDetectionAndPing, Assembly-CSharp
+        m_MethodName: LeftUnping
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &4242742306560339368
 GameObject:
   m_ObjectHideFlags: 0
@@ -32472,11 +32583,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15cee106bb2ab5449ac47219cbc90825, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sonarMaterial: {fileID: 2100000, guid: 0472a6c355be96b4c9d9c6956b5dfb6c, type: 2}
+  sonarMaterial:
+  - {fileID: 2100000, guid: 0472a6c355be96b4c9d9c6956b5dfb6c, type: 2}
+  - {fileID: 2100000, guid: 3f2aba2c974bd08499c1343af213aae7, type: 2}
   waveSpeed: 1
   mainCamera: {fileID: 5651418626666711070}
-  handPoseDetectionAndPing: {fileID: 5235231245023041029}
+  handPoseTrigger: {fileID: 5235231245023041029}
   audio: {fileID: 8300000, guid: 61da875265019cb43a69a05e51860e54, type: 3}
+  pingingCooldown: 2.5
+  debug: 0
 --- !u!114 &981035157829997721
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -32517,6 +32632,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pingGestureActivated: 0
+  projectile: {fileID: 3566162023344564577, guid: c1c141f249ea7d7409f6cf56d9579060, type: 3}
+  leftHandPinchArea: {fileID: 4033225387396036401}
+  rightHandPinchArea: {fileID: 6191106757289574790}
 --- !u!82 &7565951904364709623
 AudioSource:
   m_ObjectHideFlags: 0
@@ -32704,7 +32822,7 @@ GameObject:
   - component: {fileID: 5968650259195405569}
   - component: {fileID: 2119155567705240570}
   m_Layer: 0
-  m_Name: HandPoseRight
+  m_Name: HandPoseRightEcho
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -36361,7 +36479,7 @@ GameObject:
   - component: {fileID: 1576198650274540541}
   - component: {fileID: 6868261776216942794}
   m_Layer: 0
-  m_Name: HandPoseLeft
+  m_Name: HandPoseLeftEcho
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -39803,7 +39921,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6120759425548519856}
-  - component: {fileID: 6853101046843323392}
   m_Layer: 0
   m_Name: NetworkPlayer
   m_TagString: Untagged
@@ -39827,18 +39944,6 @@ Transform:
   - {fileID: 1737607485010611831}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6853101046843323392
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6151239523002255458}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4ddf199d1228727429d1dccc01c830a0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &6153359260231056120
 GameObject:
   m_ObjectHideFlags: 0
@@ -55631,6 +55736,128 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4377845796030679731}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &8506730927645548192
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5578262442579203631}
+  - component: {fileID: 6924148029735964686}
+  - component: {fileID: 434668079858211280}
+  - component: {fileID: 1401283404582095829}
+  - component: {fileID: 4830886568843536597}
+  m_Layer: 0
+  m_Name: HandPoseRightFire
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5578262442579203631
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8506730927645548192}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1737607485010611831}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6924148029735964686
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8506730927645548192}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08f7cfb1f9629da4494ac0840f3a3cfd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _hand: {fileID: 8496260405051491747}
+  _fingerFeatureStateProvider: {fileID: 4009482499900174911}
+  _shapes:
+  - {fileID: 11400000, guid: 55734ff6ac9c48443ab37831fdd69d7b, type: 2}
+--- !u!114 &434668079858211280
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8506730927645548192}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aebd5da9a8bd22243b407f1927f4965b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _activeStates:
+  - {fileID: 6924148029735964686}
+  _logicOperator: 0
+--- !u!114 &1401283404582095829
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8506730927645548192}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1cd9780be7e512049b4d33d5c9d0ac92, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _activeState: {fileID: 434668079858211280}
+--- !u!114 &4830886568843536597
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8506730927645548192}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de76f7169412b8f4896235a1585d8939, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _selector: {fileID: 1401283404582095829}
+  _whenSelected:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 5235231245023041029}
+        m_TargetAssemblyTypeName: HandPoseDetectionAndPing, Assembly-CSharp
+        m_MethodName: RightPing
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  _whenUnselected:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 5235231245023041029}
+        m_TargetAssemblyTypeName: HandPoseDetectionAndPing, Assembly-CSharp
+        m_MethodName: RightUnping
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &8525152445958977349
 GameObject:
   m_ObjectHideFlags: 0

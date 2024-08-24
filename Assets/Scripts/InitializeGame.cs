@@ -5,8 +5,13 @@ using UnityEngine;
 public class InitializeGame : MonoBehaviour
 {
     [SerializeField] private Camera mainCamera;
-    void Start()
+    private void Start()
     {
         mainCamera.depthTextureMode = DepthTextureMode.Depth;
+    }
+
+    private void CheckRoomInitialization()
+    {
+
     }
 }
