@@ -11,6 +11,7 @@ public class EnemySubmarineSpawner : MonoBehaviour
     [SerializeField] private int maxIterations = 1000;
     [SerializeField] private MRUKAnchor.SceneLabels labels = ~(MRUKAnchor.SceneLabels)0;
     [SerializeField] private float surfaceClearanceDistance = 0.3f;
+    [SerializeField] private EnemySubmarinesManager enemySubmarinesManager;
 
     void Start()
     {
@@ -43,8 +44,6 @@ public class EnemySubmarineSpawner : MonoBehaviour
                 if (room.GenerateRandomPositionOnSurface(surfaceType, 0.1f, LabelFilter.Included(labels), out var pos, out var normal))
                 {
                     spawnPosition = pos - normal * surfaceClearanceDistance;
-                    Debug.Log($"Spawn position: {spawnPosition}");
-                    Debug.Log($"Spawn normal: {normal}");
                     spawnNormal = normal;
                     var center = spawnPosition;
                     if (room.IsPositionInRoom(center))
@@ -64,8 +63,9 @@ public class EnemySubmarineSpawner : MonoBehaviour
                 Quaternion spawnRotation = Quaternion.FromToRotation(Vector3.up, spawnNormal);
                 if (enemySubmarinePrefab.gameObject.scene.path == null && spawnPosition != Vector3.zero)
                 {
-                    Instantiate(enemySubmarinePrefab, spawnPosition, spawnRotation, transform);
-                    Debug.Log($"Spawn position: {spawnPosition}");
+                    Transform instantiatedEnemySubmarinePrefab = Instantiate(enemySubmarinePrefab, spawnPosition, spawnRotation, transform);
+                    enemySubmarinesManager.AddToEnemySubmarinesList(instantiatedEnemySubmarinePrefab);
+                    instantiatedEnemySubmarinePrefab.GetComponent<EnemySubmarineController>().SetState(EnemySubmarineController.SubmarineState.GETINROOM);
                 }
                 else
                 {

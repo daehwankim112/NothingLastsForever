@@ -59965,73 +59965,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 984354080134106425, guid: c2e00db6d2dfa42ac8d821db8d493a44, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 8495550660209685608}
-    - targetCorrespondingSourceObject: {fileID: 984354080134106425, guid: c2e00db6d2dfa42ac8d821db8d493a44, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 7721616595649380378}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c2e00db6d2dfa42ac8d821db8d493a44, type: 3}
 --- !u!4 &3729127396884802453 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8047981335285221976, guid: c2e00db6d2dfa42ac8d821db8d493a44, type: 3}
   m_PrefabInstance: {fileID: 6661010759379100109}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &5897896011006815476 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 984354080134106425, guid: c2e00db6d2dfa42ac8d821db8d493a44, type: 3}
-  m_PrefabInstance: {fileID: 6661010759379100109}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &8495550660209685608
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5897896011006815476}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3d607ba0c0320e446ba9d62671d9d7a1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SpawnOnStart: 1
-  TrackUpdates: 1
-  PrefabsToSpawn:
-  - Labels: 96
-    Prefabs:
-    - {fileID: 3331229999188802995, guid: d69a2f3da306629418e85d5ba364356a, type: 3}
-    PrefabSelection: 0
-    MatchAspectRatio: 0
-    CalculateFacingDirection: 1
-    Scaling: 3
-    Alignment: 2
-    IgnorePrefabSize: 0
-  SeedValue: 0
-  onPrefabSpawned:
-    m_PersistentCalls:
-      m_Calls: []
---- !u!114 &7721616595649380378
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5897896011006815476}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0d14e43228043c04db9e374568cb89a9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SpawnOnStart: 1
-  SpawnObject: {fileID: 3331229999188802995, guid: d69a2f3da306629418e85d5ba364356a, type: 3}
-  SpawnAmount: 8
-  MaxIterations: 1000
-  SpawnLocations: 3
-  Labels: 96
-  CheckOverlaps: 0
-  OverrideBounds: -1
-  LayerMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  SurfaceClearanceDistance: -0.5
