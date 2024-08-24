@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class EnemySubmarineController : MonoBehaviour
 {
+    [HideInInspector] public AudioSource audioSource;
     [HideInInspector] public enum SubmarineState
     {
         GETINROOM,
@@ -14,6 +15,9 @@ public class EnemySubmarineController : MonoBehaviour
         CHASEPLAYER,
         EXPLODES
     }
+    [SerializeField] private AudioClip SubmarineSonarSound;
+    [SerializeField] private AudioClip TorpedoFiringSound;
+    [SerializeField] private AudioClip SubmarineExplosionSound;
     private SubmarineState submarineState;
     private bool isSubmarineChasingPlayer = false;
 
@@ -25,6 +29,21 @@ public class EnemySubmarineController : MonoBehaviour
     public SubmarineState GetState()
     {
         return submarineState;
+    }
+
+    public void PlaySonarSound()
+    {
+        audioSource.PlayOneShot(SubmarineSonarSound);
+    }
+
+    public void PlayTorpedoFiringSound()
+    {
+        audioSource.PlayOneShot(TorpedoFiringSound);
+    }
+
+    public void PlayExplosionSound()
+    {
+        audioSource.PlayOneShot(SubmarineExplosionSound);
     }
 
 
