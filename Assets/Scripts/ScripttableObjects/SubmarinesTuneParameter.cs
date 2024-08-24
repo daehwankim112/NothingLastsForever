@@ -4,8 +4,8 @@ using UnityEngine;
 public class SubmarinesTuneParameter : ScriptableObject
 {
     public float enemySubmarineMaxSpeed = 0.003f;
-    public float towardThePlayerWeight = 0.7f;
-    public float rotateAroundThePlayerWeight = 12f;
+    public float towardTheTargetWeight = 0.7f;
+    public float rotateAroundTheTargetWeight = 12f;
     public float avoidCollisionWeight = 2f;
     public float collisionTestDistance = 1f;
     public float rotationEuqalibriumDistance = 1f;

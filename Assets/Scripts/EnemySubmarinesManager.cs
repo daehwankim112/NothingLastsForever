@@ -2,8 +2,10 @@ using Meta.XR.MRUtilityKit;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Profiling;
 
 /// <summary>
@@ -12,34 +14,45 @@ using UnityEngine.Profiling;
 /// </summary>
 public class EnemySubmarinesManager : MonoBehaviour
 {
+    UnityEvent onPlayerNotEchoingForSomeTime = new UnityEvent();
+
     [SerializeField] private SubmarinesTuneParameter submarinesTuneParameter;
     [HideInInspector] public List<Transform> enemySubmarines = new List<Transform>();
+    [HideInInspector] public Transform playerPingLocation; // To be replced with PlayerPingLocation in the Game Manager. 8/24/2024 David Kim
     [SerializeField] private Transform OVRRigMainCamera;
+    [SerializeField] private float timeBeforeSubmarinesStartEchoing = 10f;
+    [SerializeField] private float lastTimeEchod = 0; // To be replaced with lastTimeEchoed in the Game Manager. 8/24/2024 David Kim
+    [SerializeField] private float rangeOfSonarPingNeighbours = 2f;
     private Transform centreOfFloor;
     private Transform centreOfCeiling;
     private MRUKRoom room;
 
     // Parameters from Submarines Tune Parameter Scriptable Object
     private float enemySubmarineMaxSpeed;
-    private float towardThePlayerWeight;
-    private float rotateAroundThePlayerWeight;
+    private float towardTheTargetWeight;
+    private float rotateAroundTheTargetWeight;
     private float avoidCollisionWeight;
     private float collisionTestDistance;
     private float rotationEuqalibriumDistance;
     private float testDistance;
     private float testRadius;
     private int numberOfTest;
-    private List<Vector3> towardThePlayer = new List<Vector3>();
-    private List<Vector3> rotateAroundThePlayer = new List<Vector3>();
+    private List<Vector3> towardTheTarget = new List<Vector3>();
+    private List<Vector3> rotateAroundTheTarget = new List<Vector3>();
     private List<Vector3> avoidCollision = new List<Vector3>();
 
     private Vector3 target;
+    private List<Transform> neighbouringSubmarinesOnPursue = new List<Transform>();
+
+    /// <summary>
+    /// Initialize the Enemy Submarine Manager with the parameters from the Submarines Tune Parameter Scriptable Object.
+    /// </summary>
     void Start()
     {
         // Initialize the parameters according to the scriptable object
         enemySubmarineMaxSpeed = submarinesTuneParameter.enemySubmarineMaxSpeed;
-        towardThePlayerWeight = submarinesTuneParameter.towardThePlayerWeight;
-        rotateAroundThePlayerWeight = submarinesTuneParameter.rotateAroundThePlayerWeight;
+        towardTheTargetWeight = submarinesTuneParameter.towardTheTargetWeight;
+        rotateAroundTheTargetWeight = submarinesTuneParameter.rotateAroundTheTargetWeight;
         avoidCollisionWeight = submarinesTuneParameter.avoidCollisionWeight;
         collisionTestDistance = submarinesTuneParameter.collisionTestDistance;
         rotationEuqalibriumDistance = submarinesTuneParameter.rotationEuqalibriumDistance;
@@ -70,8 +83,16 @@ public class EnemySubmarinesManager : MonoBehaviour
                 Initialize(MRUK.Instance.GetCurrentRoom());
             });
         }
+
+        onPlayerNotEchoingForSomeTime.AddListener(ClosestSubmarineToPingAndTransitionNeighboursToPursue);
     }
 
+    
+
+    /// <summary>
+    /// Initialize the room
+    /// </summary>
+    /// <param name="r">MRUKRoom to set center anchors for FLOOR and CEILING</param>
     private void Initialize(MRUKRoom r)
     {
         if (r.HasAllLabels(MRUKAnchor.SceneLabels.FLOOR))
@@ -85,12 +106,20 @@ public class EnemySubmarinesManager : MonoBehaviour
         room = r;
     }
 
+    /// <summary>
+    /// public room initialize function
+    /// </summary>
     public void Initialize()
     {
         MRUK.Instance.RegisterSceneLoadedCallback(() =>
         {
             Initialize(MRUK.Instance.GetCurrentRoom());
         });
+    }
+
+    private void Update()
+    {
+        lastTimeEchod += Time.deltaTime; // To be replaced with lastTimeEchoed in the Game Manager. 8/24/2024 David Kim
     }
 
     void FixedUpdate()
@@ -106,10 +135,10 @@ public class EnemySubmarinesManager : MonoBehaviour
                 case EnemySubmarineController.SubmarineState.ROTATEAROUNDCENTRE:
                     RotateAroundCentre(i);
                     break;
-                /*case EnemySubmarineController.SubmarineState.SONARPING:
+                case EnemySubmarineController.SubmarineState.SONARPING:
                     SonarPing(i);
                     break;
-                case EnemySubmarineController.SubmarineState.FIRETORPEDO:
+                /*case EnemySubmarineController.SubmarineState.FIRETORPEDO:
                     FireTorpedo(i);
                     break;
                 case EnemySubmarineController.SubmarineState.APPROACHPLAYER:
@@ -180,10 +209,10 @@ public class EnemySubmarinesManager : MonoBehaviour
             ///     direction = (towardThePlayer[i] * towardThePlayerWeight + rotateAroundThePlayer[i] * rotateAroundThePlayerWeight + avoidCollision[i] * avoidCollisionWeight).normalized;
             /// }
             /// avoidCollision[i] = AvoidCollision(enemySubmarines[i].position, enemySubmarines[i].forward);
-            direction = (towardThePlayer[i] * towardThePlayerWeight + rotateAroundThePlayer[i] * rotateAroundThePlayerWeight + avoidCollision[i] * avoidCollisionWeight).normalized;
+            direction = (towardTheTarget[i] * towardTheTargetWeight + rotateAroundTheTarget[i] * rotateAroundTheTargetWeight + avoidCollision[i] * avoidCollisionWeight).normalized;
 
-            Debug.DrawRay(enemySubmarines[i].position, towardThePlayer[i], Color.red);
-            Debug.DrawRay(enemySubmarines[i].position, rotateAroundThePlayer[i], Color.green);
+            Debug.DrawRay(enemySubmarines[i].position, towardTheTarget[i], Color.red);
+            Debug.DrawRay(enemySubmarines[i].position, rotateAroundTheTarget[i], Color.green);
             Debug.DrawRay(enemySubmarines[i].position, avoidCollision[i], Color.cyan);
             Debug.DrawRay(enemySubmarines[i].position, direction, Color.white);
             Quaternion lookOnLook = Quaternion.LookRotation(direction);
@@ -194,7 +223,11 @@ public class EnemySubmarinesManager : MonoBehaviour
         }
     }
 
-
+    
+    /// <summary>
+    /// "GETINROOM" state. The submarine will move towards the centre of room.
+    /// </summary>
+    /// <param name="i"></param>
     private void GetInRoom(int i)
     {
         Vector3 resultingDirection;
@@ -202,28 +235,48 @@ public class EnemySubmarinesManager : MonoBehaviour
         Debug.Log(i + " submarine is in GETINROOM state");
         Debug.Log("centre of the floor: " + centreOfFloor.position);
         Debug.Log("centre of the ceiling: " + centreOfCeiling.position);
-        towardThePlayer[i] = TowardTarget( (centreOfFloor.position + centreOfCeiling.position) / 2, enemySubmarines[i].position);
-        rotateAroundThePlayer[i] = Vector3.zero;
+        towardTheTarget[i] = TowardTarget( (centreOfFloor.position + centreOfCeiling.position) / 2, enemySubmarines[i].position);
+        rotateAroundTheTarget[i] = Vector3.zero;
         avoidCollision[i] = AvoidCollision(enemySubmarines[i].position, enemySubmarines[i].forward, layerMask);
+
+        // Transition to "ROTATEAROUNDCENTRE" state if the submarine is in the room.
         if (room.IsPositionInRoom(enemySubmarines[i].position + (enemySubmarines[i].position - OVRRigMainCamera.position) / 10f))
         {
             enemySubmarines[i].GetComponent<EnemySubmarineController>().SetState(EnemySubmarineController.SubmarineState.ROTATEAROUNDCENTRE);
             Debug.Log(i + " submarine is in ROTATEAROUNDCENTRE state");
         }
     }
+    /// <summary>
+    /// "ROTATEAROUNDCENTRE" state. The submarine will rotate around the player.
+    /// </summary>
+    /// <param name="i"></param>
     private void RotateAroundCentre(int i)
     {
         Vector3 resultingDirection;
         LayerMask layerMask = LayerMask.GetMask("Default");
         Debug.Log(i + " submarine is in GETINROOM state");
-        towardThePlayer[i] = TowardTarget(OVRRigMainCamera.position, enemySubmarines[i].position);
-        rotateAroundThePlayer[i] = RotateTarget(OVRRigMainCamera.position, enemySubmarines[i].position);
+        towardTheTarget[i] = TowardTarget(OVRRigMainCamera.position, enemySubmarines[i].position);
+        rotateAroundTheTarget[i] = RotateTarget(OVRRigMainCamera.position, enemySubmarines[i].position);
         avoidCollision[i] = AvoidCollision(enemySubmarines[i].position, enemySubmarines[i].forward, layerMask);
+
         // if statements to check if the submarine is close to the player has not been echoing for some time.
         // If so, check the closest sub to the player and transition that submarine to "SONARPING" state.
         // Otherwise, check if the submarine is close to the "SONARPING" submarine and transition that submarine to
         // "FIRETORPEDO" state if it is close enough otherwise transition to "APPROACHPLAYER" state.
         // If player echos, reset the timer and transition to "FIRETORPEDO" state.
+        if (lastTimeEchod > timeBeforeSubmarinesStartEchoing)
+        {
+            lastTimeEchod = 0f;
+        }
+    }
+
+
+    private void SonarPing(int i)
+    {
+        playerPingLocation = OVRRigMainCamera;
+        // play sonar ping sound once
+
+        throw new NotImplementedException();
     }
 
     private Vector3 TowardTarget(Vector3 target, Vector3 position)
@@ -284,8 +337,33 @@ public class EnemySubmarinesManager : MonoBehaviour
     public void AddToEnemySubmarinesList(Transform submarine)
     {
         enemySubmarines.Add(submarine);
-        towardThePlayer.Add(Vector3.zero);
-        rotateAroundThePlayer.Add(Vector3.zero);
+        towardTheTarget.Add(Vector3.zero);
+        rotateAroundTheTarget.Add(Vector3.zero);
         avoidCollision.Add(Vector3.zero);
+    }
+
+    private void ClosestSubmarineToPingAndTransitionNeighboursToPursue()
+    {
+        float closestDistance = 0;
+        int closestSubmarineIndex = 0;
+        for (int i = 0; i < enemySubmarines.Count; i++)
+        {
+            if (Vector3.Distance(OVRRigMainCamera.position, enemySubmarines[i].position) < closestDistance)
+            {
+                closestDistance = Vector3.Distance(OVRRigMainCamera.position, enemySubmarines[i].position);
+                closestSubmarineIndex = i;
+            }
+        }
+
+        enemySubmarines[closestSubmarineIndex].GetComponent<EnemySubmarineController>().SetState(EnemySubmarineController.SubmarineState.SONARPING);
+
+        for (int i = 0; i < enemySubmarines.Count; i++)
+        {
+            if (Vector3.Distance(enemySubmarines[closestSubmarineIndex].position, enemySubmarines[i].position) < rangeOfSonarPingNeighbours)
+            {
+                neighbouringSubmarinesOnPursue.Add(enemySubmarines[i]);
+                enemySubmarines[i].GetComponent<EnemySubmarineController>().SetState(EnemySubmarineController.SubmarineState.APPROACHPLAYER);
+            }
+        }
     }
 }
