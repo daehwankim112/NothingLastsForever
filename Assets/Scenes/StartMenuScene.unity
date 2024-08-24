@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028331, g: 0.2257133, b: 0.3069217, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -3260,6 +3260,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: NetworkPlayer
       objectReference: {fileID: 0}
+    - target: {fileID: 6924148029735964686, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
+      propertyPath: _shapes.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: 479824b3005704f4686aee8be6f95fe0, type: 2}
     - target: {fileID: 7950999700976850951, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
       propertyPath: SceneSettings.RoomIndex
       value: -1
@@ -3300,6 +3304,10 @@ PrefabInstance:
       propertyPath: GlobalObjectIdHash
       value: 2211454507
       objectReference: {fileID: 0}
+    - target: {fileID: 8560995727844593686, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
+      propertyPath: _shapes.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: 479824b3005704f4686aee8be6f95fe0, type: 2}
     - target: {fileID: 8774285561066417992, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
       propertyPath: m_IsActive
       value: 1
@@ -5825,10 +5833,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   numBoids: 100
-  boidDrag: 2
   boid: {fileID: 6677586760661799738, guid: 129ac79c073da8f4eae06a18e0c77a23, type: 3}
   boidManager: {fileID: 1957074765}
-  boids: []
 --- !u!114 &1957074765
 MonoBehaviour:
   m_ObjectHideFlags: 0
