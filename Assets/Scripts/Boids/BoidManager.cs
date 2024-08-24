@@ -9,6 +9,9 @@ using UnityEngine;
 
 public class BoidManager : MonoBehaviour
 {
+    private GameManager gameManager => GameManager.Instance;
+
+
     private struct Boid
     {
         public Vector3 position;
@@ -94,7 +97,7 @@ public class BoidManager : MonoBehaviour
         var torpedoManager = FindObjectOfType<TorpedoManager>();
         if (torpedoManager == null) return;
 
-        torpedoManager.OnTorpedoExploded += OnTorpedoExploded;
+        gameManager.OnExplosion += OnTorpedoExploded;
     }
 
 
@@ -432,19 +435,19 @@ public class BoidManager : MonoBehaviour
 
 
 
-    private void OnTorpedoExploded(Vector3 position, float power, GameManager.Alliance torpedoAlliance)
+    private void OnTorpedoExploded(object sender, GameManager.OnExplosionArgs explosionArgs)
     {
-        if (torpedoAlliance != GameManager.Alliance.Player) return;
+        if (explosionArgs.ExplosionAlliance != GameManager.Alliance.Player) return;
 
         for (int boidIndex = 0; boidIndex < boids.Count; boidIndex++)
         {
             Boid boid = boids[boidIndex];
 
-            float distance = Vector3.Distance(position, boid.position);
+            float distance = Vector3.Distance(explosionArgs.Position, boid.position);
 
-            float explosionPower = power / (distance * distance);
+            float explosionPower = explosionArgs.Power / (distance * distance);
 
-            boid.velocity += explosionPower * (boid.position - position).normalized;
+            boid.velocity += explosionPower * (boid.position - explosionArgs.Position).normalized;
 
             float survivalChance = Random.value;
 
