@@ -7,7 +7,7 @@ using UnityEngine;
 
 
 
-public class BoidManager : MonoBehaviour
+public class BoidManager : Singleton<BoidManager>
 {
     private GameManager gameManager => GameManager.Instance;
 
