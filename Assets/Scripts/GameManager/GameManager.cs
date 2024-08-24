@@ -14,9 +14,9 @@ public class GameManager : Singleton<GameManager>
         public GameObject DeadThing;
         public Alliance DeadThingAlliance;
     }
-    public static event EventHandler<OnDeathArgs> OnDeath;
+    public event EventHandler<OnDeathArgs> OnDeath;
 
-    public static void Death(GameObject deadThing, Alliance alliance)
+    public void Death(GameObject deadThing, Alliance alliance)
     {
         OnDeath?.Invoke(null, new OnDeathArgs { DeadThing = deadThing, DeadThingAlliance = alliance });
     }
@@ -33,9 +33,9 @@ public class GameManager : Singleton<GameManager>
         public float Power;
         public Alliance ExplosionAlliance;
     }
-    public static event EventHandler<OnExplosionArgs> OnExplosion;
+    public event EventHandler<OnExplosionArgs> OnExplosion;
 
-    public static void Explosion(Vector3 position, float power, Alliance alliance)
+    public void Explosion(Vector3 position, float power, Alliance alliance)
     {
         OnExplosion?.Invoke(null, new OnExplosionArgs { Position = position, Power = power, ExplosionAlliance = alliance });
     }
