@@ -25,7 +25,9 @@ public class CollectablesManager : Singleton<CollectablesManager>
 
     private void OnDeath(object sender, GameManager.OnDeathArgs deathArgs)
     {
-        if (!deathArgs.DeadThing.TryGetComponent<Inventory>(out Inventory inventory))
+        Debug.Log($"CollectablesManager: {deathArgs.DeadThing.name} died");
+
+        if (deathArgs.DeadThing.TryGetComponent<Inventory>(out Inventory inventory))
         {
             Debug.Log($"CollectablesManager: {deathArgs.DeadThing.name} died, dropping {inventory.NumTorpedos} torpedos");
         }
