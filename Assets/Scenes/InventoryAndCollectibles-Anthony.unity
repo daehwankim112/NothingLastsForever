@@ -205,6 +205,7 @@ GameObject:
   - component: {fileID: 94348891}
   - component: {fileID: 94348893}
   - component: {fileID: 94348894}
+  - component: {fileID: 94348895}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -268,6 +269,35 @@ MonoBehaviour:
   SpawnInterval: 1
   LeftToSpawn: 10
   SpawnRadius: 10
+--- !u!114 &94348895
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 94348890}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80c2b34408ffe0c4ea3beec3bb21b15d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PlayerTorpedoSettings:
+    EnginePower: 0
+    FuseTimer: 0
+    ExplosionPower: 0
+    ExplosionTriggerRadius: 0
+    SearchFov: 0
+    SearchRadius: 0
+  EnemyTorpedoSettings:
+    EnginePower: 0
+    FuseTimer: 0
+    ExplosionPower: 0
+    ExplosionTriggerRadius: 0
+    SearchFov: 0
+    SearchRadius: 0
+  Targets: []
+  Player: {fileID: 0}
+  ExplosionEffect: {fileID: 0}
 --- !u!1001 &109570381
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1991,7 +2021,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74cdbe964ff10bc4aa22c0c3cc24d399, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  handGrabInteractable: {fileID: 1135002167}
+  ControllerGrabable: {fileID: 1135002169}
+  HandGrabable: {fileID: 1135002167}
 --- !u!54 &2087331238
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2202,7 +2233,7 @@ PrefabInstance:
     - target: {fileID: 5235231245023041029, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
       propertyPath: torpedoManager
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 94348895}
     - target: {fileID: 6120759425548519856, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

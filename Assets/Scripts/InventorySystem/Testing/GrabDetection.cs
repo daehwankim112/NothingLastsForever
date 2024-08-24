@@ -1,15 +1,28 @@
+
 using Oculus.Interaction;
 using Oculus.Interaction.HandGrab;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class GrabDetection : MonoBehaviour
 {
-    public HandGrabInteractable handGrabInteractable;
+    public GrabInteractable ControllerGrabable;
+    public HandGrabInteractable HandGrabable;
 
     void Start()
     {
-        handGrabInteractable.WhenStateChanged += WhenStateChanged;
+        ControllerGrabable.WhenStateChanged += WhenStateChanged;
+        HandGrabable.WhenStateChanged += WhenStateChanged;
     }
+
+
+
+    private void OnDestroy()
+    {
+        ControllerGrabable.WhenStateChanged -= WhenStateChanged;
+        HandGrabable.WhenStateChanged -= WhenStateChanged;
+    }
+
 
     private void WhenStateChanged(InteractableStateChangeArgs args)
     {
