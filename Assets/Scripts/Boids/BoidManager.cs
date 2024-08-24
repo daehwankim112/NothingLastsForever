@@ -82,7 +82,7 @@ public class BoidManager : Singleton<BoidManager>
     [SerializeField]
     private readonly List<Boid> boids = new();
 
-    private readonly HashSet<Boid> deadBoids = new();
+    private readonly List<int> deadBoidIndicies = new();
 
     public ComputeShader BoidComputeShader;
     private ComputeBuffer settingsBuffer;
@@ -413,9 +413,9 @@ public class BoidManager : Singleton<BoidManager>
 
     private void RemoveDeadBoids()
     {
-        foreach (Boid deadBoid in deadBoids)
+        foreach (int deadBoidIndex in deadBoidIndicies)
         {
-            RemoveBoid(deadBoid, true);
+            RemoveBoid(deadBoidIndex, true);
         }
     }
 
@@ -423,14 +423,32 @@ public class BoidManager : Singleton<BoidManager>
 
     private bool RemoveBoid(Boid boid, bool destroyGameobject = false)
     {
-        bool successful = boids.Remove(boid);
+        int index = boids.FindIndex(b => b.Equals(boid));
+        bool successful = index >= 0;
 
-        if (successful && destroyGameobject)
+        return successful && RemoveBoid(index, destroyGameobject);
+    }
+
+
+
+    /// <summary>
+    /// This is the ONLY function that removes a boid from the boid manager.
+    /// </summary>
+    /// <param name="boidIndex"></param>
+    /// <param name="destroyGameobject"></param>
+    /// <returns></returns>
+    private bool RemoveBoid(int boidIndex, bool destroyGameobject = false)
+    {
+        Boid boid = boids[boidIndex];
+
+        boids.RemoveAt(boidIndex);
+
+        if (destroyGameobject)
         {
             Destroy(boid.transform.gameObject);
         }
 
-        return successful;
+        return true;
     }
 
 
@@ -453,7 +471,7 @@ public class BoidManager : Singleton<BoidManager>
 
             if (survivalChance < Mathf.InverseLerp(ExplosionPowerSurvivalCertainty, ExplosionPowerDeathCertainty, explosionPower))
             {
-                deadBoids.Add(boid);
+                deadBoidIndicies.Add(boidIndex);
             }
 
             boids[boidIndex] = boid;
