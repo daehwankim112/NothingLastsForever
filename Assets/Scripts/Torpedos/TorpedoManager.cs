@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class TorpedoManager : Singleton<TorpedoManager>
 {
+    private GameManager gameManager => GameManager.Instance;
 
     private struct Torpedo
     {
@@ -34,8 +35,6 @@ public class TorpedoManager : Singleton<TorpedoManager>
 
     public TorpedoSettings PlayerTorpedoSettings;
     public TorpedoSettings EnemyTorpedoSettings;
-
-    public event Explosions.ExplosionEvent OnTorpedoExploded;
 
     public List<Transform> Targets;
     public Transform Player;
@@ -223,7 +222,7 @@ public class TorpedoManager : Singleton<TorpedoManager>
 
     private bool ExplodeTorpedo(Torpedo torpedo)
     {
-        OnTorpedoExploded?.Invoke(torpedo.position, GetTorpedoSettings(torpedo.alliance).ExplosionPower, torpedo.alliance);
+        gameManager.Explosion(torpedo.position, GetTorpedoSettings(torpedo.alliance).ExplosionPower, torpedo.alliance);
 
         if (ExplosionEffect != null)
         {

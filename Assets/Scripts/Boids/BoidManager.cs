@@ -7,8 +7,11 @@ using UnityEngine;
 
 
 
-public class BoidManager : MonoBehaviour
+public class BoidManager : Singleton<BoidManager>
 {
+    private GameManager gameManager => GameManager.Instance;
+
+
     private struct Boid
     {
         public Vector3 position;
@@ -79,7 +82,7 @@ public class BoidManager : MonoBehaviour
     [SerializeField]
     private readonly List<Boid> boids = new();
 
-    private readonly HashSet<Boid> deadBoids = new();
+    private readonly List<int> deadBoidIndicies = new();
 
     public ComputeShader BoidComputeShader;
     private ComputeBuffer settingsBuffer;
@@ -94,7 +97,7 @@ public class BoidManager : MonoBehaviour
         var torpedoManager = FindObjectOfType<TorpedoManager>();
         if (torpedoManager == null) return;
 
-        torpedoManager.OnTorpedoExploded += OnTorpedoExploded;
+        gameManager.OnExplosion += OnTorpedoExploded;
     }
 
 
@@ -410,9 +413,9 @@ public class BoidManager : MonoBehaviour
 
     private void RemoveDeadBoids()
     {
-        foreach (Boid deadBoid in deadBoids)
+        foreach (int deadBoidIndex in deadBoidIndicies)
         {
-            RemoveBoid(deadBoid, true);
+            RemoveBoid(deadBoidIndex, true);
         }
     }
 
@@ -420,37 +423,55 @@ public class BoidManager : MonoBehaviour
 
     private bool RemoveBoid(Boid boid, bool destroyGameobject = false)
     {
-        bool successful = boids.Remove(boid);
+        int index = boids.FindIndex(b => b.Equals(boid));
+        bool successful = index >= 0;
 
-        if (successful && destroyGameobject)
-        {
-            Destroy(boid.transform.gameObject);
-        }
-
-        return successful;
+        return successful && RemoveBoid(index, destroyGameobject);
     }
 
 
 
-    private void OnTorpedoExploded(Vector3 position, float power, GameManager.Alliance torpedoAlliance)
+    /// <summary>
+    /// This is the ONLY function that removes a boid from the boid manager.
+    /// </summary>
+    /// <param name="boidIndex"></param>
+    /// <param name="destroyGameobject"></param>
+    /// <returns></returns>
+    private bool RemoveBoid(int boidIndex, bool destroyGameobject = false)
     {
-        if (torpedoAlliance != GameManager.Alliance.Player) return;
+        Boid boid = boids[boidIndex];
+
+        boids.RemoveAt(boidIndex);
+
+        if (destroyGameobject)
+        {
+            Destroy(boid.transform.gameObject);
+        }
+
+        return true;
+    }
+
+
+
+    private void OnTorpedoExploded(object sender, GameManager.OnExplosionArgs explosionArgs)
+    {
+        if (explosionArgs.ExplosionAlliance != GameManager.Alliance.Player) return;
 
         for (int boidIndex = 0; boidIndex < boids.Count; boidIndex++)
         {
             Boid boid = boids[boidIndex];
 
-            float distance = Vector3.Distance(position, boid.position);
+            float distance = Vector3.Distance(explosionArgs.Position, boid.position);
 
-            float explosionPower = power / (distance * distance);
+            float explosionPower = explosionArgs.Power / (distance * distance);
 
-            boid.velocity += explosionPower * (boid.position - position).normalized;
+            boid.velocity += explosionPower * (boid.position - explosionArgs.Position).normalized;
 
             float survivalChance = Random.value;
 
             if (survivalChance < Mathf.InverseLerp(ExplosionPowerSurvivalCertainty, ExplosionPowerDeathCertainty, explosionPower))
             {
-                deadBoids.Add(boid);
+                deadBoidIndicies.Add(boidIndex);
             }
 
             boids[boidIndex] = boid;

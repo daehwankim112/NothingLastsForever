@@ -972,6 +972,7 @@ GameObject:
   - component: {fileID: 150876693}
   - component: {fileID: 150876692}
   - component: {fileID: 150876695}
+  - component: {fileID: 150876696}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -1055,6 +1056,8 @@ MonoBehaviour:
   CollisionAvoidanceFactor: 5
   CollisionAvoidanceRadius: 1
   FramesBetweenCollisionChecks: 10
+  ExplosionPowerDeathCertainty: 0
+  ExplosionPowerSurvivalCertainty: 0
   boidSettings:
     MaxSpeed: 1
     MinSpeed: 0.1
@@ -1094,10 +1097,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   numBoids: 100
-  boidDrag: 0
   boid: {fileID: 7311501369167484682, guid: 8f8e48919d877c44a8e15b1e8035c573, type: 3}
   boidManager: {fileID: 150876694}
-  boids: []
+--- !u!114 &150876696
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 150876686}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0815203697d2ae3429c567727e3a71d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &211435741
 GameObject:
   m_ObjectHideFlags: 0
