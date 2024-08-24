@@ -8,6 +8,9 @@ public class CollectablesManager : Singleton<CollectablesManager>
     private GameManager gameManager => GameManager.Instance;
 
 
+    public GameObject TorpedoCollectablePrefab;
+
+
 
     void Start()
     {
@@ -25,11 +28,13 @@ public class CollectablesManager : Singleton<CollectablesManager>
 
     private void OnDeath(object sender, GameManager.OnDeathArgs deathArgs)
     {
-        Debug.Log($"CollectablesManager: {deathArgs.DeadThing.name} died");
-
         if (deathArgs.DeadThing.TryGetComponent<Inventory>(out Inventory inventory))
         {
-            Debug.Log($"CollectablesManager: {deathArgs.DeadThing.name} died, dropping {inventory.NumTorpedos} torpedos");
+            if (inventory.NumTorpedos > 0)
+            {
+                GameObject torpedoCollectable = Instantiate(TorpedoCollectablePrefab, deathArgs.DeadThing.transform.position, Quaternion.identity);
+                torpedoCollectable.GetComponent<Inventory>().NumTorpedos = inventory.NumTorpedos;
+            }
         }
     }
 }
