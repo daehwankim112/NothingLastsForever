@@ -174,8 +174,8 @@ public class TorpedoManager : Singleton<TorpedoManager>
             Vector3 aimDirection = torpedo.velocity.normalized;
             Vector3? nearestTargetPos = torpedo.alliance switch
                 {
-                    GameManager.Alliance.Player =>  TargetPlayer(torpedo, out withinExplodeRadius),
-                    GameManager.Alliance.Enemy => GetNearestTargetPosition(torpedo, targetPositions, out withinExplodeRadius),
+                    GameManager.Alliance.Player => GetNearestTargetPosition(torpedo, targetPositions, out withinExplodeRadius),
+                    GameManager.Alliance.Enemy =>  TargetPlayer(torpedo, out withinExplodeRadius),
                     _ => null
                 };
 
@@ -275,7 +275,7 @@ public class TorpedoManager : Singleton<TorpedoManager>
         {
             playerPosition = Player.position;
 
-            if (Vector3.Distance(torpedo.position, playerPosition.Value) < GetTorpedoSettings(torpedo.alliance).ExplosionTriggerRadius)
+            if (Vector3.Distance(torpedo.position, playerPosition) < GetTorpedoSettings(torpedo.alliance).ExplosionTriggerRadius)
             {
                 withinExplodeRadius = true;
             }
