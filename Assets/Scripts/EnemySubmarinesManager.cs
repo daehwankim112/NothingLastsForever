@@ -137,8 +137,9 @@ public class EnemySubmarinesManager : MonoBehaviour
             var enemySubmarineController = enemySubmarines[i].GetComponent<EnemySubmarineController>();
             if (enemySubmarineController.GetTimeSinceLastTorpedoFired() > torpedoFireCooldown)
             {
-                if (Vector3.Distance(enemySubmarines[i].position, OVRRigMainCamera.position) > sonarPingDistanceFromPlayer && sonarPingDistanceFromPlayer < 500)
+                if (Vector3.Distance(enemySubmarines[i].position, OVRRigMainCamera.position) > sonarPingDistanceFromPlayer && sonarPingDistanceFromPlayer < 500 && sonarPingDistanceFromPlayer != 0)
                 {
+                    playerPingLocation = OVRRigMainCamera;
                     enemySubmarineController.SetState(EnemySubmarineController.SubmarineState.FIRETORPEDO);
                 }
             }
@@ -146,15 +147,19 @@ public class EnemySubmarinesManager : MonoBehaviour
             switch(enemySubmarineController.GetState())
             {
                 case EnemySubmarineController.SubmarineState.GETINROOM:
+                    enemySubmarineController.transform.GetChild(0).GetComponent<MeshRenderer>().material.SetColor("_Color", Color.yellow);
                     GetInRoom(i);
                     break;
                 case EnemySubmarineController.SubmarineState.ROTATEAROUNDCENTRE:
+                    enemySubmarineController.transform.GetChild(0).GetComponent<MeshRenderer>().material.SetColor("_Color", Color.green);
                     RotateAroundCentre(i);
                     break;
                 case EnemySubmarineController.SubmarineState.SONARPING:
+                    enemySubmarineController.transform.GetChild(0).GetComponent<MeshRenderer>().material.SetColor("_Color", Color.blue);
                     SonarPing(i);
                     break;
                 case EnemySubmarineController.SubmarineState.FIRETORPEDO:
+                    enemySubmarineController.transform.GetChild(0).GetComponent<MeshRenderer>().material.SetColor("_Color", Color.red);
                     FireTorpedo(i);
                     break;
                 /*case EnemySubmarineController.SubmarineState.APPROACHPLAYER:
@@ -196,7 +201,7 @@ public class EnemySubmarinesManager : MonoBehaviour
         Debug.Log("centre of the ceiling: " + centreOfCeiling.position);*/
         towardTheTarget[i] = TowardTarget( (centreOfFloor.position + centreOfCeiling.position) / 2, enemySubmarines[i].position);
         rotateAroundTheTarget[i] = Vector3.zero;
-        avoidCollision[i] = AvoidCollision(enemySubmarines[i].position, enemySubmarines[i].forward, layerMask);
+        avoidCollision[i] = AvoidCollision(enemySubmarines[i].position, enemySubmarines[i].forward, enemySubmarines[i].right, enemySubmarines[i].up, layerMask);
 
         var enemySubmarineController = enemySubmarines[i].GetComponent<EnemySubmarineController>();
 
@@ -218,9 +223,9 @@ public class EnemySubmarinesManager : MonoBehaviour
         LayerMask layerMask = LayerMask.GetMask("Default");
         // Debug.Log(i + " submarine is in GETINROOM state");
 
-        towardTheTarget[i] = TowardTarget(OVRRigMainCamera.position, enemySubmarines[i].position); // Replace OVRRigMainCamera with Centre of the room ((centreOfCeiling.position - centreOfFloor.position) / 2). 8/24/2024 David Kim
-        rotateAroundTheTarget[i] = RotateTarget(OVRRigMainCamera.position, enemySubmarines[i].position);
-        avoidCollision[i] = AvoidCollision(enemySubmarines[i].position, enemySubmarines[i].forward, layerMask);
+        towardTheTarget[i] = TowardTarget(((centreOfCeiling.position - centreOfFloor.position) / 2), enemySubmarines[i].position); // Replace OVRRigMainCamera with Centre of the room ((centreOfCeiling.position - centreOfFloor.position) / 2). 8/24/2024 David Kim
+        rotateAroundTheTarget[i] = RotateTarget(((centreOfCeiling.position - centreOfFloor.position) / 2), enemySubmarines[i].position);
+        avoidCollision[i] = AvoidCollision(enemySubmarines[i].position, enemySubmarines[i].right, enemySubmarines[i].up, enemySubmarines[i].forward, layerMask);
 
         // if statements to check if the submarine is close to the player has not been echoing for some time.
         // If so, check the closest sub to the player and transition that submarine to "SONARPING" state.
@@ -230,7 +235,7 @@ public class EnemySubmarinesManager : MonoBehaviour
         if (lastTimeSincePlayerEchod > timeBeforeSubmarinesStartEchoing)
         {
             lastTimeSincePlayerEchod = 0f;
-            onPlayerNotEchoingForSomeTime.Invoke();
+            // onPlayerNotEchoingForSomeTime.Invoke();
         }
     }
 
@@ -251,7 +256,7 @@ public class EnemySubmarinesManager : MonoBehaviour
 
         towardTheTarget[i] = TowardTarget(playerPingLocation.position, enemySubmarines[i].position);
         rotateAroundTheTarget[i] = RotateTarget(playerPingLocation.position, enemySubmarines[i].position);
-        avoidCollision[i] = AvoidCollision(enemySubmarines[i].position, enemySubmarines[i].forward, LayerMask.GetMask("Default"));
+        avoidCollision[i] = AvoidCollision(enemySubmarines[i].position, enemySubmarines[i].forward, enemySubmarines[i].right, enemySubmarines[i].up, LayerMask.GetMask("Default"));
     }
 
     private void FireTorpedo(int i)
@@ -263,6 +268,10 @@ public class EnemySubmarinesManager : MonoBehaviour
             FireTorpedoIntantiateTorpedoPrefab(enemySubmarines[i].position, enemySubmarines[i].forward);
             enemySubmarineController.FiredTorpedoSound();
         }
+
+        towardTheTarget[i] = TowardTarget(playerPingLocation.position, enemySubmarines[i].position);
+        rotateAroundTheTarget[i] = RotateTarget(playerPingLocation.position, enemySubmarines[i].position);
+        avoidCollision[i] = AvoidCollision(enemySubmarines[i].position, enemySubmarines[i].forward, enemySubmarines[i].right, enemySubmarines[i].up, LayerMask.GetMask("Default"));
     }
 
     /// <summary>
@@ -275,7 +284,7 @@ public class EnemySubmarinesManager : MonoBehaviour
     {
         Vector3 targetVector = target - position;
         float distance = targetVector.magnitude;
-        return Mathf.Pow(distance * rotationEuqalibriumDistance, 2) * targetVector.normalized;
+        return Mathf.Pow(distance - rotationEuqalibriumDistance, 3) * targetVector.normalized;
     }
 
     /// <summary>
@@ -301,7 +310,7 @@ public class EnemySubmarinesManager : MonoBehaviour
     /// <param name="forward">forward Vector of the current item</param>
     /// <param name="layerMask">layer to avoid</param>
     /// <returns></returns>
-    private Vector3 AvoidCollision(Vector3 position, Vector3 forward, LayerMask layerMask)
+    private Vector3 AvoidCollision(Vector3 position, Vector3 up, Vector3 right, Vector3 forward, LayerMask layerMask)
     {
         float closestDistance = 0;
         int closestTestIndex = 0;
@@ -316,7 +325,8 @@ public class EnemySubmarinesManager : MonoBehaviour
             closestDistance = initialHit.distance;
             for (int j = 0; j < numberOfTest; j++)
             {
-                if (Physics.Raycast(position, (testDistance * forward + testRadius * (Mathf.Cos( (Mathf.PI / numberOfTest) * j) * new Vector3(1, 0, 0) + Mathf.Sin( (Mathf.PI / numberOfTest) * j) * new Vector3(0, 1, 0))).normalized, out RaycastHit FrontalHit, collisionTestDistance, layerMask))
+                Debug.DrawRay(position, (testDistance * forward + testRadius * (Mathf.Cos((2 * Mathf.PI / numberOfTest) * j) * right + Mathf.Sin((2 * Mathf.PI / numberOfTest) * j) * up)).normalized, Color.yellow);
+                if (Physics.Raycast(position, (testDistance * forward + testRadius * (Mathf.Cos( (2 * Mathf.PI / numberOfTest) * j) * right + Mathf.Sin( (2 * Mathf.PI / numberOfTest) * j) * up)).normalized, out RaycastHit FrontalHit, collisionTestDistance, layerMask))
                 {
                     if (FrontalHit.distance < closestDistance)
                     {
@@ -324,7 +334,7 @@ public class EnemySubmarinesManager : MonoBehaviour
                         closestTestIndex = j;
                     }
                 }
-                if (Physics.Raycast(position, (testRadius * (Mathf.Cos((Mathf.PI / numberOfTest) * j) * new Vector3(1, 0, 0) + Mathf.Sin((Mathf.PI / numberOfTest) * j) * new Vector3(0, 1, 0))).normalized, out RaycastHit sideHit, collisionTestDistance, layerMask))
+                if (Physics.Raycast(position, (testRadius * (Mathf.Cos((2 * Mathf.PI / numberOfTest) * j) * right + Mathf.Sin((2 * Mathf.PI / numberOfTest) * j) * up)).normalized, out RaycastHit sideHit, collisionTestDistance, layerMask))
                 {
                     if (sideHit.distance < closestDistance)
                     {
@@ -333,8 +343,10 @@ public class EnemySubmarinesManager : MonoBehaviour
                     }
                 }
             }
-            closestDistanceVector = testDistance * forward + testRadius * (Mathf.Cos( (Mathf.PI / numberOfTest) * closestTestIndex) * new Vector3(1, 0, 0) + Mathf.Sin( (Mathf.PI / numberOfTest) * closestTestIndex) * new Vector3(0, 1, 0));
-            return - closestDistanceVector.normalized * 1 / closestDistance;
+            Debug.DrawRay(position, (testDistance * forward + testRadius * (Mathf.Cos((2 * Mathf.PI / numberOfTest) * closestTestIndex) * right + Mathf.Sin((2 * Mathf.PI / numberOfTest) * closestTestIndex) * up)).normalized, Color.magenta);
+            // closestDistanceVector = testDistance * forward + testRadius * (Mathf.Cos( (2 * Mathf.PI / numberOfTest) * ((closestTestIndex + (int) (numberOfTest/2)) % numberOfTest)) * new Vector3(1, 0, 0) + Mathf.Sin( (2 * Mathf.PI / numberOfTest) * ((closestTestIndex + (int)(numberOfTest / 2)) % numberOfTest)) * new Vector3(0, 1, 0));
+            closestDistanceVector = testDistance * forward + testRadius * (Mathf.Cos( (2 * Mathf.PI / numberOfTest) * closestTestIndex) * right + Mathf.Sin( (2 * Mathf.PI / numberOfTest) * closestTestIndex) * up);
+            return closestDistanceVector.normalized * (1 / (closestDistance - testDistance) - 1);
         }
     }
 

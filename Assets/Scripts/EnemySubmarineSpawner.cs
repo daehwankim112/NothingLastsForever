@@ -13,6 +13,8 @@ public class EnemySubmarineSpawner : MonoBehaviour
     [SerializeField] private float surfaceClearanceDistance = 0.3f;
     [SerializeField] private EnemySubmarinesManager enemySubmarinesManager;
 
+    private float tempTime = 0.0f;
+
     void Start()
     {
         if (MRUK.Instance)
@@ -66,6 +68,7 @@ public class EnemySubmarineSpawner : MonoBehaviour
                     Transform instantiatedEnemySubmarinePrefab = Instantiate(enemySubmarinePrefab, spawnPosition, spawnRotation, transform);
                     enemySubmarinesManager.AddToEnemySubmarinesList(instantiatedEnemySubmarinePrefab);
                     instantiatedEnemySubmarinePrefab.GetComponent<EnemySubmarineController>().SetState(EnemySubmarineController.SubmarineState.GETINROOM);
+                    return;
                 }
                 else
                 {
@@ -79,6 +82,16 @@ public class EnemySubmarineSpawner : MonoBehaviour
         else
         {
             Debug.Log($"Following labels do not exist in your room {labels.ToString()}");
+        }
+    }
+
+    private void Update()
+    {
+        tempTime += Time.deltaTime;
+        if (tempTime > 2.0f)
+        {
+            tempTime = 0.0f;
+            SpawnSubmarines(MRUK.Instance.GetCurrentRoom());
         }
     }
 }

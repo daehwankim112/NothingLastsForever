@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: efb6db0a5ae9b4f4db38986ea42831dc, type: 3}
   m_Name: SubmarinesDefault
   m_EditorClassIdentifier: 
-  enemySubmarineMaxSpeed: 0.003
-  towardTheTargetWeight: 0.7
-  rotateAroundTheTargetWeight: 12
-  avoidCollisionWeight: 3
+  enemySubmarineMaxSpeed: 0.01
+  towardTheTargetWeight: 1
+  rotateAroundTheTargetWeight: 1
+  avoidCollisionWeight: 1
   collisionTestDistance: 1
   rotationEuqalibriumDistance: 1
-  testDistance: 0.1
-  testRadius: 0.2
-  torpedoFireCooldown: 2
+  testDistance: 0.15
+  testRadius: 0.15
+  torpedoFireCooldown: 4
   numberOfTest: 10
   torpedoPrefab: {fileID: 2569363520602517200, guid: b4e28ebebcde7f641b3642282470a765, type: 3}

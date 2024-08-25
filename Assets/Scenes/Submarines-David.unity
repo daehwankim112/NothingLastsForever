@@ -1119,8 +1119,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23f3a8741eb938a4e958089937689407, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemySubmarinePrefab: {fileID: 8239988699146671603, guid: d69a2f3da306629418e85d5ba364356a, type: 3}
-  numberOfSubmarines: 20
+  enemySubmarinePrefab: {fileID: 8239988699146671603, guid: e31d590b2af72064f8c9f861842ae509, type: 3}
+  numberOfSubmarines: 5
   maxIterations: 1000
   labels: 96
   surfaceClearanceDistance: 0.5
@@ -1139,7 +1139,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   submarinesTuneParameter: {fileID: 11400000, guid: efae15be150b6d04c9afa8b30b947331, type: 2}
   enemySubmarines: []
+  playerPingLocation: {fileID: 0}
+  sonarPingDistanceFromPlayer: 999
   OVRRigMainCamera: {fileID: 1571285976}
+  timeBeforeSubmarinesStartEchoing: 10
+  lastTimeSincePlayerEchod: 0
+  lastTimeSinceSubmarineEchod: 0
+  rangeOfSonarPingngSubmarineNeighbours: 2
+  rangeOfSonarFiringTorpedo: 3
 --- !u!1001 &309821952
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1332,6 +1339,79 @@ Light:
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
+--- !u!1001 &440905506
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 3331229999188802995, guid: e31d590b2af72064f8c9f861842ae509, type: 3}
+      propertyPath: m_Name
+      value: EnemySubmarineNoSonarEffect
+      objectReference: {fileID: 0}
+    - target: {fileID: 3331229999188802995, guid: e31d590b2af72064f8c9f861842ae509, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8239988699146671603, guid: e31d590b2af72064f8c9f861842ae509, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8239988699146671603, guid: e31d590b2af72064f8c9f861842ae509, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8239988699146671603, guid: e31d590b2af72064f8c9f861842ae509, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8239988699146671603, guid: e31d590b2af72064f8c9f861842ae509, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8239988699146671603, guid: e31d590b2af72064f8c9f861842ae509, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8239988699146671603, guid: e31d590b2af72064f8c9f861842ae509, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8239988699146671603, guid: e31d590b2af72064f8c9f861842ae509, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8239988699146671603, guid: e31d590b2af72064f8c9f861842ae509, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8239988699146671603, guid: e31d590b2af72064f8c9f861842ae509, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8239988699146671603, guid: e31d590b2af72064f8c9f861842ae509, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8239988699146671603, guid: e31d590b2af72064f8c9f861842ae509, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8239988699146671603, guid: e31d590b2af72064f8c9f861842ae509, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8239988699146671603, guid: e31d590b2af72064f8c9f861842ae509, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: e31d590b2af72064f8c9f861842ae509, type: 3}
 --- !u!1 &443647150
 GameObject:
   m_ObjectHideFlags: 0
@@ -2500,7 +2580,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3906733160417276171, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
       propertyPath: debug
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3906733160417276171, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
       propertyPath: waveSpeed
@@ -2510,6 +2590,10 @@ PrefabInstance:
       propertyPath: pingingCooldown
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 3906733160417276171, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
+      propertyPath: enemySubmarinesManager
+      value: 
+      objectReference: {fileID: 150876693}
     - target: {fileID: 3906733160417276171, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
       propertyPath: sonarMaterial.Array.size
       value: 3
@@ -2668,7 +2752,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8249713770714487970, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 2672722024
+      value: 699342938
       objectReference: {fileID: 0}
     - target: {fileID: 8560995727844593686, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
       propertyPath: _shapes.Array.data[0]
@@ -2793,3 +2877,4 @@ SceneRoots:
   - {fileID: 573583800}
   - {fileID: 150876688}
   - {fileID: 7748697680198859458}
+  - {fileID: 440905506}

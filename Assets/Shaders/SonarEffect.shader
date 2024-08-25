@@ -5,7 +5,7 @@ Shader "Custom/SonarEffect"
         _WaveDistance ("Wave Distance", Float) = 1.0
         _MaxWaveDistance ("Max Wave Distance", Float) = 1.0
         _Threshold ("Threshold", Float) = 0.1
-        _BaseColor ("Base Color", Color) = (0, 0, 0, 1)
+        _Color ("Color", Color) = (0, 0, 0, 1)
     }
 
     SubShader
@@ -47,7 +47,7 @@ Shader "Custom/SonarEffect"
             };
 
             CBUFFER_START(UnityPerMaterial)
-                half4 _BaseColor;
+                half4 _Color;
                 float _MaxWaveDistance;
                 float _WaveDistance;
                 float _Threshold;
@@ -89,7 +89,7 @@ Shader "Custom/SonarEffect"
                 UNITY_SETUP_INSTANCE_ID(input);
                 UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(input);
 
-                half4 finalColor = _BaseColor;
+                half4 finalColor = _Color;
 
                 float4 depthSpace = mul(_EnvironmentDepthReprojectionMatrices[unity_StereoEyeIndex], float4(input.worldPos.xyz, 1.0));
                 float2 uvCoords = (depthSpace.xy / depthSpace.w + 1.0f) * 0.5f;

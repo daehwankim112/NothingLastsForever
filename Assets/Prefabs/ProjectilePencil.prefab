@@ -101,7 +101,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e717bee6cb0df043897a0c1f11df1c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectile: {fileID: 0}
+  projectile: {fileID: 2569363520602517200}
   speed: 1
 --- !u!64 &320770344169035751
 MeshCollider:

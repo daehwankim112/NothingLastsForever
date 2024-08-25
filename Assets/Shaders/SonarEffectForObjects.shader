@@ -5,7 +5,7 @@ Shader "Custom/SonarEffectForObjects"
         _WaveDistance ("Wave Distance", Float) = 1.0
         _MaxWaveDistance ("Max Wave Distance", Float) = 1.0
         _Threshold ("Threshold", Float) = 0.1
-        _BaseColor ("Base Color", Color) = (1, 1, 1, 1)
+        _Color ("Color", Color) = (1, 1, 1, 1)
     }
     SubShader
     {
@@ -38,7 +38,7 @@ Shader "Custom/SonarEffectForObjects"
             };
 
             CBUFFER_START(UnityPerMaterial)
-                half4 _BaseColor;
+                half4 _Color;
                 float _MaxWaveDistance;
                 float _WaveDistance;
                 float _Threshold;
@@ -73,7 +73,7 @@ Shader "Custom/SonarEffectForObjects"
                 float alpha = waveAlpha(zDepth, _WaveDistance, _Threshold, _MaxWaveDistance);
 
                 output.depth = zDepth;
-                output.color = _BaseColor;
+                output.color = _Color;
                 output.color.a = 1 - alpha;
                 return output;
             }

@@ -16,6 +16,7 @@ public class SonarEffectController : MonoBehaviour
     private bool pinging = false;
     private AudioSource audioSource;
     private float currentWaveDistance = 999f;
+    private bool debugFromInspector = false;
 
     void Start()
     {
@@ -64,11 +65,17 @@ public class SonarEffectController : MonoBehaviour
         }*/
 
 
-        if ((handPoseTrigger.pingGestureActivated 
+        if (((handPoseTrigger.pingGestureActivated 
             || (OVRInput.Get(OVRInput.RawButton.A) || OVRInput.Get(OVRInput.RawButton.X))) 
-            && !pinging && !debug)
+            && !pinging && !debug) || debugFromInspector)
         {
+            Debug.Log("Ping gesture activated");
+            currentWaveDistance = 0.0f;
             StartCoroutine(SonarPing());
+            if (debugFromInspector)
+            {
+                debugFromInspector = false;
+            }
         }
         if (debug && !pinging)
         {
@@ -100,6 +107,12 @@ public class SonarEffectController : MonoBehaviour
     {
         pinging = false;
         StopAllCoroutines();
+    }
+
+    [ContextMenu("SonarPingDebugFromInspector")]
+    private void SonarPingDebugFromInspector()
+    {
+        debugFromInspector = true;
     }
 
     IEnumerator SonarPing()
