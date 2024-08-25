@@ -234,7 +234,7 @@ Transform:
   m_GameObject: {fileID: 94348890}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.956, z: 0}
+  m_LocalPosition: {x: 0, y: 0.956, z: -0.525}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -286,9 +286,9 @@ MonoBehaviour:
     EnginePower: 1
     FuseTimer: 10
     ExplosionPower: 0
-    ExplosionTriggerRadius: 0
-    SearchFov: 0
-    SearchRadius: 0
+    ExplosionTriggerRadius: 0.25
+    SearchFov: 45
+    SearchRadius: 10
   EnemyTorpedoSettings:
     EnginePower: 0
     FuseTimer: 0
@@ -296,7 +296,8 @@ MonoBehaviour:
     ExplosionTriggerRadius: 0
     SearchFov: 0
     SearchRadius: 0
-  Targets: []
+  Targets:
+  - {fileID: 2087331242}
   Player: {fileID: 1845871983}
   ExplosionEffect: {fileID: 717426838407661557, guid: 1ea96d85958a4a64a87160a40627c801, type: 3}
 --- !u!1001 &109570381

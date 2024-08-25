@@ -13,13 +13,15 @@ public class Collectable : MonoBehaviour
 
     private Inventory inventory;
 
+    public GameObject HandGrabObject;
+
 
     void Start()
     {
         inventory = GetComponent<Inventory>();
 
-        HandGrabable = gameObject.GetComponent<HandGrabInteractable>();
-        ControllerGrabable = gameObject.GetComponent<GrabInteractable>();
+        HandGrabable = HandGrabObject.GetComponent<HandGrabInteractable>();
+        ControllerGrabable = HandGrabObject.GetComponent<GrabInteractable>();
 
         ControllerGrabable.WhenStateChanged += OnGrabbableStateChanged;
         HandGrabable.WhenStateChanged += OnGrabbableStateChanged;
