@@ -3263,7 +3263,7 @@ PrefabInstance:
     - target: {fileID: 6924148029735964686, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
       propertyPath: _shapes.Array.data[0]
       value: 
-      objectReference: {fileID: 11400000, guid: 479824b3005704f4686aee8be6f95fe0, type: 2}
+      objectReference: {fileID: 11400000, guid: 92370b19c98c91d499ee0c8086afab1c, type: 2}
     - target: {fileID: 7950999700976850951, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
       propertyPath: SceneSettings.RoomIndex
       value: -1
@@ -3307,7 +3307,7 @@ PrefabInstance:
     - target: {fileID: 8560995727844593686, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
       propertyPath: _shapes.Array.data[0]
       value: 
-      objectReference: {fileID: 11400000, guid: 479824b3005704f4686aee8be6f95fe0, type: 2}
+      objectReference: {fileID: 11400000, guid: 92370b19c98c91d499ee0c8086afab1c, type: 2}
     - target: {fileID: 8774285561066417992, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
       propertyPath: m_IsActive
       value: 1
@@ -5847,33 +5847,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d1ab908629309c42b5f9201311d503c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BoidFactor: 1
-  SeparationFactor: 10
-  SeparationDistance: 0.2
-  SeparationUsesFov: 0
-  AlignmentFactor: 1
-  AlignmentDistance: 0.8
-  AlignmentUsesFov: 0
-  CohesionFactor: 1
-  CohesionDistance: 0.8
-  CohesionUsesFov: 0
-  TargetFactor: 1
-  MaxTargetDistance: 100000
-  TargetUsesFov: 0
-  targetMode: 1
-  targets:
-  - {fileID: 1582696138}
-  AvoidFactor: 0.1
-  MaxAvoidDistance: 1
-  AvoidUsesFov: 1
-  avoidMode: 0
-  avoids:
-  - {fileID: 1582696138}
-  boundingDistance: 30
-  boundingEffectDistance: 20
-  maxForce: 1
-  minForce: 0.5
-  boidFov: 75
 --- !u!114 &1957074766
 MonoBehaviour:
   m_ObjectHideFlags: 0
