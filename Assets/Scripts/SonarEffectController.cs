@@ -95,11 +95,13 @@ public class SonarEffectController : MonoBehaviour
             if (currentWaveDistance > waveSpeed * pingingCooldown)
             {
                 currentWaveDistance = 999f;
+                pinging = false;
             }
         }
         else
         {
             currentWaveDistance = 999f;
+            pinging = false;
         }
     }
 

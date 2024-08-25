@@ -137,9 +137,16 @@ public class EnemySubmarinesManager : MonoBehaviour
             var enemySubmarineController = enemySubmarines[i].GetComponent<EnemySubmarineController>();
             if (enemySubmarineController.GetTimeSinceLastTorpedoFired() > torpedoFireCooldown)
             {
-                if (Vector3.Distance(enemySubmarines[i].position, OVRRigMainCamera.position) > sonarPingDistanceFromPlayer && sonarPingDistanceFromPlayer < 500 && sonarPingDistanceFromPlayer != 0)
+                if (Vector3.Distance(enemySubmarines[i].position, OVRRigMainCamera.position) < sonarPingDistanceFromPlayer && sonarPingDistanceFromPlayer < 500 && sonarPingDistanceFromPlayer != 0)
                 {
+/*                    Debug.Log("Sonar detected player");
+                    GameObject lastPlayerLocationKnown = new GameObject();
+                    lastPlayerLocationKnown.name = "LastPlayerLocationKnown";
+                    playerPingLocation = lastPlayerLocationKnown.transform;
+                    playerPingLocation.position = new Vector3(OVRRigMainCamera.position.x, OVRRigMainCamera.position.y, OVRRigMainCamera.position.z);
+                    Debug.Log("playerPingLocation: " + playerPingLocation.position);*/
                     playerPingLocation = OVRRigMainCamera;
+
                     enemySubmarineController.SetState(EnemySubmarineController.SubmarineState.FIRETORPEDO);
                 }
             }
