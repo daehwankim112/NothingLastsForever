@@ -4,12 +4,16 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
 using UnityEngine;
+using Meta.XR.MRUtilityKit;
 
 
 
 public class BoidManager : Singleton<BoidManager>
 {
     private GameManager gameManager => GameManager.Instance;
+    private MRUK mruk => MRUK.Instance;
+    private MRUKRoom currentMrukRoom = null;
+
 
 
     private struct Boid
@@ -127,6 +131,8 @@ public class BoidManager : Singleton<BoidManager>
     private void OnDestroy()
     {
         ReleaseBuffers();
+
+        gameManager.OnExplosion -= OnTorpedoExploded;
     }
 
 
@@ -154,7 +160,7 @@ public class BoidManager : Singleton<BoidManager>
 
         if (initialVelocity != null)
         {
-            newBoid.velocity = (Vector3) initialVelocity;
+            newBoid.velocity = (Vector3)initialVelocity;
         }
 
         boids.Add(newBoid);
@@ -250,16 +256,16 @@ public class BoidManager : Singleton<BoidManager>
     private void ComputeBoidShader()
     {
         // Calculate the number of thread groups needed based on the number of boids
-        int threadGroups = Mathf.CeilToInt((float) NumBoids / 256.0f);
+        int threadGroups = Mathf.CeilToInt((float)NumBoids / 256.0f);
         BoidComputeShader.Dispatch(0, threadGroups, 1, 1);
 
         // Get the data from the boid buffer
         bufferBoids = new BufferBoid[NumBoids];
         boidBuffer.GetData(bufferBoids);
     }
-    
 
-    
+
+
     /// <summary>
     /// Updates the behavior of the boids.
     /// </summary>
@@ -281,7 +287,7 @@ public class BoidManager : Singleton<BoidManager>
                 boid.AvoidCollisionDirection = avoidCollisionDirection;
                 boid.FramesSinceLastCollisionCheck = 0;
             }
-            
+
             force += CollisionAvoidanceFactor * boid.AvoidCollisionDirection;
             force = Vector3.ClampMagnitude(force, boidSettings.MaxTurning);
 
@@ -316,6 +322,16 @@ public class BoidManager : Singleton<BoidManager>
             boid.position += Time.fixedDeltaTime * velocity;
             boid.transform.position = boid.position;
 
+            if (currentMrukRoom)
+            {
+                if (!currentMrukRoom.IsPositionInRoom(boid.position))
+                {
+                    currentMrukRoom.TryGetClosestSurfacePosition(boid.position, out Vector3 surfacePosition, out MRUKAnchor closestAnchor);
+
+                    boid.position = closestAnchor.transform.TransformVector(surfacePosition);
+                }
+            }
+
             boids[boidIndex] = boid;
         }
     }
@@ -348,12 +364,12 @@ public class BoidManager : Singleton<BoidManager>
         for (int i = numCircles; i > 1; i--)
         {
             // Start at 90 degrees, search forward, then start backwards and search to 90 degrees
-            float searchAngle = (float) ((i + (numCircles / 2)) % numCircles) * 180.0f / (float) numCircles;
+            float searchAngle = (float)((i + (numCircles / 2)) % numCircles) * 180.0f / (float)numCircles;
 
             for (int j = 0; j < searchesPerCircle; j++)
             {
                 // Search around the full circle
-                float searchDirection = (float) j * 360.0f / (float) searchesPerCircle;
+                float searchDirection = (float)j * 360.0f / (float)searchesPerCircle;
 
                 Vector3 testDirection = Quaternion.AngleAxis(searchDirection, forwardDirection)
                                       * (Quaternion.AngleAxis(searchAngle, orthogonalDirection)
@@ -476,5 +492,11 @@ public class BoidManager : Singleton<BoidManager>
 
             boids[boidIndex] = boid;
         }
+    }
+
+
+    public void MrukRoomLoaded()
+    {
+        currentMrukRoom = mruk.GetCurrentRoom();
     }
 }
