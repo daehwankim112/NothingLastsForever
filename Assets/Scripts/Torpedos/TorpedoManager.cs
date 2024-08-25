@@ -192,7 +192,7 @@ public class TorpedoManager : Singleton<TorpedoManager>
             }
 
             // Explode if going to hit something
-            if (Physics.Raycast(torpedo.position, aimDirection, out RaycastHit hit, torpedoSettings.SearchRadius))
+            if (Physics.Raycast(torpedo.position, torpedo.velocity, out RaycastHit hit, torpedoSettings.ExplosionTriggerRadius))
             {
                 torpedosToExplode.Add(torpedo);
                 continue;
@@ -268,20 +268,21 @@ public class TorpedoManager : Singleton<TorpedoManager>
 
     private Vector3? TargetPlayer(Torpedo torpedo, out bool withinExplodeRadius)
     {
-        Vector3? playerPosition = null;
         withinExplodeRadius = false;
 
-        if (TorpedoCanSee(torpedo, Player.position))
-        {
-            playerPosition = Player.position;
+        Vector3 playerPosition = Player.position;
 
+        if (TorpedoCanSee(torpedo, playerPosition))
+        {
             if (Vector3.Distance(torpedo.position, playerPosition) < GetTorpedoSettings(torpedo.alliance).ExplosionTriggerRadius)
             {
                 withinExplodeRadius = true;
             }
+
+            return playerPosition;
         }
 
-        return playerPosition;
+        return null;
     }
 
 
