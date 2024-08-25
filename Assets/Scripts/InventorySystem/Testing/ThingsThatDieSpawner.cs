@@ -2,6 +2,7 @@ using Meta.XR.MRUtilityKit;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.PlayerSettings;
 
 public class ThingsThatDieSpawner : MonoBehaviour
 {
@@ -11,7 +12,7 @@ public class ThingsThatDieSpawner : MonoBehaviour
 
     public int LeftToSpawn = 10;
 
-    public float SpawnRadius = 100.0f;
+    public float ChestSize = 0.5f;
 
     private float timeSinceLastSpawn = 0.0f;
 
@@ -56,30 +57,21 @@ public class ThingsThatDieSpawner : MonoBehaviour
 
     private Vector3 GetRandomFloorLocation()
     {
-        Vector2 randomPoint = new(1000.0f, 1000.0f);
+        Vector3 randomPoint = new(1000.0f, 1000.0f, 1000.0f);
 
-        int attempts = 0;
-        do
+        for (int attempts = 0; attempts < 20; attempts++)
         {
-            attempts++;
-            randomPoint = new(Random.Range(-floorSize.x / 2.0f, floorSize.x / 2.0f), Random.Range(-floorSize.y / 2.0f, floorSize.y / 2.0f));
+            mrukRoom.GenerateRandomPositionOnSurface(MRUK.SurfaceType.FACING_UP, ChestSize, LabelFilter.Excluded(MRUKAnchor.SceneLabels.CEILING), out randomPoint, out Vector3 normal);
 
+            randomPoint += normal * 0.2f;
 
-            floorAnchor.GetClosestSurfacePosition(randomPoint, out Vector3 closestPosition);
-        } while (attempts <= 21 && !floorAnchor.IsPositionInBoundary(randomPoint));
-
-        Vector3 worldPoint = new Vector3(randomPoint.x, randomPoint.y, 0.0f);
-
-        worldPoint = floorAnchor.transform.TransformPoint(worldPoint);
-
-        Debug.Log($"Attempts: {attempts}");
-
-        if (attempts >= 19)
-        {
-            return floorAnchor.GetAnchorCenter();
+            if (mrukRoom.IsPositionInRoom(randomPoint) && !mrukRoom.IsPositionInSceneVolume(randomPoint))
+            {
+                return randomPoint;
+            }
         }
 
-        return worldPoint;
+        return floorAnchor.GetAnchorCenter();
     }
 
 

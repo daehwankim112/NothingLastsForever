@@ -267,9 +267,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ThingThatDiesPrefab: {fileID: 2929434610889685477, guid: c81f07f78830ee84ebb8044d74d7ab51, type: 3}
-  SpawnInterval: 10
-  LeftToSpawn: 10
-  SpawnRadius: 0.5
+  SpawnInterval: 0
+  LeftToSpawn: 200
+  ChestSize: 0.5
 --- !u!114 &94348895
 MonoBehaviour:
   m_ObjectHideFlags: 0
