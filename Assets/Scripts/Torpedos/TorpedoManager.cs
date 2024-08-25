@@ -174,8 +174,8 @@ public class TorpedoManager : Singleton<TorpedoManager>
             Vector3 aimDirection = torpedo.velocity.normalized;
             Vector3? nearestTargetPos = torpedo.alliance switch
                 {
-                    GameManager.Alliance.Player =>  TargetPlayer(torpedo, out withinExplodeRadius),
-                    GameManager.Alliance.Enemy => GetNearestTargetPosition(torpedo, targetPositions, out withinExplodeRadius),
+                    GameManager.Alliance.Player => GetNearestTargetPosition(torpedo, targetPositions, out withinExplodeRadius),
+                    GameManager.Alliance.Enemy =>  TargetPlayer(torpedo, out withinExplodeRadius),
                     _ => null
                 };
 
@@ -192,7 +192,7 @@ public class TorpedoManager : Singleton<TorpedoManager>
             }
 
             // Explode if going to hit something
-            if (Physics.Raycast(torpedo.position, aimDirection, out RaycastHit hit, torpedoSettings.SearchRadius))
+            if (Physics.Raycast(torpedo.position, torpedo.velocity, out RaycastHit hit, torpedoSettings.ExplosionTriggerRadius))
             {
                 torpedosToExplode.Add(torpedo);
                 continue;
@@ -268,20 +268,21 @@ public class TorpedoManager : Singleton<TorpedoManager>
 
     private Vector3? TargetPlayer(Torpedo torpedo, out bool withinExplodeRadius)
     {
-        Vector3? playerPosition = null;
         withinExplodeRadius = false;
 
-        if (TorpedoCanSee(torpedo, Player.position))
-        {
-            playerPosition = Player.position;
+        Vector3 playerPosition = Player.position;
 
-            if (Vector3.Distance(torpedo.position, playerPosition.Value) < GetTorpedoSettings(torpedo.alliance).ExplosionTriggerRadius)
+        if (TorpedoCanSee(torpedo, playerPosition))
+        {
+            if (Vector3.Distance(torpedo.position, playerPosition) < GetTorpedoSettings(torpedo.alliance).ExplosionTriggerRadius)
             {
                 withinExplodeRadius = true;
             }
+
+            return playerPosition;
         }
 
-        return playerPosition;
+        return null;
     }
 
 
