@@ -37,7 +37,10 @@ public class CubeTorpedo : MonoBehaviour
 
     private void OnDestroy()
     {
-        gameManager.OnExplosion -= OnExplosion;
+        if (gameManager != null)
+        {
+            gameManager.OnExplosion -= OnExplosion;
+        }
     }
 
 
