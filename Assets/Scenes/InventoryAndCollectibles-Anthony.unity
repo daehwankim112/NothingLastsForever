@@ -285,9 +285,9 @@ MonoBehaviour:
   PlayerTorpedoSettings:
     EnginePower: 1
     FuseTimer: 5
-    ExplosionPower: 5
-    ExplosionTriggerRadius: 0.05
-    SearchFov: 90
+    ExplosionPower: 20
+    ExplosionTriggerRadius: 0.25
+    SearchFov: 120
     SearchRadius: 5
   EnemyTorpedoSettings:
     EnginePower: 0

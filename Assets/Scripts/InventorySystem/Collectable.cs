@@ -46,12 +46,8 @@ public class Collectable : MonoBehaviour
 
     private void OnGrabbableStateChanged(InteractableStateChangeArgs args)
     {
-        Debug.Log($"State changed from {args.PreviousState} to {args.NewState}");
-
         if (args.PreviousState == InteractableState.Select)
         {
-            Debug.Log("Object was dropped");
-
             GetCollected();
         }
     }
