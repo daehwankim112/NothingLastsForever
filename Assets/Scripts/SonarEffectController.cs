@@ -11,6 +11,7 @@ public class SonarEffectController : MonoBehaviour
     [SerializeField] private AudioClip audio;
     [SerializeField] private float pingingCooldown = 2.5f;
     [SerializeField] private bool debug = false;
+    [SerializeField] private EnemySubmarinesManager enemySubmarinesManager;
 
     private bool pinging = false;
     private AudioSource audioSource;
@@ -82,6 +83,7 @@ public class SonarEffectController : MonoBehaviour
                 sonarMaterial.SetFloat("_WaveDistance", waveSpeed * currentWaveDistance);
                 sonarMaterial.SetFloat("_Threshold", 1);
                 sonarMaterial.SetFloat("_MaxWaveDistance", waveSpeed * pingingCooldown);
+                enemySubmarinesManager.sonarPingDistanceFromPlayer = waveSpeed * currentWaveDistance;
             }
             if (currentWaveDistance > waveSpeed * pingingCooldown)
             {

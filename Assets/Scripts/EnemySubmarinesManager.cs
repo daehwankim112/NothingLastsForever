@@ -19,11 +19,13 @@ public class EnemySubmarinesManager : MonoBehaviour
     [SerializeField] private SubmarinesTuneParameter submarinesTuneParameter;
     [HideInInspector] public List<Transform> enemySubmarines = new List<Transform>();
     [HideInInspector] public Transform playerPingLocation; // To be replced with PlayerPingLocation in the Game Manager. 8/24/2024 David Kim
+    [HideInInspector] public float sonarPingDistanceFromPlayer = 999;
     [SerializeField] private Transform OVRRigMainCamera;
     [SerializeField] private float timeBeforeSubmarinesStartEchoing = 10f;
     [SerializeField] private float lastTimeSincePlayerEchod = 0; // To be replaced with lastTimeEchoed in the Game Manager. 8/24/2024 David Kim
     [SerializeField] private float lastTimeSinceSubmarineEchod = 0;
-    [SerializeField] private float rangeOfSonarPingNeighbours = 2f;
+    [SerializeField] private float rangeOfSonarPingngSubmarineNeighbours = 2f;
+    [SerializeField] private float rangeOfSonarFiringTorpedo = 3f;
     private List<Transform> neighbouringSubmarinesOnPursue = new List<Transform>();
     private Transform centreOfFloor;
     private Transform centreOfCeiling;
@@ -41,7 +43,9 @@ public class EnemySubmarinesManager : MonoBehaviour
     private float rotationEuqalibriumDistance;
     private float testDistance;
     private float testRadius;
+    private float torpedoFireCooldown;
     private int numberOfTest;
+    private Transform torpedoPrefab;
     private List<Vector3> towardTheTarget = new List<Vector3>();
     private List<Vector3> rotateAroundTheTarget = new List<Vector3>();
     private List<Vector3> avoidCollision = new List<Vector3>();
@@ -60,16 +64,9 @@ public class EnemySubmarinesManager : MonoBehaviour
         rotationEuqalibriumDistance = submarinesTuneParameter.rotationEuqalibriumDistance;
         testDistance = submarinesTuneParameter.testDistance;
         testRadius = submarinesTuneParameter.testRadius;
+        torpedoFireCooldown = submarinesTuneParameter.torpedoFireCooldown;
         numberOfTest = submarinesTuneParameter.numberOfTest;
-        // Deprecated way of initializing the submarines
-        /*for (int i = 0; i < enemySubmarines.Count; i++)
-        {
-            float distance = (mainCamera.position - enemySubmarines[i].position).magnitude;
-            Vector3 projectedVector = Vector3.ProjectOnPlane(enemySubmarines[i].position - mainCamera.position, new Vector3(0, 1, 0));
-            towardThePlayer.Add(enemySubmarines[i].position - mainCamera.position);
-            rotateAroundThePlayer.Add(rotationYby90.MultiplyVector(new Vector4(projectedVector.x, projectedVector.y, projectedVector.z, 1)).normalized * 1/distance);
-            avoidCollision.Add(Vector3.zero);
-        }*/
+        torpedoPrefab = submarinesTuneParameter.torpedoPrefab;
 
         GameObject emptyGOForFloor = new GameObject();
         emptyGOForFloor.name = "CentreOfFloor";
@@ -137,7 +134,16 @@ public class EnemySubmarinesManager : MonoBehaviour
         // Debug.Log("enemySubmarines count: " + enemySubmarines.Count);
         for (int i = 0; i < enemySubmarines.Count; i++)
         {
-            switch(enemySubmarines[i].GetComponent<EnemySubmarineController>().GetState())
+            var enemySubmarineController = enemySubmarines[i].GetComponent<EnemySubmarineController>();
+            if (enemySubmarineController.GetTimeSinceLastTorpedoFired() > torpedoFireCooldown)
+            {
+                if (Vector3.Distance(enemySubmarines[i].position, OVRRigMainCamera.position) > sonarPingDistanceFromPlayer && sonarPingDistanceFromPlayer < 500)
+                {
+                    enemySubmarineController.SetState(EnemySubmarineController.SubmarineState.FIRETORPEDO);
+                }
+            }
+
+            switch(enemySubmarineController.GetState())
             {
                 case EnemySubmarineController.SubmarineState.GETINROOM:
                     GetInRoom(i);
@@ -181,7 +187,7 @@ public class EnemySubmarinesManager : MonoBehaviour
     /// <summary>
     /// "GETINROOM" state. The submarine will move towards the centre of room.
     /// </summary>
-    /// <param name="i"></param>
+    /// <param name="i">submarine index</param>
     private void GetInRoom(int i)
     {
         LayerMask layerMask = LayerMask.GetMask("Nothing");
@@ -192,17 +198,21 @@ public class EnemySubmarinesManager : MonoBehaviour
         rotateAroundTheTarget[i] = Vector3.zero;
         avoidCollision[i] = AvoidCollision(enemySubmarines[i].position, enemySubmarines[i].forward, layerMask);
 
+        var enemySubmarineController = enemySubmarines[i].GetComponent<EnemySubmarineController>();
+
         // Transition to "ROTATEAROUNDCENTRE" state if the submarine is in the room.
         if (room.IsPositionInRoom(enemySubmarines[i].position + (enemySubmarines[i].position - OVRRigMainCamera.position) / 10f))
         {
-            enemySubmarines[i].GetComponent<EnemySubmarineController>().SetState(EnemySubmarineController.SubmarineState.ROTATEAROUNDCENTRE);
+            enemySubmarineController.SetState(EnemySubmarineController.SubmarineState.ROTATEAROUNDCENTRE);
             // Debug.Log(i + " submarine is in ROTATEAROUNDCENTRE state");
         }
+        enemySubmarineController.SetSubmarineSonarTrackingTime(true);
+        enemySubmarineController.SetSubmarineTorpedoTrackingTime(true);
     }
     /// <summary>
     /// "ROTATEAROUNDCENTRE" state. The submarine will rotate around the player.
     /// </summary>
-    /// <param name="i"></param>
+    /// <param name="i">submarine index</param>
     private void RotateAroundCentre(int i)
     {
         LayerMask layerMask = LayerMask.GetMask("Default");
@@ -227,7 +237,7 @@ public class EnemySubmarinesManager : MonoBehaviour
     /// <summary>
     /// The dedicated submarine will ping and check the neighbouring submarines to transition to "APPROACHPLAYER" state.
     /// </summary>
-    /// <param name="i"></param>
+    /// <param name="i">submarine index</param>
     private void SonarPing(int i)
     {
         // Make a Unity Function in GameManager that invoke submaries to stop sonar pinging when a player echos.
@@ -235,8 +245,8 @@ public class EnemySubmarinesManager : MonoBehaviour
         {
             lastTimeSincePlayerEchod = 0f;
             // play sonar ping sound once
-            enemySubmarines[i].GetComponent<EnemySubmarineController>().PlaySonarSound();
             WhenOneSubmarinePingCheckNeighboursAndChangeNeighboursStateToPursue();
+            enemySubmarines[i].GetComponent<EnemySubmarineController>().PlaySonarSound();
         }
 
         towardTheTarget[i] = TowardTarget(playerPingLocation.position, enemySubmarines[i].position);
@@ -246,7 +256,13 @@ public class EnemySubmarinesManager : MonoBehaviour
 
     private void FireTorpedo(int i)
     {
-        throw new NotImplementedException();
+        CheckNeighbouringSubmarinesFromPlayer();
+        var enemySubmarineController = enemySubmarines[i].GetComponent<EnemySubmarineController>();
+        if (enemySubmarineController.GetTimeSinceLastTorpedoFired() > torpedoFireCooldown)
+        {
+            FireTorpedoIntantiateTorpedoPrefab(enemySubmarines[i].position, enemySubmarines[i].forward);
+            enemySubmarineController.FiredTorpedoSound();
+        }
     }
 
     /// <summary>
@@ -362,12 +378,40 @@ public class EnemySubmarinesManager : MonoBehaviour
     {
         for (int i = 0; i < enemySubmarines.Count; i++)
         {
-            if (Vector3.Distance(enemySubmarines[closestSubmarineIndex].position, enemySubmarines[i].position) < rangeOfSonarPingNeighbours)
+            if (Vector3.Distance(enemySubmarines[closestSubmarineIndex].position, enemySubmarines[i].position) < rangeOfSonarPingngSubmarineNeighbours)
+            {
+                enemySubmarines[i].GetComponent<EnemySubmarineController>().SetState(EnemySubmarineController.SubmarineState.FIRETORPEDO);
+            }
+            else
             {
                 neighbouringSubmarinesOnPursue.Add(enemySubmarines[i]);
                 enemySubmarines[i].GetComponent<EnemySubmarineController>().SetState(EnemySubmarineController.SubmarineState.APPROACHPLAYER);
             }
         }
+    }
 
+    /// <summary>
+    /// public function to check neighbouring submarines from the player
+    /// </summary>
+    public void CheckNeighbouringSubmarinesFromPlayer()
+    {
+        for (int i = 0; i < enemySubmarines.Count; i++)
+        {
+            if (Vector3.Distance(enemySubmarines[i].position, OVRRigMainCamera.position) < rangeOfSonarFiringTorpedo)
+            {
+                enemySubmarines[i].GetComponent<EnemySubmarineController>().SetSubmarineTorpedoTrackingTime(true);
+                enemySubmarines[i].GetComponent<EnemySubmarineController>().SetState(EnemySubmarineController.SubmarineState.FIRETORPEDO);
+            }
+            else
+            {
+                enemySubmarines[i].GetComponent<EnemySubmarineController>().SetState(EnemySubmarineController.SubmarineState.APPROACHPLAYER);
+            }
+        }
+    }
+
+    private Transform FireTorpedoIntantiateTorpedoPrefab(Vector3 position, Vector3 forward)
+    {
+        Transform torpedo = Instantiate(torpedoPrefab, position, Quaternion.LookRotation(forward));
+        return torpedo;
     }
 }

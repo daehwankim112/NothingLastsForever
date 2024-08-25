@@ -11,5 +11,7 @@ public class SubmarinesTuneParameter : ScriptableObject
     public float rotationEuqalibriumDistance = 1f;
     public float testDistance = 0.1f;
     public float testRadius = 0.2f;
+    public float torpedoFireCooldown = 2f;
     public int numberOfTest = 10;
+    public Transform torpedoPrefab;
 }
