@@ -27,7 +27,7 @@ public class ThingsThatDieSpawner : MonoBehaviour
             GameObject newTtd = Instantiate(ThingThatDiesPrefab, transform.position + (SpawnRadius * Random.insideUnitSphere), Random.rotationUniform);
 
             newTtd.GetComponent<ThingThatDies>().DeathTimer = Random.Range(1, 20);
-            newTtd.GetComponent<Inventory>().NumTorpedos = Random.Range(0, 3);
+            newTtd.GetComponent<Inventory>().NumTorpedos = Random.Range(1, 5);
         }
     }
 }

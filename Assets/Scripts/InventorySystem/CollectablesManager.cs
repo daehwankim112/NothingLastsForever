@@ -7,9 +7,7 @@ public class CollectablesManager : Singleton<CollectablesManager>
 {
     private GameManager gameManager => GameManager.Instance;
 
-
     public GameObject TorpedoCollectablePrefab;
-
 
     public Inventory PlayerInventory;
 
@@ -38,7 +36,7 @@ public class CollectablesManager : Singleton<CollectablesManager>
     {
         if (collectable.TryGetComponent<Inventory>(out Inventory inventory))
         {
-            PlayerInventory.NumTorpedos += inventory.NumTorpedos;
+            PlayerInventory.AddContents(inventory);
         }
 
         Destroy(collectable);
@@ -53,7 +51,7 @@ public class CollectablesManager : Singleton<CollectablesManager>
             if (inventory.NumTorpedos > 0)
             {
                 GameObject torpedoCollectable = Instantiate(TorpedoCollectablePrefab, deathArgs.DeadThing.transform.position, Quaternion.identity);
-                torpedoCollectable.GetComponent<Inventory>().NumTorpedos = inventory.NumTorpedos;
+                torpedoCollectable.GetComponent<Inventory>().AddContents(inventory);
             }
         }
     }

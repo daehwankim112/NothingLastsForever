@@ -229,7 +229,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   NumTorpedos: 0
-  Health: 100
+  Health: 0
 --- !u!114 &-240947254274980503
 MonoBehaviour:
   m_ObjectHideFlags: 0
