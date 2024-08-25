@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class Collectable : MonoBehaviour
 {
+    private CollectablesManager collectablesManager => CollectablesManager.Instance;
+
     private GrabInteractable ControllerGrabable;
     private HandGrabInteractable HandGrabable;
 
@@ -33,6 +35,13 @@ public class Collectable : MonoBehaviour
 
 
 
+    private void GetCollected()
+    {
+        collectablesManager.CollectCollectable(gameObject);
+    }
+
+
+
     private void OnGrabbableStateChanged(InteractableStateChangeArgs args)
     {
         Debug.Log($"State changed from {args.PreviousState} to {args.NewState}");
@@ -41,7 +50,7 @@ public class Collectable : MonoBehaviour
         {
             Debug.Log("Object was dropped");
 
-            GetComponent<Rigidbody>().AddTorque(100.0f * Vector3.forward);
+            GetCollected();
         }
     }
 }

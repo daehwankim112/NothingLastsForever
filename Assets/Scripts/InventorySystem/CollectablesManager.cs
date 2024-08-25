@@ -11,6 +11,9 @@ public class CollectablesManager : Singleton<CollectablesManager>
     public GameObject TorpedoCollectablePrefab;
 
 
+    public Inventory PlayerInventory;
+
+
 
     void Start()
     {
@@ -27,6 +30,18 @@ public class CollectablesManager : Singleton<CollectablesManager>
     private void OnDestroy()
     {
         gameManager.OnDeath -= OnDeath;
+    }
+
+
+
+    public void CollectCollectable(GameObject collectable)
+    {
+        if (collectable.TryGetComponent<Inventory>(out Inventory inventory))
+        {
+            PlayerInventory.NumTorpedos += inventory.NumTorpedos;
+        }
+
+        Destroy(collectable);
     }
 
 
