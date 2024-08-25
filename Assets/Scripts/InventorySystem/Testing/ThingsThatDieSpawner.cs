@@ -66,7 +66,7 @@ public class ThingsThatDieSpawner : MonoBehaviour
 
 
             floorAnchor.GetClosestSurfacePosition(randomPoint, out Vector3 closestPosition);
-        } while (attempts < 100 && !floorAnchor.IsPositionInBoundary(randomPoint));
+        } while (attempts <= 21 && !floorAnchor.IsPositionInBoundary(randomPoint));
 
         Vector3 worldPoint = new Vector3(randomPoint.x, randomPoint.y, 0.0f);
 
@@ -74,7 +74,7 @@ public class ThingsThatDieSpawner : MonoBehaviour
 
         Debug.Log($"Attempts: {attempts}");
 
-        if (attempts >= 100)
+        if (attempts >= 19)
         {
             return floorAnchor.GetAnchorCenter();
         }

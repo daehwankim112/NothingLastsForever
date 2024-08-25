@@ -13,6 +13,8 @@ public class Chest : MonoBehaviour
 
     public GameObject HandGrabObject;
 
+    private bool opened = false;
+
 
     void Start()
     {
@@ -35,7 +37,12 @@ public class Chest : MonoBehaviour
 
     private void OnGrabbableStateChanged(InteractableStateChangeArgs args)
     {
-        if (args.PreviousState == InteractableState.Hover)
+        if (args.PreviousState == InteractableState.Hover || args.PreviousState == InteractableState.Select)
+        {
+            opened = true;
+        }
+
+        if (opened && (args.NewState == InteractableState.Normal || args.NewState == InteractableState.Disabled))
         {
             gameManager.Death(gameObject, GameManager.Alliance.Player);
 
