@@ -202,4 +202,20 @@ public class GameManager : Singleton<GameManager>
             }
         }
     }
+
+
+
+    public void LoadSettingsFromFile(string path)
+    {
+        settings = JsonUtility.FromJson<Settings>(path);
+    }
+
+
+
+    public void SaveSettingsToFile(string path)
+    {
+        string json = JsonUtility.ToJson(settings);
+
+        System.IO.File.WriteAllText(path, json);
+    }
 }
