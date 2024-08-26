@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 
 using UnityEngine;
 using Meta.XR.MRUtilityKit;
+using Meta.WitAi.TTS.Data;
 
 
 
@@ -338,7 +339,11 @@ public class BoidManager : Singleton<BoidManager>, IDifficultySensor
                 {
                     currentMrukRoom.TryGetClosestSurfacePosition(boid.position, out Vector3 surfacePosition, out MRUKAnchor closestAnchor);
 
-                    boid.position = closestAnchor.transform.TransformVector(surfacePosition);
+                    Vector3 normal = (surfacePosition - boid.position).normalized;
+                    boid.velocity = Vector3.Reflect(boid.velocity, normal);
+                    Debug.Log($"Boid at position {boid.position} is outside the room. Teleporting to {surfacePosition + (0.02f * normal)}.");
+
+                    boid.position = surfacePosition + (0.02f * normal);
                 }
             }
 

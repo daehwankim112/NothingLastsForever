@@ -1115,7 +1115,7 @@ MonoBehaviour:
   currentGameState: 0
   difficultyController: {fileID: 150876697}
   settings:
-    DifficultySlope: 0
+    DifficultySlope: 0.1
     StartDifficulty: 0
     ActionThreshold: 0
     MinActionTimer: 3
@@ -1144,7 +1144,7 @@ MonoBehaviour:
   currentDifficulty: 0
   actionThreshold: 0
   ActionTimer: 0
-  difficultySlope: 0.1
+  difficultySlope: 0
 --- !u!1 &211435741
 GameObject:
   m_ObjectHideFlags: 0
