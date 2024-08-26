@@ -52,7 +52,7 @@ public class BoidSpawner : MonoBehaviour
         if (timeToEndOfSecond <= 0.0f)
         {
             int boidDifference = numBoidsTarget - numBoids;
-            int thisSecondSpawn = Mathf.CeilToInt(Mathf.Clamp(boidDifference, -settings.MaxBoidSpawnRate, settings.MaxBoidSpawnRate));
+            int thisSecondSpawn = Mathf.CeilToInt(Mathf.Clamp(boidDifference, -settings.BoidMaxSpawnRate, settings.BoidMaxSpawnRate));
 
             numBoidsByEndOfSecond = numBoids + thisSecondSpawn;
 
@@ -97,6 +97,6 @@ public class BoidSpawner : MonoBehaviour
 
     private void OnWave(object sender, GameManager.OnWaveArgs args)
     {
-        numBoidsTarget += Mathf.CeilToInt(args.DifficultyDelta / settings.BoidWeight);
+        numBoidsTarget += Mathf.CeilToInt(settings.BoidMaxWaveContribution * args.DifficultyDelta / settings.BoidWeight);
     }
 }
