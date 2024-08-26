@@ -21,10 +21,11 @@ public class EnemySubmarinesManager : MonoBehaviour
     [HideInInspector] public Transform playerPingLocation; // To be replced with PlayerPingLocation in the Game Manager. 8/24/2024 David Kim
     [HideInInspector] public float sonarPingDistanceFromPlayer = 999;
     [SerializeField] private Transform OVRRigMainCamera;
-    [SerializeField] private float timeBeforeSubmarinesStartEchoing = 10f;
+    [SerializeField] private float timeBeforeSubmarinesStartEchoing = 4f;
     [SerializeField] private float lastTimeSincePlayerEchod = 0; // To be replaced with lastTimeEchoed in the Game Manager. 8/24/2024 David Kim
     [SerializeField] private float lastTimeSinceSubmarineEchod = 0;
-    [SerializeField] private float rangeOfSonarPingngSubmarineNeighbours = 2f;
+    [SerializeField] private float submarineSonarPingCooldown = 2.0f;
+    [SerializeField] private float rangeOfSonarPingngSubmarineNeighbours = 0.5f;
     [SerializeField] private float rangeOfSonarFiringTorpedo = 3f;
     private List<Transform> neighbouringSubmarinesOnPursue = new List<Transform>();
     private Transform centreOfFloor;
@@ -121,11 +122,11 @@ public class EnemySubmarinesManager : MonoBehaviour
         lastTimeSincePlayerEchod += Time.deltaTime; // To be replaced with lastTimeEchoed in the Game Manager. 8/24/2024 David Kim
         if (submarinesChasingPlayer)
         {
-            lastTimeSinceSubmarineEchod += Time.deltaTime;
+            lastTimeSinceSubmarineEchod = 0f;
         }
         else
         {
-            lastTimeSinceSubmarineEchod = 0f;
+            lastTimeSinceSubmarineEchod += Time.deltaTime;
         }
     }
 
@@ -148,6 +149,7 @@ public class EnemySubmarinesManager : MonoBehaviour
                     enemySubmarineController.SetState(EnemySubmarineController.SubmarineState.FIRETORPEDO);
                 }
             }
+
 
             switch (enemySubmarineController.GetState())
             {
@@ -225,6 +227,7 @@ public class EnemySubmarinesManager : MonoBehaviour
     /// <param name="i">submarine index</param>
     private void RotateAroundCentre(int i)
     {
+        var enemySubmarineController = enemySubmarines[i].GetComponent<EnemySubmarineController>();
         // Debug.Log(i + " submarine is in GETINROOM state");
 
         towardTheTarget[i] = TowardTarget(((centreOfCeiling.position - centreOfFloor.position) / 2), enemySubmarines[i].position); // Replace OVRRigMainCamera with Centre of the room ((centreOfCeiling.position - centreOfFloor.position) / 2). 8/24/2024 David Kim
@@ -236,10 +239,17 @@ public class EnemySubmarinesManager : MonoBehaviour
         // Otherwise, check if the submarine is close to the "SONARPING" submarine and transition that submarine to
         // "FIRETORPEDO" state if it is close enough otherwise transition to "APPROACHPLAYER" state.
         // If player echos, reset the timer and transition to "FIRETORPEDO" state.
-        if (lastTimeSincePlayerEchod > timeBeforeSubmarinesStartEchoing)
+
+        if (!submarinesChasingPlayer)
         {
-            lastTimeSincePlayerEchod = 0f;
-            // onPlayerNotEchoingForSomeTime.Invoke();
+            if (lastTimeSincePlayerEchod > timeBeforeSubmarinesStartEchoing && enemySubmarineController.GetState() != EnemySubmarineController.SubmarineState.GETINROOM)
+            {
+                Debug.Log("Player has not been echoing for some time. Time: " + lastTimeSincePlayerEchod);
+                lastTimeSincePlayerEchod = 0f;
+                ClosestSubmarineToPingAndTransitionNeighboursToPursue();
+                // enemySubmarineController.SetState(EnemySubmarineController.SubmarineState.SONARPING);
+                // onPlayerNotEchoingForSomeTime.Invoke();
+            }
         }
     }
 
@@ -265,7 +275,7 @@ public class EnemySubmarinesManager : MonoBehaviour
 
     private void FireTorpedo(int i)
     {
-        CheckNeighbouringSubmarinesFromPlayer();
+        CheckNeighbouringSubmarinesFromPlayer(i);
         var enemySubmarineController = enemySubmarines[i].GetComponent<EnemySubmarineController>();
         if (enemySubmarineController.GetTimeSinceLastTorpedoFired() > torpedoFireCooldown)
         {
@@ -285,6 +295,12 @@ public class EnemySubmarinesManager : MonoBehaviour
         towardTheTarget[i] = TowardTarget(OVRRigMainCamera.position, enemySubmarines[i].position); // Replace OVRRigMainCamera with Centre of the room ((centreOfCeiling.position - centreOfFloor.position) / 2). 8/24/2024 David Kim
         rotateAroundTheTarget[i] = RotateTarget(OVRRigMainCamera.position, enemySubmarines[i].position);
         avoidCollision[i] = AvoidCollision(enemySubmarines[i].position, enemySubmarines[i].right, enemySubmarines[i].up, enemySubmarines[i].forward, LayerMask.GetMask("Default"));
+
+        if (lastTimeSinceSubmarineEchod > submarineSonarPingCooldown)
+        {
+            lastTimeSinceSubmarineEchod = 0f;
+            enemySubmarines[closestSubmarineIndex].GetComponent<EnemySubmarineController>().SetState(EnemySubmarineController.SubmarineState.SONARPING);
+        }
     }
 
     /// <summary>
@@ -381,10 +397,10 @@ public class EnemySubmarinesManager : MonoBehaviour
     private void ClosestSubmarineToPingAndTransitionNeighboursToPursue()
     {
         playerPingLocation = OVRRigMainCamera;
-        submarinesChasingPlayer = true;
-        lastTimeSincePlayerEchod = timeBeforeSubmarinesStartEchoing;
+        submarinesChasingPlayer = true; // set to false when the chasing submarine explodes
+        // lastTimeSincePlayerEchod = timeBeforeSubmarinesStartEchoing;
         // play sonar ping sound once
-        float closestDistance = 0;
+        float closestDistance = float.MaxValue;
 
         if (enemySubmarines.Count == 0)
         {
@@ -400,45 +416,53 @@ public class EnemySubmarinesManager : MonoBehaviour
             }
         }
 
-        enemySubmarines[closestSubmarineIndex].GetComponent<EnemySubmarineController>().SetState(EnemySubmarineController.SubmarineState.SONARPING);
         sonarPingingSubmarineIndex = closestSubmarineIndex;
         WhenOneSubmarinePingCheckNeighboursAndChangeNeighboursStateToPursue();
     }
 
     private void WhenOneSubmarinePingCheckNeighboursAndChangeNeighboursStateToPursue()
     {
+        Debug.Log("One submarine pinging");
         for (int i = 0; i < enemySubmarines.Count; i++)
         {
             var enemySubmarineController = enemySubmarines[i].GetComponent<EnemySubmarineController>();
-            if (Vector3.Distance(enemySubmarines[closestSubmarineIndex].position, enemySubmarines[i].position) < rangeOfSonarPingngSubmarineNeighbours)
+            if (Vector3.Distance(enemySubmarines[closestSubmarineIndex].position, enemySubmarines[i].position) < rangeOfSonarPingngSubmarineNeighbours
+                && enemySubmarineController.GetState() != EnemySubmarineController.SubmarineState.GETINROOM && enemySubmarineController.GetState() != EnemySubmarineController.SubmarineState.SONARPING)
             {
-                enemySubmarineController.SetState(EnemySubmarineController.SubmarineState.FIRETORPEDO);
+                Debug.Log("Neighbouring submarine detected");
+                if (Vector3.Distance(enemySubmarines[i].position, OVRRigMainCamera.position) < rangeOfSonarFiringTorpedo)
+                {
+                    enemySubmarineController.SetState(EnemySubmarineController.SubmarineState.FIRETORPEDO);
+                }
+                else
+                {
+                    enemySubmarineController.SetState(EnemySubmarineController.SubmarineState.APPROACHPLAYER);
+                }
             }
-            else
+            /*else
             {
-                if (enemySubmarineController.GetState() != EnemySubmarineController.SubmarineState.GETINROOM)
+                if (enemySubmarineController.GetState() != EnemySubmarineController.SubmarineState.GETINROOM && enemySubmarineController.GetState() != EnemySubmarineController.SubmarineState.SONARPING)
                 {
                     neighbouringSubmarinesOnPursue.Add(enemySubmarines[i]);
                     enemySubmarineController.SetState(EnemySubmarineController.SubmarineState.APPROACHPLAYER);
                 }
-            }
+            }*/
         }
+        enemySubmarines[closestSubmarineIndex].GetComponent<EnemySubmarineController>().SetState(EnemySubmarineController.SubmarineState.SONARPING);
     }
 
     /// <summary>
     /// public function to check neighbouring submarines from the player
     /// </summary>
-    public void CheckNeighbouringSubmarinesFromPlayer()
+    public void CheckNeighbouringSubmarinesFromPlayer(int i)
     {
-        for (int i = 0; i < enemySubmarines.Count; i++)
+        Debug.Log("Checking neighbouring submarines from player");
+        var enemySubmarineController = enemySubmarines[i].GetComponent<EnemySubmarineController>();
+        if (enemySubmarineController.GetState() != EnemySubmarineController.SubmarineState.GETINROOM && enemySubmarineController.GetState() != EnemySubmarineController.SubmarineState.SONARPING)
         {
-            var enemySubmarineController = enemySubmarines[i].GetComponent<EnemySubmarineController>();
-            if (enemySubmarineController.GetState() != EnemySubmarineController.SubmarineState.GETINROOM)
+            if (Vector3.Distance(enemySubmarines[i].position, OVRRigMainCamera.position) > rangeOfSonarFiringTorpedo)
             {
-                if (Vector3.Distance(enemySubmarines[i].position, OVRRigMainCamera.position) > rangeOfSonarFiringTorpedo)
-                {
-                    enemySubmarineController.SetState(EnemySubmarineController.SubmarineState.APPROACHPLAYER);
-                }
+                enemySubmarineController.SetState(EnemySubmarineController.SubmarineState.APPROACHPLAYER);
             }
         }
     }

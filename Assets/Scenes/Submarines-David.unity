@@ -1145,8 +1145,9 @@ MonoBehaviour:
   timeBeforeSubmarinesStartEchoing: 10
   lastTimeSincePlayerEchod: 0
   lastTimeSinceSubmarineEchod: 0
-  rangeOfSonarPingngSubmarineNeighbours: 2
-  rangeOfSonarFiringTorpedo: 3
+  submarineSonarPingCooldown: 4
+  rangeOfSonarPingngSubmarineNeighbours: 1.5
+  rangeOfSonarFiringTorpedo: 4
 --- !u!1001 &309821952
 PrefabInstance:
   m_ObjectHideFlags: 0
