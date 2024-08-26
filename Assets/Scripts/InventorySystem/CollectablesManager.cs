@@ -1,4 +1,5 @@
 
+using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -11,6 +12,11 @@ public class CollectablesManager : Singleton<CollectablesManager>
 
     public Inventory PlayerInventory;
 
+    public List<GameObject> Collectables;
+    public List<GameObject> Chests;
+
+    private readonly List<GameObject> stuffToRemove = new();
+
 
 
     void Start()
@@ -21,6 +27,32 @@ public class CollectablesManager : Singleton<CollectablesManager>
         {
             Debug.LogError("TorpedoCollectablePrefab is not set in the CollectablesManager");
         }
+    }
+
+
+
+    void LateUpdate()
+    {
+        foreach (GameObject thingToRemove in stuffToRemove)
+        {
+            bool removable = false;
+
+            if (thingToRemove.TryGetComponent<Chest>(out _))
+            {
+                removable |= Chests.Remove(thingToRemove);
+            }
+            else if (thingToRemove.TryGetComponent<Collectable>(out _))
+            {
+                removable |= Collectables.Remove(thingToRemove);
+            }
+
+            if (removable)
+            {
+                Destroy(thingToRemove);
+            }
+        }
+
+        stuffToRemove.Clear();
     }
 
 
@@ -39,7 +71,7 @@ public class CollectablesManager : Singleton<CollectablesManager>
             PlayerInventory.AddContents(inventory);
         }
 
-        Destroy(collectable);
+        stuffToRemove.Add(collectable);
     }
 
 
@@ -52,6 +84,13 @@ public class CollectablesManager : Singleton<CollectablesManager>
             {
                 GameObject torpedoCollectable = Instantiate(TorpedoCollectablePrefab, deathArgs.DeadThing.transform.position, Quaternion.identity);
                 torpedoCollectable.GetComponent<Inventory>().AddContents(inventory);
+
+                Collectables.Add(torpedoCollectable);
+            }
+
+            if (deathArgs.DeadThing.TryGetComponent<Chest>(out _))
+            {
+                stuffToRemove.Add(deathArgs.DeadThing);
             }
         }
     }
