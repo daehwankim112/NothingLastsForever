@@ -8,8 +8,20 @@ public class HandPoseTrigger : MonoBehaviour
     [SerializeField] private Transform projectile;
     [SerializeField] private Transform leftHandPinchArea;
     [SerializeField] private Transform rightHandPinchArea;
+
     private bool holdingLeftHand = false;
     private bool holdingRightHand = false;
+
+    private TorpedoManager torpedoManager => TorpedoManager.Instance;
+    private Inventory inventory;
+
+
+    void Start()
+    {
+        inventory = GetComponent<Inventory>();
+    }
+
+
 
     public void LeftHandPing()
     {
@@ -40,12 +52,29 @@ public class HandPoseTrigger : MonoBehaviour
     public void LeftHandFire()
     {
         Debug.Log("Left Fire!");
-        Instantiate(projectile, leftHandPinchArea.position, leftHandPinchArea.rotation);
+
+        torpedoManager.ExplodeAllTorpedos(GameManager.Alliance.Player);
     }
 
     public void RightHandFire()
     {
         Debug.Log("Right Fire!");
-        Instantiate(projectile, rightHandPinchArea.position, rightHandPinchArea.rotation);
+
+        SpawnNewProjectile(rightHandPinchArea);
+    }
+
+
+
+    private void SpawnNewProjectile(Transform hand)
+    {
+        if (inventory.GetTorpedoes() <= 0)
+        {
+            Debug.Log("No torpedos left!");
+            return;
+        }
+
+        Transform newProjectile = Instantiate(projectile, hand.position, hand.rotation);
+
+        torpedoManager.AddTorpedo(newProjectile, hand.rotation * Vector3.forward, GameManager.Alliance.Player);
     }
 }

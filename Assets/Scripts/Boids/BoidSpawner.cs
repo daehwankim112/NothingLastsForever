@@ -8,16 +8,10 @@ public class BoidSpawner : MonoBehaviour
     public int numBoids = 0;
 
     [SerializeField]
-    public float boidDrag = 0.0f;
-
-    [SerializeField]
     private Transform boid;
 
     [SerializeField]
-    private BoidManagerCompute boidManager;
-
-    [SerializeField]
-    private List<Transform> boids = new List<Transform>();
+    private BoidManager boidManager;
 
 
     // Start is called before the first frame update
@@ -29,36 +23,15 @@ public class BoidSpawner : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (numBoids < 0)
+        if (numBoids == boidManager.NumBoids) return;
+
+        if (numBoids < boidManager.NumBoids)
         {
-            numBoids = 0;
+            RemoveBoids(boidManager.NumBoids - numBoids);
         }
-
-        for (int i = 0; i < boids.Count; i++)
+        else if (numBoids > boidManager.NumBoids)
         {
-            Transform boid = boids[i];
-
-            if (boid.position.sqrMagnitude > 100.0f)
-            {
-                Transform boidToRemove = boids[i];
-
-                boids.RemoveAt(i);
-
-                boidManager.RemoveBoid(boidToRemove);
-
-                Destroy(boidToRemove.gameObject);
-            }
-        }
-
-        if (numBoids == boids.Count) return;
-
-        if (numBoids < boids.Count)
-        {
-            RemoveBoids(boids.Count - numBoids);
-        }
-        else if (numBoids > boids.Count)
-        {
-            SpawnMoreBoids(numBoids - boids.Count);
+            SpawnMoreBoids(numBoids - boidManager.NumBoids);
         }
     }
 
@@ -68,20 +41,18 @@ public class BoidSpawner : MonoBehaviour
     {
         for (int i = 0; i < numToSpawn; i++)
         {
-            Vector3 randomLocationOnSphere = Random.onUnitSphere * 0.5f;
+            Vector3 randomLocationOnSphere = Random.onUnitSphere * 0.25f;
             Quaternion randomRotation = Random.rotation;
             Color randomColor = Random.ColorHSV();
 
-            Transform newBoid = Instantiate(boid, randomLocationOnSphere, randomRotation);
+            Transform newBoid = Instantiate(boid, transform.position + randomLocationOnSphere, randomRotation);
 
             // newBoid.GetComponent<MeshRenderer>().material.SetColor("_EmissionColor", randomColor);
-            // newBoid.GetComponent<MeshRenderer>().material.SetColor("_BaseColor", randomColor);
-            // newBoid.GetComponent<MeshRenderer>().material.color = randomColor;
+             newBoid.GetComponent<MeshRenderer>().material.SetColor("_BaseColor", randomColor);
+            newBoid.GetComponent<MeshRenderer>().material.color = randomColor;
 
             // newBoid.GetComponent<Rigidbody>().velocity = Random.onUnitSphere * 5.0f;
             // newBoid.GetComponent<Rigidbody>().drag = boidDrag;
-
-            boids.Add(newBoid);
 
             boidManager.AddBoid(newBoid, Random.onUnitSphere * 0.1f);
         }
@@ -93,15 +64,7 @@ public class BoidSpawner : MonoBehaviour
     {
         for (int i = 0; i < numToRemove; i++)
         {
-            int indexToRemvove = Random.Range(0, boids.Count);
-
-            Transform boidToRemove = boids[indexToRemvove];
-
-            boids.RemoveAt(indexToRemvove);
-
-            boidManager.RemoveBoid(boidToRemove);
-
-            Destroy(boidToRemove.gameObject);
+            boidManager.RemoveBoid(null, true);
         }
     }
 }
