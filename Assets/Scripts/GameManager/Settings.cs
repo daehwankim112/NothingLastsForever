@@ -26,7 +26,7 @@ public struct Settings
     /// </summary>
     #region
     public float BoidWeight;
-    public float MaxBoidSpawnRate;
-
+    public float BoidMaxSpawnRate;
+    public float BoidMaxWaveContribution;
     #endregion
 }
