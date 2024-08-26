@@ -61,20 +61,21 @@ public class GameManager : Singleton<GameManager>
 
 
     /// <summary>
-    /// Enemy Wave Event
+    /// Wave Event
     /// </summary>
-    #region Echo Event
+    #region Wave Event
     public class OnWaveArgs : EventArgs
     {
-        float waveDifficulty;
+        public float DifficultyDelta;
     }
     public event EventHandler<OnWaveArgs> OnWave;
 
-    private void Wave()
+    private void Wave(float difficultyDelta)
     {
-        OnWave?.Invoke(null, new OnWaveArgs());
+        OnWave?.Invoke(null, new OnWaveArgs { DifficultyDelta = difficultyDelta });
     }
     #endregion
+
 
 
     /// <summary>
@@ -95,6 +96,7 @@ public class GameManager : Singleton<GameManager>
     #endregion
 
 
+
     /// <summary>
     /// Game Pause Event
     /// </summary>
@@ -113,6 +115,7 @@ public class GameManager : Singleton<GameManager>
     #endregion
 
 
+
     /// <summary>
     /// Game Over Event
     /// </summary>
@@ -129,6 +132,7 @@ public class GameManager : Singleton<GameManager>
         OnGameOver?.Invoke(null, new OnGameOverArgs());
     }
     #endregion
+
 
 
     /// <summary>
@@ -157,6 +161,7 @@ public class GameManager : Singleton<GameManager>
     }
 
 
+
     public enum GameState
     {
         Playing,
@@ -169,20 +174,29 @@ public class GameManager : Singleton<GameManager>
     private GameState currentGameState;
     public GameState CurrentGameState { get => currentGameState; }
 
-
     [SerializeField]
-    private float targetDifficulty;
-    public float TargetDifficulty { get => targetDifficulty; }
-
-
-    [SerializeField]
-    private float currentDifficulty;
-    public float CurrentDifficulty { get => currentDifficulty; }
+    private DifficultyController difficultyController;
 
 
 
     void Start()
     {
         StartGame();
+    }
+
+
+    void Update()
+    {
+        if (currentGameState == GameState.Playing)
+        {
+            float controlSignal = difficultyController.CalculateControlSignal();
+
+            if (controlSignal != 0.0f)
+            {
+                Wave(controlSignal);
+
+                difficultyController.ActionTimer = UnityEngine.Random.Range(1.0f, 3.0f);
+            }
+        }
     }
 }
