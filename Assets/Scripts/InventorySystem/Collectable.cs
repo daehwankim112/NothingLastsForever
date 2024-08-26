@@ -37,6 +37,7 @@ public class Collectable : MonoBehaviour
 
 
 
+    [ContextMenu("Get Collected")]
     private void GetCollected()
     {
         collectablesManager.CollectCollectable(gameObject);

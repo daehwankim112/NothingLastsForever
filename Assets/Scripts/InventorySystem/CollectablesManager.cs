@@ -57,7 +57,7 @@ public class CollectablesManager : Singleton<CollectablesManager>
 
 
 
-    private void OnDestroy()
+    void OnDestroy()
     {
         gameManager.OnDeath -= OnDeath;
     }
@@ -72,6 +72,13 @@ public class CollectablesManager : Singleton<CollectablesManager>
         }
 
         stuffToRemove.Add(collectable);
+    }
+
+
+
+    public void AddChest(GameObject chest)
+    {
+        Chests.Add(chest);
     }
 
 
