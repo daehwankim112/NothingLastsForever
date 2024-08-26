@@ -178,6 +178,11 @@ public class GameManager : Singleton<GameManager>
     private DifficultyController difficultyController;
 
 
+    [SerializeField]
+    private Settings settings;
+    public Settings Settings { get => settings; }
+
+
 
     void Start()
     {
@@ -194,8 +199,6 @@ public class GameManager : Singleton<GameManager>
             if (controlSignal != 0.0f)
             {
                 Wave(controlSignal);
-
-                difficultyController.ActionTimer = UnityEngine.Random.Range(1.0f, 3.0f);
             }
         }
     }
