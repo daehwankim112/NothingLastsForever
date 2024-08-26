@@ -973,6 +973,7 @@ GameObject:
   - component: {fileID: 150876694}
   - component: {fileID: 150876695}
   - component: {fileID: 150876696}
+  - component: {fileID: 150876697}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -1109,6 +1110,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0815203697d2ae3429c567727e3a71d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentGameState: 0
+  difficultyController: {fileID: 150876697}
+  settings:
+    DifficultySlope: 1
+    StartDifficulty: 0
+    ActionThreshold: 0
+    MinActionTimer: 1
+    MaxActionTimer: 3
+    GameStartGracePeriod: 2
+    AdaptiveDifficulty: 0
+    AdaptiveDifficultyIdleTimeIncreaseLimit: 0
+    AdaptiveDifficultySeconds: 0
+    BoidWeight: 0.01
+--- !u!114 &150876697
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 150876686}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e414332a90dc619458197ab4c5b343fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetDifficulty: 0
+  currentDifficulty: 0
+  actionThreshold: 0
+  ActionTimer: 0
+  difficultySlope: 0
 --- !u!1 &211435741
 GameObject:
   m_ObjectHideFlags: 0

@@ -8,9 +8,12 @@ using Meta.XR.MRUtilityKit;
 
 
 
-public class BoidManager : Singleton<BoidManager>
+public class BoidManager : Singleton<BoidManager>, IDifficultySensor
 {
     private GameManager gameManager => GameManager.Instance;
+
+    private Settings settings => gameManager.Settings;
+
     private MRUK mruk => MRUK.Instance;
     private MRUKRoom currentMrukRoom = null;
 
@@ -173,23 +176,30 @@ public class BoidManager : Singleton<BoidManager>
     /// <summary>
     /// Removes a boid from the boid manager.
     /// </summary>
-    /// <param name="boid">The transform of the boid to be removed, chooses a boid if not set.</param>
     /// <param name="destroyGameobject">Whether or not to destroy the gameobject associated with the boid.</param>
     /// <returns>True if the boid was successfully removed, false otherwise.</returns>
-    public bool RemoveBoid(Transform boid = null, bool destroyGameobject = false)
+    public bool RemoveBoid(bool destroyGameobject = false)
     {
-        Boid boidToRemove;
+        return RemoveBoid(boids.Count - 1, destroyGameobject);
+    }
 
-        if (boid == null)
-        {
-            boidToRemove = boids[^1];
-        }
-        else
-        {
-            boidToRemove = boids.Find(b => b.transform == boid);
-        }
 
-        return RemoveBoid(boidToRemove, destroyGameobject);
+
+    /// <summary>
+    /// Removes a boid from the boid manager.
+    /// </summary>
+    /// <param name="boid">The transform of the boid to be removed.</param>
+    /// <param name="destroyGameobject">Whether or not to destroy the gameobject associated with the boid.</param>
+    /// <returns>True if the boid was successfully removed, false otherwise.</returns>
+    public bool RemoveBoid(Transform boid, bool destroyGameobject = false)
+    {
+        return RemoveBoid(boids.FindIndex(b => b.transform == boid), destroyGameobject);
+    }
+
+
+    public float GetDifficulty()
+    {
+        return settings.BoidWeight * NumBoids;
     }
 
 
@@ -448,7 +458,7 @@ public class BoidManager : Singleton<BoidManager>
 
 
     /// <summary>
-    /// This is the ONLY function that removes a boid from the boid manager.
+    /// This is the ONLY function that will actually remove a boid from the boid manager.
     /// </summary>
     /// <param name="boidIndex"></param>
     /// <param name="destroyGameobject"></param>
