@@ -103,6 +103,7 @@ public class SonarEffectController : MonoBehaviour
             currentWaveDistance = 999f;
             pinging = false;
         }
+        Debug.Log("current sonar ping distance: " + currentWaveDistance);
     }
 
     private void OnDestroy()

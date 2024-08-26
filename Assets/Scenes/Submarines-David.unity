@@ -2588,7 +2588,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3906733160417276171, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
       propertyPath: pingingCooldown
-      value: 3
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 3906733160417276171, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
       propertyPath: enemySubmarinesManager

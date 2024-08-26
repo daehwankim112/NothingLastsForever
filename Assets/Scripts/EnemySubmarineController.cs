@@ -20,9 +20,9 @@ public class EnemySubmarineController : MonoBehaviour
     [SerializeField] private AudioClip TorpedoFiringSound;
     [SerializeField] private AudioClip SubmarineExplosionSound;
     private SubmarineState submarineState;
-    private bool isSubmarineChasingPlayer = false;
     private float timeSinceLastSonarPing = 0;
     private float timeSinceLastTorpedoFired = 0;
+    private bool isSubmarineChasingPlayer = false;
     private bool keepTrackOfSubmarineSonarTime = false;
     private bool keepTrackOfSubmarineTorpedoTime = false;
 
