@@ -10,7 +10,9 @@ public class DifficultyController : MonoBehaviour
 {
     private Settings settings => GameManager.Instance.Settings;
 
+
     [SerializeField]
+    private List<Component> difficultySensorComponents;
     private List<IDifficultySensor> difficultySensors;
 
 
@@ -41,6 +43,10 @@ public class DifficultyController : MonoBehaviour
         difficultySlope = settings.DifficultySlope;
         actionThreshold = settings.ActionThreshold;
         targetDifficulty = settings.StartDifficulty;
+
+        difficultySensors = difficultySensorComponents.Select(component => component as IDifficultySensor).ToList();
+
+        GameManager.Instance.OnWave += Wave;
     }
 
 
@@ -54,13 +60,15 @@ public class DifficultyController : MonoBehaviour
 
 
 
-    private float GetDifficulty() => difficultySensors.Sum(sensor => sensor.GetDifficulty());
+    private float GetDifficulty() => difficultySensors.Count > 0 ? difficultySensors.Sum(sensor => sensor.GetDifficulty()) : 0.0f;
 
 
 
     private float DifficultyError()
     {
-        return GetDifficulty() - targetDifficulty;
+        currentDifficulty = GetDifficulty();
+
+        return targetDifficulty - GetDifficulty();
     }
 
 
@@ -76,7 +84,7 @@ public class DifficultyController : MonoBehaviour
 
 
 
-    public void Wave(float _)
+    public void Wave(object obj, GameManager.OnWaveArgs args)
     {
         ActionTimer = Random.Range(settings.MinActionTimer, settings.MaxActionTimer);
     }
