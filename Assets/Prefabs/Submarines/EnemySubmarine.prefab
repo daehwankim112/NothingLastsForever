@@ -153,6 +153,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 276e5768a8adfd54dbfbab7f8c1c23c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  audioSource: {fileID: 0}
+  SubmarineSonarSound: {fileID: 8300000, guid: 61da875265019cb43a69a05e51860e54, type: 3}
+  TorpedoFiringSound: {fileID: 8300000, guid: 8a677715c883808409477c7824246212, type: 3}
+  SubmarineExplosionSound: {fileID: 8300000, guid: 8a677715c883808409477c7824246212, type: 3}
 --- !u!82 &6249281119273520013
 AudioSource:
   m_ObjectHideFlags: 0

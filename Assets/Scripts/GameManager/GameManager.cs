@@ -125,11 +125,16 @@ public class GameManager : Singleton<GameManager>
     }
     public event EventHandler<OnGameOverArgs> OnGameOver;
 
-    private void EndGame()
+    public void EndGame()
     {
         currentGameState = GameState.GameOver;
 
         OnGameOver?.Invoke(null, new OnGameOverArgs());
+    }
+
+    public void PlayerDead()
+    {
+        EndGame();
     }
     #endregion
 
@@ -144,7 +149,7 @@ public class GameManager : Singleton<GameManager>
     }
     public event EventHandler<OnStartArgs> OnStart;
 
-    private void StartGame()
+    public void StartGame()
     {
         currentGameState = GameState.Playing;
 
@@ -170,13 +175,13 @@ public class GameManager : Singleton<GameManager>
     }
 
 
+
     [SerializeField]
     private GameState currentGameState;
     public GameState CurrentGameState { get => currentGameState; }
 
     [SerializeField]
     private DifficultyController difficultyController;
-
 
     [SerializeField]
     private Settings settings;
@@ -186,6 +191,12 @@ public class GameManager : Singleton<GameManager>
 
     void Start()
     {
+        if (difficultyController == null)
+        {
+            Debug.LogError("Difficulty Controller is not set in GameManager");
+            difficultyController = gameObject.AddComponent<DifficultyController>();
+        }
+
         StartGame();
     }
 
