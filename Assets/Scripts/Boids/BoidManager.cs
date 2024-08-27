@@ -5,12 +5,16 @@ using System.Runtime.InteropServices;
 
 using UnityEngine;
 using Meta.XR.MRUtilityKit;
+using Meta.WitAi.TTS.Data;
 
 
 
-public class BoidManager : Singleton<BoidManager>
+public class BoidManager : Singleton<BoidManager>, IDifficultySensor
 {
     private GameManager gameManager => GameManager.Instance;
+
+    private Settings settings => gameManager.Settings;
+
     private MRUK mruk => MRUK.Instance;
     private MRUKRoom currentMrukRoom = null;
 
@@ -175,23 +179,30 @@ public class BoidManager : Singleton<BoidManager>
     /// <summary>
     /// Removes a boid from the boid manager.
     /// </summary>
-    /// <param name="boid">The transform of the boid to be removed, chooses a boid if not set.</param>
     /// <param name="destroyGameobject">Whether or not to destroy the gameobject associated with the boid.</param>
     /// <returns>True if the boid was successfully removed, false otherwise.</returns>
-    public bool RemoveBoid(Transform boid = null, bool destroyGameobject = false)
+    public bool RemoveBoid(bool destroyGameobject = false)
     {
-        Boid boidToRemove;
+        return RemoveBoid(boids.Count - 1, destroyGameobject);
+    }
 
-        if (boid == null)
-        {
-            boidToRemove = boids[^1];
-        }
-        else
-        {
-            boidToRemove = boids.Find(b => b.transform == boid);
-        }
 
-        return RemoveBoid(boidToRemove, destroyGameobject);
+
+    /// <summary>
+    /// Removes a boid from the boid manager.
+    /// </summary>
+    /// <param name="boid">The transform of the boid to be removed.</param>
+    /// <param name="destroyGameobject">Whether or not to destroy the gameobject associated with the boid.</param>
+    /// <returns>True if the boid was successfully removed, false otherwise.</returns>
+    public bool RemoveBoid(Transform boid, bool destroyGameobject = false)
+    {
+        return RemoveBoid(boids.FindIndex(b => b.transform == boid), destroyGameobject);
+    }
+
+
+    public float GetDifficulty()
+    {
+        return settings.BoidWeight * NumBoids;
     }
 
 
@@ -330,7 +341,11 @@ public class BoidManager : Singleton<BoidManager>
                 {
                     currentMrukRoom.TryGetClosestSurfacePosition(boid.position, out Vector3 surfacePosition, out MRUKAnchor closestAnchor);
 
-                    boid.position = closestAnchor.transform.TransformVector(surfacePosition);
+                    Vector3 normal = (surfacePosition - boid.position).normalized;
+                    boid.velocity = Vector3.Reflect(boid.velocity, normal);
+                    Debug.Log($"Boid at position {boid.position} is outside the room. Teleporting to {surfacePosition + (0.02f * normal)}.");
+
+                    boid.position = surfacePosition + (0.02f * normal);
                 }
             }
 
@@ -450,7 +465,7 @@ public class BoidManager : Singleton<BoidManager>
 
 
     /// <summary>
-    /// This is the ONLY function that removes a boid from the boid manager.
+    /// This is the ONLY function that will actually remove a boid from the boid manager.
     /// </summary>
     /// <param name="boidIndex"></param>
     /// <param name="destroyGameobject"></param>

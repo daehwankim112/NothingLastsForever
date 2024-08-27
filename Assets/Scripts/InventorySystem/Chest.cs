@@ -27,10 +27,17 @@ public class Chest : MonoBehaviour
 
 
 
-    private void OnDestroy()
+    void OnDestroy()
     {
         ControllerGrabable.WhenStateChanged -= OnGrabbableStateChanged;
         HandGrabable.WhenStateChanged -= OnGrabbableStateChanged;
+    }
+
+
+    [ContextMenu("Get Collected")]
+    private void GetCollected()
+    {
+        gameManager.Death(gameObject, GameManager.Alliance.Player);
     }
 
 
@@ -44,9 +51,7 @@ public class Chest : MonoBehaviour
 
         if (opened && (args.NewState == InteractableState.Normal || args.NewState == InteractableState.Disabled))
         {
-            gameManager.Death(gameObject, GameManager.Alliance.Player);
-
-            Destroy(gameObject);
+            GetCollected();
         }
     }
 }

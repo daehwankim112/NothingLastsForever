@@ -4,8 +4,21 @@ using UnityEngine;
 
 public class BoidSpawner : MonoBehaviour
 {
+    private GameManager gameManager => GameManager.Instance;
+
+    private Settings settings => gameManager.Settings;
+
+
     [SerializeField]
-    public int numBoids = 0;
+    private int numBoidsTarget;
+
+    private int numBoids => boidManager.NumBoids;
+
+    [SerializeField]
+    private int numBoidsByEndOfSecond;
+
+    [SerializeField]
+    private float timeToEndOfSecond;
 
     [SerializeField]
     private Transform boid;
@@ -17,21 +30,33 @@ public class BoidSpawner : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        gameManager.OnWave += OnWave;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (numBoids == boidManager.NumBoids) return;
+        timeToEndOfSecond -= Time.deltaTime;
 
-        if (numBoids < boidManager.NumBoids)
+        int numBoidsToSpawnThisFrame = Mathf.CeilToInt((Time.deltaTime / timeToEndOfSecond) * (numBoidsByEndOfSecond - numBoids));
+
+        if (numBoidsToSpawnThisFrame < 0)
         {
-            RemoveBoids(boidManager.NumBoids - numBoids);
+            RemoveBoids(numBoidsToSpawnThisFrame);
         }
-        else if (numBoids > boidManager.NumBoids)
+        else if (numBoidsToSpawnThisFrame > 0)
         {
-            SpawnMoreBoids(numBoids - boidManager.NumBoids);
+            SpawnMoreBoids(numBoidsToSpawnThisFrame);
+        }
+
+        if (timeToEndOfSecond <= 0.0f)
+        {
+            int boidDifference = numBoidsTarget - numBoids;
+            int thisSecondSpawn = Mathf.CeilToInt(Mathf.Clamp(boidDifference, -settings.BoidMaxSpawnRate, settings.BoidMaxSpawnRate));
+
+            numBoidsByEndOfSecond = numBoids + thisSecondSpawn;
+
+            timeToEndOfSecond = 1.0f;
         }
     }
 
@@ -64,7 +89,14 @@ public class BoidSpawner : MonoBehaviour
     {
         for (int i = 0; i < numToRemove; i++)
         {
-            boidManager.RemoveBoid(null, true);
+            boidManager.RemoveBoid(true);
         }
+    }
+
+
+
+    private void OnWave(object sender, GameManager.OnWaveArgs args)
+    {
+        numBoidsTarget += Mathf.CeilToInt(settings.BoidMaxWaveContribution * args.DifficultyDelta / settings.BoidWeight);
     }
 }

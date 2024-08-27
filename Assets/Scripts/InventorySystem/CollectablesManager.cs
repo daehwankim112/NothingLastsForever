@@ -1,15 +1,23 @@
 
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 
 
-public class CollectablesManager : Singleton<CollectablesManager>
+public class CollectablesManager : Singleton<CollectablesManager>, IDifficultySensor
 {
     private GameManager gameManager => GameManager.Instance;
+    private Settings settings => gameManager.Settings;
 
     public GameObject TorpedoCollectablePrefab;
 
     public Inventory PlayerInventory;
+
+    public List<GameObject> Collectables;
+    public List<GameObject> Chests;
+
+    private readonly List<GameObject> stuffToRemove = new();
 
 
 
@@ -25,7 +33,33 @@ public class CollectablesManager : Singleton<CollectablesManager>
 
 
 
-    private void OnDestroy()
+    void LateUpdate()
+    {
+        foreach (GameObject thingToRemove in stuffToRemove)
+        {
+            bool removable = false;
+
+            if (thingToRemove.TryGetComponent<Chest>(out _))
+            {
+                removable |= Chests.Remove(thingToRemove);
+            }
+            else if (thingToRemove.TryGetComponent<Collectable>(out _))
+            {
+                removable |= Collectables.Remove(thingToRemove);
+            }
+
+            if (removable)
+            {
+                Destroy(thingToRemove);
+            }
+        }
+
+        stuffToRemove.Clear();
+    }
+
+
+
+    void OnDestroy()
     {
         gameManager.OnDeath -= OnDeath;
     }
@@ -39,7 +73,29 @@ public class CollectablesManager : Singleton<CollectablesManager>
             PlayerInventory.AddContents(inventory);
         }
 
-        Destroy(collectable);
+        stuffToRemove.Add(collectable);
+    }
+
+
+
+    public void AddChest(GameObject chest)
+    {
+        Chests.Add(chest);
+    }
+
+
+
+    public float GetDifficulty()
+    {
+        float chestDifficulty = Chests.Sum(chest => settings.ChestDifficultyValue
+                                    - (settings.ChestTorpedoDifficultyValue * chest.GetComponent<Inventory>().NumTorpedos)
+                                    - (settings.ChestHealthDifficultyValue * chest.GetComponent<Inventory>().Health));
+
+        float collectableDifficulty = Collectables.Sum(collectable => settings.CollectableDifficultyValue
+                                    + (settings.CollectableTorpedoDifficultyValue * collectable.GetComponent<Inventory>().NumTorpedos)
+                                    + (settings.CollectableHealthDifficultyValue * collectable.GetComponent<Inventory>().Health));
+
+        return chestDifficulty + collectableDifficulty;
     }
 
 
@@ -52,6 +108,13 @@ public class CollectablesManager : Singleton<CollectablesManager>
             {
                 GameObject torpedoCollectable = Instantiate(TorpedoCollectablePrefab, deathArgs.DeadThing.transform.position, Quaternion.identity);
                 torpedoCollectable.GetComponent<Inventory>().AddContents(inventory);
+
+                Collectables.Add(torpedoCollectable);
+            }
+
+            if (deathArgs.DeadThing.TryGetComponent<Chest>(out _))
+            {
+                stuffToRemove.Add(deathArgs.DeadThing);
             }
         }
     }
