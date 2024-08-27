@@ -6,10 +6,15 @@ using UnityEngine;
 public class TorpedoManager : Singleton<TorpedoManager>
 {
     private GameManager gameManager => GameManager.Instance;
+    private Transform Player => PlayerManager.Instance.Player.transform;
 
     [SerializeField]
     private Transform torpedoPrefab;
     public Transform TorpedoPrefab => torpedoPrefab;
+
+    [SerializeField]
+    private Transform explosionEffect;
+    public Transform ExplosionEffect => explosionEffect;
 
     private struct Torpedo
     {
@@ -41,13 +46,9 @@ public class TorpedoManager : Singleton<TorpedoManager>
     public TorpedoSettings EnemyTorpedoSettings;
 
     public List<Transform> Targets;
-    public Transform Player;
 
     private readonly List<Torpedo> torpedos = new();
     private readonly HashSet<Torpedo> torpedosToExplode = new();
-
-
-    public GameObject ExplosionEffect;
 
 
 
