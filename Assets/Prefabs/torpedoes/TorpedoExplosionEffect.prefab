@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: -6433046850041433151}
   - component: {fileID: -5908541718983936087}
   - component: {fileID: 5439791854315847698}
+  - component: {fileID: 3972206584306387601}
   m_Layer: 0
   m_Name: TorpedoExplosionEffect
   m_TagString: Untagged
@@ -742,7 +743,7 @@ ParticleSystem:
     m_UseMeshMaterialIndex: 0
     m_UseMeshColors: 1
     alignToDirection: 0
-    m_Texture: {fileID: 0}
+    m_Texture: {fileID: 10300, guid: 0000000000000000f000000000000000, type: 0}
     m_TextureClipChannel: 3
     m_TextureClipThreshold: 0
     m_TextureUVChannel: 0
@@ -4944,3 +4945,22 @@ MonoBehaviour:
   gainBoostDb: 0
   enableAcoustics: 1
   reverbSendDb: 0
+--- !u!114 &3972206584306387601
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 717426838407661557}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 796f04c5a94947649c2235acef0008ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hrtfIntensity: 1
+  volumetricRadius: 0.5
+  earlyReflectionsSendDb: 0
+  reverbReach: 0.5
+  directivityIntensity: 0
+  directivityPattern: 0
+  directSoundEnabled: 1
