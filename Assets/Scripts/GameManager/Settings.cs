@@ -27,6 +27,8 @@ public struct Settings
     public float BoidWeight;
     public float BoidMaxSpawnRate;
     public float BoidMaxWaveContribution;
+    public bool  BoidsRemovable;
+    public int   BoidMax;
 
 
     public float ChestDifficultyValue;
@@ -34,10 +36,17 @@ public struct Settings
     public float ChestHealthDifficultyValue;
     public int   ChestMaxSpawnPerWave;
     public float ChestMaxWaveContribution;
+    public int   ChestMax;
 
 
     public float CollectableDifficultyValue;
     public float CollectableTorpedoDifficultyValue;
     public float CollectableHealthDifficultyValue;
+
+
+    public float PlayerHealthDifficultyValue;
+    public float PlayerTorpedoDifficultyValue;
+    public float PlayerHealthThreshhold;
+    public float PlayerTorpedoThreshhold;
     #endregion
 }

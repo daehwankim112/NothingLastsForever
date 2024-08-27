@@ -207,6 +207,8 @@ GameObject:
   - component: {fileID: 94348895}
   - component: {fileID: 94348896}
   - component: {fileID: 94348891}
+  - component: {fileID: 94348899}
+  - component: {fileID: 94348898}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -231,16 +233,31 @@ MonoBehaviour:
   settings:
     DifficultySlope: 0
     StartDifficulty: 0
-    ActionThreshold: 0
-    MinActionTimer: 0
-    MaxActionTimer: 0
+    ActionThreshold: 0.5
+    MinActionTimer: 1
+    MaxActionTimer: 1
     GameStartGracePeriod: 0
     AdaptiveDifficulty: 0
     AdaptiveDifficultyIdleTimeIncreaseLimit: 0
     AdaptiveDifficultySeconds: 0
-    BoidWeight: 0
-    BoidMaxSpawnRate: 0
-    BoidMaxWaveContribution: 0
+    BoidWeight: 0.01
+    BoidMaxSpawnRate: 50
+    BoidMaxWaveContribution: 0.1
+    BoidsRemovable: 0
+    BoidMax: 500
+    ChestDifficultyValue: 0.5
+    ChestTorpedoDifficultyValue: 0.2
+    ChestHealthDifficultyValue: 0.1
+    ChestMaxSpawnPerWave: 5
+    ChestMaxWaveContribution: 0.9
+    ChestMax: 10
+    CollectableDifficultyValue: 0.1
+    CollectableTorpedoDifficultyValue: 0.2
+    CollectableHealthDifficultyValue: 0.1
+    PlayerHealthDifficultyValue: 0
+    PlayerTorpedoDifficultyValue: 0
+    PlayerHealthThreshhold: 0
+    PlayerTorpedoThreshhold: 0
 --- !u!4 &94348892
 Transform:
   m_ObjectHideFlags: 0
@@ -269,7 +286,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TorpedoCollectablePrefab: {fileID: 346658356286899382, guid: 7353a39450e514c4a8df320544cc4ee3, type: 3}
-  PlayerInventory: {fileID: 1181766260}
   Collectables: []
   Chests: []
 --- !u!114 &94348895
@@ -314,7 +330,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e414332a90dc619458197ab4c5b343fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  difficultySensorComponents: []
+  difficultySensorComponents:
+  - {fileID: 94348893}
+  - {fileID: 94348899}
+  - {fileID: 1181766254}
   targetDifficulty: 0
   currentDifficulty: 0
   actionThreshold: 0
@@ -336,6 +355,63 @@ MonoBehaviour:
   SpawnInterval: 1
   LeftToSpawn: 10
   ChestSize: 0.5
+--- !u!114 &94348898
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 94348890}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60a382b112bc1fc48a0d24f214ea3c1d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  numBoidsTarget: 0
+  numBoidsByEndOfSecond: 0
+  timeToEndOfSecond: 0
+  boid: {fileID: 7311501369167484682, guid: 8f8e48919d877c44a8e15b1e8035c573, type: 3}
+  boidManager: {fileID: 94348899}
+--- !u!114 &94348899
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 94348890}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de964c1f4de50064a9bbe56da134f06f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionAvoidanceFactor: 5
+  CollisionAvoidanceRadius: 1
+  FramesBetweenCollisionChecks: 10
+  ExplosionPowerDeathCertainty: 100
+  ExplosionPowerSurvivalCertainty: 4
+  boidSettings:
+    MaxSpeed: 1
+    MinSpeed: 0.1
+    MaxTurning: 2
+    boidFov: 90
+    SeparationFactor: 1
+    SeparationRadius: 0.1
+    SeparationUsesFov: 0
+    AlignmentFactor: 10
+    AlignmentRadius: 1
+    AlignmentUsesFov: 1
+    CohesionFactor: 1
+    CohesionRadius: 1
+    CohesionUsesFov: 1
+    TargetFactor: 1
+    TargetRadius: 1
+    TargetUsesFov: 0
+    AvoidFactor: 0
+    AvoidRadius: 1
+    AvoidUsesFov: 1
+  targets: []
+  avoids: []
+  BoidComputeShader: {fileID: 7200000, guid: b48d0693ac2fa36449ebfa4123ba09c0, type: 3}
 --- !u!1001 &109570381
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2091,6 +2167,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   NumTorpedos: 10
   Health: 100
+--- !u!114 &1181766265
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 287388799}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f3c165a1ec525a41a601b53679a8cfe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PlayerInventory: {fileID: 1181766260}
 --- !u!1 &1487105493
 GameObject:
   m_ObjectHideFlags: 0
@@ -2662,7 +2751,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7950999700976850951, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
       propertyPath: <SceneLoadedEvent>k__BackingField.m_PersistentCalls.m_Calls.Array.size
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7950999700976850951, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
       propertyPath: <RoomCreatedEvent>k__BackingField.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
@@ -2678,6 +2767,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7950999700976850951, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
       propertyPath: <SceneLoadedEvent>k__BackingField.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7950999700976850951, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
+      propertyPath: <SceneLoadedEvent>k__BackingField.m_PersistentCalls.m_Calls.Array.data[2].m_Mode
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7950999700976850951, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
@@ -2697,6 +2790,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 94348897}
     - target: {fileID: 7950999700976850951, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
+      propertyPath: <SceneLoadedEvent>k__BackingField.m_PersistentCalls.m_Calls.Array.data[2].m_Target
+      value: 
+      objectReference: {fileID: 94348899}
+    - target: {fileID: 7950999700976850951, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
       propertyPath: <RoomCreatedEvent>k__BackingField.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
       objectReference: {fileID: 0}
@@ -2710,6 +2807,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7950999700976850951, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
       propertyPath: <SceneLoadedEvent>k__BackingField.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7950999700976850951, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
+      propertyPath: <SceneLoadedEvent>k__BackingField.m_PersistentCalls.m_Calls.Array.data[2].m_CallState
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7950999700976850951, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
@@ -2729,6 +2830,10 @@ PrefabInstance:
       value: MrukRoomCreatedEvent
       objectReference: {fileID: 0}
     - target: {fileID: 7950999700976850951, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
+      propertyPath: <SceneLoadedEvent>k__BackingField.m_PersistentCalls.m_Calls.Array.data[2].m_MethodName
+      value: MrukRoomLoaded
+      objectReference: {fileID: 0}
+    - target: {fileID: 7950999700976850951, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
       propertyPath: <RoomCreatedEvent>k__BackingField.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: ThingsThatDieSpawner, Assembly-CSharp
       objectReference: {fileID: 0}
@@ -2745,6 +2850,10 @@ PrefabInstance:
       value: ChestSpawner, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 7950999700976850951, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
+      propertyPath: <SceneLoadedEvent>k__BackingField.m_PersistentCalls.m_Calls.Array.data[2].m_TargetAssemblyTypeName
+      value: BoidManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 7950999700976850951, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
       propertyPath: <RoomCreatedEvent>k__BackingField.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
@@ -2758,6 +2867,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7950999700976850951, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
       propertyPath: <SceneLoadedEvent>k__BackingField.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 7950999700976850951, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
+      propertyPath: <SceneLoadedEvent>k__BackingField.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 8249713770714487970, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
@@ -2790,6 +2903,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5177257551763928141, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1181766260}
+    - targetCorrespondingSourceObject: {fileID: 5177257551763928141, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1181766265}
   m_SourcePrefab: {fileID: 100100000, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
 --- !u!1 &7042400944557242961 stripped
 GameObject:
