@@ -1,8 +1,9 @@
+
 using Meta.XR.MRUtilityKit;
-using Meta.XR.Util;
-using System.Collections;
-using System.Collections.Generic;
+
 using UnityEngine;
+
+
 
 public class EnemySubmarineSpawner : MonoBehaviour
 {
@@ -14,6 +15,9 @@ public class EnemySubmarineSpawner : MonoBehaviour
     [SerializeField] private EnemySubmarinesManager enemySubmarinesManager;
 
     private float tempTime = 0.0f;
+
+
+
 
     void Start()
     {
@@ -28,6 +32,9 @@ public class EnemySubmarineSpawner : MonoBehaviour
             });
         }
     }
+
+
+
     public void SpawnSubmarines(MRUKRoom room)
     {
         Debug.Log("Spawning a submarine");
@@ -76,14 +83,15 @@ public class EnemySubmarineSpawner : MonoBehaviour
                     enemySubmarinePrefab.transform.rotation = spawnRotation;
                     return;
                 }
-                break;
             }
         }
         else
         {
-            Debug.Log($"Following labels do not exist in your room {labels.ToString()}");
+            Debug.Log($"Following labels do not exist in your room {labels}");
         }
     }
+
+
 
     private void Update()
     {
