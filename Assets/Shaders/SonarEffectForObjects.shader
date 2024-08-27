@@ -42,7 +42,7 @@ Shader "Custom/SonarEffectForObjects"
                 float _MaxWaveDistance;
                 float _WaveDistance;
                 float _Threshold;
-                sampler2D _CameraDepthTexture;
+                // sampler2D _CameraDepthTexture;
             CBUFFER_END
 
             // Easing function for the wave length
