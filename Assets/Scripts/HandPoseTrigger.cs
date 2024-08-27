@@ -67,7 +67,7 @@ public class HandPoseTrigger : MonoBehaviour
 
     private void SpawnNewProjectile(Transform hand)
     {
-        if (inventory.GetTorpedoes() <= 0)
+        if (inventory.TakeTorpedoes() <= 0)
         {
             Debug.Log("No torpedos left!");
             return;

@@ -123,6 +123,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &53651970 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5177257551763928141, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
+  m_PrefabInstance: {fileID: 7042400944557242960}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &70394390 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 268535639156518619, guid: 2c79091165ddb24409b0a91f0d71bba0, type: 3}
@@ -973,6 +978,9 @@ GameObject:
   - component: {fileID: 150876691}
   - component: {fileID: 150876692}
   - component: {fileID: 150876693}
+  - component: {fileID: 150876694}
+  - component: {fileID: 150876695}
+  - component: {fileID: 150876696}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -1110,6 +1118,65 @@ MonoBehaviour:
   submarineSonarPingCooldown: 4
   rangeOfSonarPingngSubmarineNeighbours: 1.5
   rangeOfSonarFiringTorpedo: 4
+--- !u!114 &150876694
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 150876686}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b49cff5fc9363c4f8f0ba749d8068c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  torpedo: {fileID: 2569363520602517200, guid: 64956e351a8985a49a47aca5b5da31e4, type: 3}
+  torpedoManager: {fileID: 150876695}
+  spawnPeriod: 1
+--- !u!114 &150876695
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 150876686}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80c2b34408ffe0c4ea3beec3bb21b15d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PlayerTorpedoSettings:
+    EnginePower: 1
+    FuseTimer: 10
+    ExplosionPower: 100
+    ExplosionTriggerRadius: 0.5
+    SearchFov: 45
+    SearchRadius: 1
+  EnemyTorpedoSettings:
+    EnginePower: 0.5
+    FuseTimer: 10
+    ExplosionPower: 50
+    ExplosionTriggerRadius: 1
+    SearchFov: 120
+    SearchRadius: 2
+  Targets: []
+  Player: {fileID: 1181766254}
+  ExplosionEffect: {fileID: 717426838407661557, guid: 1ea96d85958a4a64a87160a40627c801, type: 3}
+--- !u!114 &150876696
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 150876686}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f328a37841374e8409e6369885883dc8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TorpedoCollectablePrefab: {fileID: 346658356286899382, guid: 7353a39450e514c4a8df320544cc4ee3, type: 3}
+  Collectables: []
+  Chests: []
 --- !u!1001 &309821952
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2017,6 +2084,7 @@ GameObject:
   m_Component:
   - component: {fileID: 805517439}
   - component: {fileID: 805517438}
+  - component: {fileID: 805517440}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -2037,7 +2105,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentGameState: 0
-  difficultyController: {fileID: 0}
+  difficultyController: {fileID: 805517440}
   settings:
     DifficultySlope: 0
     StartDifficulty: 0
@@ -2051,14 +2119,23 @@ MonoBehaviour:
     BoidWeight: 0
     BoidMaxSpawnRate: 0
     BoidMaxWaveContribution: 0
+    BoidsRemovable: 0
+    BoidMax: 0
     ChestDifficultyValue: 0
     ChestTorpedoDifficultyValue: 0
     ChestHealthDifficultyValue: 0
     ChestMaxSpawnPerWave: 0
     ChestMaxWaveContribution: 0
+    ChestMax: 0
+    ChestMaxTorpedoes: 0
+    ChestMaxHealth: 0
     CollectableDifficultyValue: 0
     CollectableTorpedoDifficultyValue: 0
     CollectableHealthDifficultyValue: 0
+    PlayerHealthDifficultyValue: 0
+    PlayerTorpedoDifficultyValue: 0
+    PlayerHealthThreshhold: 0
+    PlayerTorpedoThreshhold: 0
 --- !u!4 &805517439
 Transform:
   m_ObjectHideFlags: 0
@@ -2074,6 +2151,24 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &805517440
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 805517437}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e414332a90dc619458197ab4c5b343fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  difficultySensorComponents: []
+  targetDifficulty: 0
+  currentDifficulty: 0
+  actionThreshold: 0
+  ActionTimer: 0
+  difficultySlope: 0
 --- !u!1 &839389202
 GameObject:
   m_ObjectHideFlags: 0
@@ -2298,12 +2393,41 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5235231245023041029, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
   m_PrefabInstance: {fileID: 7042400944557242960}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 53651970}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0137518c58466df4395e331f154b57a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1181766260
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 53651970}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2430719af4f01fb49962e237189b42c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  numTorpedos: 1000000
+  health: 0
+  maxTorpedoes: 10000000
+  maxHealth: 0
+--- !u!114 &1181766261
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 53651970}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f3c165a1ec525a41a601b53679a8cfe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PlayerInventory: {fileID: 1181766260}
 --- !u!4 &1571285976 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7510290017661484219, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
@@ -2656,6 +2780,10 @@ PrefabInstance:
       propertyPath: _whenSelected.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 5235231245023041029, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
+      propertyPath: projectile
+      value: 
+      objectReference: {fileID: 2569363520602517200, guid: 64956e351a8985a49a47aca5b5da31e4, type: 3}
     - target: {fileID: 6120759425548519856, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -2782,7 +2910,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8249713770714487970, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 2308087692
+      value: 4186035053
       objectReference: {fileID: 0}
     - target: {fileID: 8560995727844593686, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
       propertyPath: _shapes.Array.data[0]
@@ -2809,6 +2937,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 43485522155688359, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
       insertIndex: 1
       addedObject: {fileID: 7042400944557242962}
+    - targetCorrespondingSourceObject: {fileID: 5177257551763928141, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1181766261}
+    - targetCorrespondingSourceObject: {fileID: 5177257551763928141, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1181766260}
   m_SourcePrefab: {fileID: 100100000, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
 --- !u!1 &7042400944557242961 stripped
 GameObject:
