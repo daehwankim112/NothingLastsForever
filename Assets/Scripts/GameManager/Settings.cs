@@ -42,5 +42,11 @@ public struct Settings
     public float CollectableDifficultyValue;
     public float CollectableTorpedoDifficultyValue;
     public float CollectableHealthDifficultyValue;
+
+
+    public float PlayerHealthDifficultyValue;
+    public float PlayerTorpedoDifficultyValue;
+    public float PlayerHealthThreshhold;
+    public float PlayerTorpedoThreshhold;
     #endregion
 }

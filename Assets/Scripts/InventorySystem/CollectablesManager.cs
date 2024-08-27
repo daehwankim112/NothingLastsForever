@@ -12,7 +12,7 @@ public class CollectablesManager : Singleton<CollectablesManager>, IDifficultySe
 
     public GameObject TorpedoCollectablePrefab;
 
-    public Inventory PlayerInventory;
+    private Inventory playerInventory => PlayerManager.Instance.PlayerInventory;
 
     public List<GameObject> Collectables;
     public List<GameObject> Chests;
@@ -70,7 +70,7 @@ public class CollectablesManager : Singleton<CollectablesManager>, IDifficultySe
     {
         if (collectable.TryGetComponent<Inventory>(out Inventory inventory))
         {
-            PlayerInventory.AddContents(inventory);
+            playerInventory.AddContents(inventory);
         }
 
         stuffToRemove.Add(collectable);

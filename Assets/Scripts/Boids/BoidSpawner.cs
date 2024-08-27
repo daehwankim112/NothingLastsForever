@@ -83,6 +83,8 @@ public class BoidSpawner : MonoBehaviour
 
             boidManager.AddBoid(newBoid, Random.onUnitSphere * 0.1f);
         }
+
+        Debug.Log($"Boid Difficulty: {settings.BoidWeight * numBoids}");
     }
 
 

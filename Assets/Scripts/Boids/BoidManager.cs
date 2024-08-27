@@ -202,8 +202,6 @@ public class BoidManager : Singleton<BoidManager>, IDifficultySensor
 
     public float GetDifficulty()
     {
-        Debug.Log($"Boid Difficulty: {settings.BoidWeight * NumBoids}");
-
         return settings.BoidWeight * NumBoids;
     }
 

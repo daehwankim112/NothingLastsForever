@@ -44,7 +44,9 @@ public class DifficultyController : MonoBehaviour
         actionThreshold = settings.ActionThreshold;
         targetDifficulty = settings.StartDifficulty;
 
-        difficultySensors = difficultySensorComponents.Select(component => component as IDifficultySensor).ToList();
+        //difficultySensors = difficultySensorComponents.Select(component => component as IDifficultySensor).ToList();
+
+        difficultySensors = new() { PlayerManager.Instance, CollectablesManager.Instance, BoidManager.Instance };
 
         GameManager.Instance.OnWave += Wave;
     }

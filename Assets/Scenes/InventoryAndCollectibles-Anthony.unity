@@ -234,14 +234,14 @@ MonoBehaviour:
     DifficultySlope: 0
     StartDifficulty: 0
     ActionThreshold: 0.5
-    MinActionTimer: 8
-    MaxActionTimer: 15
-    GameStartGracePeriod: 1
+    MinActionTimer: 1
+    MaxActionTimer: 1
+    GameStartGracePeriod: 0
     AdaptiveDifficulty: 0
     AdaptiveDifficultyIdleTimeIncreaseLimit: 0
     AdaptiveDifficultySeconds: 0
     BoidWeight: 0.01
-    BoidMaxSpawnRate: 10
+    BoidMaxSpawnRate: 50
     BoidMaxWaveContribution: 0.1
     BoidsRemovable: 0
     BoidMax: 500
@@ -254,6 +254,10 @@ MonoBehaviour:
     CollectableDifficultyValue: 0.1
     CollectableTorpedoDifficultyValue: 0.2
     CollectableHealthDifficultyValue: 0.1
+    PlayerHealthDifficultyValue: 0
+    PlayerTorpedoDifficultyValue: 0
+    PlayerHealthThreshhold: 0
+    PlayerTorpedoThreshhold: 0
 --- !u!4 &94348892
 Transform:
   m_ObjectHideFlags: 0
@@ -282,7 +286,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TorpedoCollectablePrefab: {fileID: 346658356286899382, guid: 7353a39450e514c4a8df320544cc4ee3, type: 3}
-  PlayerInventory: {fileID: 1181766260}
   Collectables: []
   Chests: []
 --- !u!114 &94348895
@@ -330,6 +333,7 @@ MonoBehaviour:
   difficultySensorComponents:
   - {fileID: 94348893}
   - {fileID: 94348899}
+  - {fileID: 1181766254}
   targetDifficulty: 0
   currentDifficulty: 0
   actionThreshold: 0
@@ -2163,6 +2167,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   NumTorpedos: 10
   Health: 100
+--- !u!114 &1181766265
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 287388799}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f3c165a1ec525a41a601b53679a8cfe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PlayerInventory: {fileID: 1181766260}
 --- !u!1 &1487105493
 GameObject:
   m_ObjectHideFlags: 0
@@ -2886,6 +2903,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5177257551763928141, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1181766260}
+    - targetCorrespondingSourceObject: {fileID: 5177257551763928141, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1181766265}
   m_SourcePrefab: {fileID: 100100000, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
 --- !u!1 &7042400944557242961 stripped
 GameObject:

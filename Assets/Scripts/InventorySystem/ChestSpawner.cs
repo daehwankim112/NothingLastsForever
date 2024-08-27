@@ -182,6 +182,8 @@ public class ChestSpawner : MonoBehaviour
 
     private void OnWave(object sender, GameManager.OnWaveArgs waveArgs)
     {
+        if (collectablesManager.Chests.Count >= settings.ChestMax) return;
+
         float difficultyQuota = settings.ChestMaxWaveContribution * waveArgs.DifficultyDelta;
         float maxSingleItemChestDifficultyValue = settings.ChestDifficultyValue - Mathf.Min(settings.ChestTorpedoDifficultyValue, settings.ChestHealthDifficultyValue);
         int maxNumChestsToSpawn = Mathf.Clamp(Mathf.RoundToInt(difficultyQuota / maxSingleItemChestDifficultyValue), 1, settings.ChestMaxSpawnPerWave);
