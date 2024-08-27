@@ -1007,6 +1007,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80c2b34408ffe0c4ea3beec3bb21b15d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  torpedoPrefab: {fileID: 2569363520602517200, guid: 64956e351a8985a49a47aca5b5da31e4, type: 3}
   PlayerTorpedoSettings:
     EnginePower: 1
     FuseTimer: 10
@@ -1038,8 +1039,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b49cff5fc9363c4f8f0ba749d8068c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  torpedo: {fileID: 2569363520602517200, guid: 64956e351a8985a49a47aca5b5da31e4, type: 3}
-  torpedoManager: {fileID: 150876692}
   spawnPeriod: 1
 --- !u!114 &150876694
 MonoBehaviour:
@@ -1096,7 +1095,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60a382b112bc1fc48a0d24f214ea3c1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numBoids: 100
+  numBoidsTarget: 0
+  numBoidsByEndOfSecond: 0
+  timeToEndOfSecond: 0
   boid: {fileID: 7311501369167484682, guid: 8f8e48919d877c44a8e15b1e8035c573, type: 3}
   boidManager: {fileID: 150876694}
 --- !u!114 &150876696
@@ -1111,6 +1112,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0815203697d2ae3429c567727e3a71d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentGameState: 0
+  difficultyController: {fileID: 0}
+  settings:
+    DifficultySlope: 0
+    StartDifficulty: 0
+    ActionThreshold: 0
+    MinActionTimer: 0
+    MaxActionTimer: 0
+    GameStartGracePeriod: 0
+    AdaptiveDifficulty: 0
+    AdaptiveDifficultyIdleTimeIncreaseLimit: 0
+    AdaptiveDifficultySeconds: 0
+    BoidWeight: 0
+    BoidMaxSpawnRate: 0
+    BoidMaxWaveContribution: 0
+    BoidsRemovable: 0
+    BoidMax: 0
+    ChestDifficultyValue: 0
+    ChestTorpedoDifficultyValue: 0
+    ChestHealthDifficultyValue: 0
+    ChestMaxSpawnPerWave: 0
+    ChestMaxWaveContribution: 0
+    ChestMax: 0
+    ChestMaxTorpedoes: 0
+    ChestMaxHealth: 0
+    CollectableDifficultyValue: 0
+    CollectableTorpedoDifficultyValue: 0
+    CollectableHealthDifficultyValue: 0
+    PlayerHealthDifficultyValue: 0
+    PlayerTorpedoDifficultyValue: 0
+    PlayerHealthThreshhold: 0
+    PlayerTorpedoThreshhold: 0
 --- !u!1 &211435741
 GameObject:
   m_ObjectHideFlags: 0
