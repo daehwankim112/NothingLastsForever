@@ -3,11 +3,13 @@ using UnityEngine;
 
 
 
-public class BoidSpawner : MonoBehaviour
+public class BoidSpawner : Singleton<BoidSpawner>
 {
     private GameManager gameManager => GameManager.Instance;
 
     private Settings settings => gameManager.Settings;
+
+    private BoidManager boidManager => BoidManager.Instance;
 
 
     [SerializeField]
@@ -22,16 +24,20 @@ public class BoidSpawner : MonoBehaviour
     private float timeToEndOfSecond;
 
     [SerializeField]
-    private Transform boid;
+    private Transform boidPrefab;
 
-    [SerializeField]
-    private BoidManager boidManager;
 
 
 
     void Start()
     {
         gameManager.OnWave += OnWave;
+
+        if (boidPrefab == null)
+        {
+            Debug.LogError("Boid prefab is not set in BoidSpawner. BoidSpawner will be disabled");
+            enabled = false;
+        }
     }
 
 
@@ -72,7 +78,7 @@ public class BoidSpawner : MonoBehaviour
             Quaternion randomRotation = Random.rotation;
             Color randomColor = Random.ColorHSV();
 
-            Transform newBoid = Instantiate(boid, transform.position + randomLocationOnSphere, randomRotation);
+            Transform newBoid = Instantiate(boidPrefab, transform.position + randomLocationOnSphere, randomRotation);
 
             // newBoid.GetComponent<MeshRenderer>().material.SetColor("_EmissionColor", randomColor);
              newBoid.GetComponent<MeshRenderer>().material.SetColor("_BaseColor", randomColor);

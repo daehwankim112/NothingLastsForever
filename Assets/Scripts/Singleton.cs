@@ -1,4 +1,7 @@
+
 using UnityEngine;
+
+
 
 public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 {
@@ -15,6 +18,10 @@ public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
                 if (instance == null)
                 {
                     Debug.LogError($"An instance of {typeof(T)} is needed in the scene, but it isn't there.");
+                }
+                else
+                {
+                    DontDestroyOnLoad(instance.gameObject);
                 }
             }
 

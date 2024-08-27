@@ -7,7 +7,7 @@ using UnityEngine;
 
 
 
-public class ChestSpawner : MonoBehaviour
+public class ChestSpawner : Singleton<ChestSpawner>
 {
     private GameManager gameManager => GameManager.Instance;
     private Settings settings => gameManager.Settings;
@@ -36,6 +36,12 @@ public class ChestSpawner : MonoBehaviour
     void Start()
     {
         gameManager.OnWave += OnWave;
+
+        if (ChestPrefab == null)
+        {
+            Debug.LogError("Chest prefab is not set in ChestSpawner script. Disabling script.");
+            enabled = false;
+        }
     }
 
 
@@ -98,7 +104,7 @@ public class ChestSpawner : MonoBehaviour
     {
         List<GameObject> newChests = new(numChests);
 
-        for (int i = 0; i < numChests && i + collectablesManager.Chests.Count < settings.ChestMax; i++)
+        for (int i = 0; i < numChests && i + collectablesManager.NumChests < settings.ChestMax; i++)
         {
             newChests.Add(SpawnChest());
         }
@@ -181,7 +187,7 @@ public class ChestSpawner : MonoBehaviour
 
     private void OnWave(object sender, GameManager.OnWaveArgs waveArgs)
     {
-        if (collectablesManager.Chests.Count >= settings.ChestMax) return;
+        if (collectablesManager.NumChests >= settings.ChestMax) return;
 
         float difficultyQuota = settings.ChestMaxWaveContribution * waveArgs.DifficultyDelta;
         float maxSingleItemChestDifficultyValue = settings.ChestDifficultyValue - Mathf.Min(settings.ChestTorpedoDifficultyValue, settings.ChestHealthDifficultyValue);

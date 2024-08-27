@@ -10,7 +10,29 @@ public class PlayerManager : Singleton<PlayerManager>, IDifficultySensor
     private GameManager gameManager => GameManager.Instance;
     private Settings settings => gameManager.Settings;
 
-    public Inventory PlayerInventory;
+    [SerializeField]
+    private Inventory playerInventory;
+    public Inventory PlayerInventory => playerInventory;
+
+    [SerializeField]
+    private GameObject player;
+    public GameObject Player => player;
+
+
+
+    void Start()
+    {
+        if (playerInventory == null)
+        {
+            Debug.LogError("PlayerInventory is not set in the PlayerManager");
+        }
+
+        if (player == null)
+        {
+            Debug.LogError("Player is not set in the PlayerManager");
+        }
+    }
+
 
 
     public float GetDifficulty()

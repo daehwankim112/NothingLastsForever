@@ -170,13 +170,13 @@ public class GameManager : Singleton<GameManager>
     }
 
 
+
     [SerializeField]
     private GameState currentGameState;
     public GameState CurrentGameState { get => currentGameState; }
 
     [SerializeField]
     private DifficultyController difficultyController;
-
 
     [SerializeField]
     private Settings settings;
@@ -186,6 +186,12 @@ public class GameManager : Singleton<GameManager>
 
     void Start()
     {
+        if (difficultyController == null)
+        {
+            Debug.LogError("Difficulty Controller is not set in GameManager");
+            difficultyController = gameObject.AddComponent<DifficultyController>();
+        }
+
         StartGame();
     }
 

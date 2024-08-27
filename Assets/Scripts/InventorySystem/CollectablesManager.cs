@@ -10,15 +10,19 @@ public class CollectablesManager : Singleton<CollectablesManager>, IDifficultySe
     private GameManager gameManager => GameManager.Instance;
     private Settings settings => gameManager.Settings;
 
-    public GameObject TorpedoCollectablePrefab;
-
     private Inventory playerInventory => PlayerManager.Instance.PlayerInventory;
 
-    public List<GameObject> Collectables;
-    public List<GameObject> Chests;
+    [SerializeField]
+    private readonly List<GameObject> collectables = new();
+    public int NumCollectables => collectables.Count;
+
+    [SerializeField]
+    private readonly List<GameObject> chests = new();
+    public int NumChests => chests.Count;
 
     private readonly List<GameObject> stuffToRemove = new();
 
+    public GameObject TorpedoCollectablePrefab;
 
 
     void Start()
@@ -41,11 +45,11 @@ public class CollectablesManager : Singleton<CollectablesManager>, IDifficultySe
 
             if (thingToRemove.TryGetComponent<Chest>(out _))
             {
-                removable |= Chests.Remove(thingToRemove);
+                removable |= chests.Remove(thingToRemove);
             }
             else if (thingToRemove.TryGetComponent<Collectable>(out _))
             {
-                removable |= Collectables.Remove(thingToRemove);
+                removable |= collectables.Remove(thingToRemove);
             }
 
             if (removable)
@@ -70,7 +74,7 @@ public class CollectablesManager : Singleton<CollectablesManager>, IDifficultySe
     {
         if (collectable.TryGetComponent<Inventory>(out Inventory inventory))
         {
-            playerInventory.AddContents(inventory);
+            playerInventory.MergeContents(inventory);
         }
 
         stuffToRemove.Add(collectable);
@@ -80,18 +84,21 @@ public class CollectablesManager : Singleton<CollectablesManager>, IDifficultySe
 
     public void AddChest(GameObject chest)
     {
-        Chests.Add(chest);
+        if (NumChests < settings.ChestMax && chest != null)
+        {
+            chests.Add(chest);
+        }
     }
 
 
 
     public float GetDifficulty()
     {
-        float chestDifficulty = Chests.Sum(chest => settings.ChestDifficultyValue
+        float chestDifficulty = chests.Sum(chest => settings.ChestDifficultyValue
                                     - (settings.ChestTorpedoDifficultyValue * chest.GetComponent<Inventory>().NumTorpedos)
                                     - (settings.ChestHealthDifficultyValue * chest.GetComponent<Inventory>().Health));
 
-        float collectableDifficulty = Collectables.Sum(collectable => settings.CollectableDifficultyValue
+        float collectableDifficulty = collectables.Sum(collectable => settings.CollectableDifficultyValue
                                     - (settings.CollectableTorpedoDifficultyValue * collectable.GetComponent<Inventory>().NumTorpedos)
                                     - (settings.CollectableHealthDifficultyValue * collectable.GetComponent<Inventory>().Health));
 
@@ -107,9 +114,9 @@ public class CollectablesManager : Singleton<CollectablesManager>, IDifficultySe
             if (inventory.NumTorpedos > 0)
             {
                 GameObject torpedoCollectable = Instantiate(TorpedoCollectablePrefab, deathArgs.DeadThing.transform.position, Quaternion.identity);
-                torpedoCollectable.GetComponent<Inventory>().AddContents(inventory);
+                torpedoCollectable.GetComponent<Inventory>().MergeContents(inventory);
 
-                Collectables.Add(torpedoCollectable);
+                collectables.Add(torpedoCollectable);
             }
 
             if (deathArgs.DeadThing.TryGetComponent<Chest>(out _))

@@ -20,6 +20,12 @@ public class Chest : MonoBehaviour
 
     void Start()
     {
+        if (HandGrabObject == null)
+        {
+            Debug.LogError("HandGrabObject is not set in Chest prefab");
+            HandGrabObject = GetComponentInParent<HandGrabInteractable>().gameObject;
+        }
+
         HandGrabable = HandGrabObject.GetComponent<HandGrabInteractable>();
         ControllerGrabable = HandGrabObject.GetComponent<GrabInteractable>();
 
