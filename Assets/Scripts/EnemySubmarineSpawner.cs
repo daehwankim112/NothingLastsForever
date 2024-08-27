@@ -88,7 +88,7 @@ public class EnemySubmarineSpawner : MonoBehaviour
     private void Update()
     {
         tempTime += Time.deltaTime;
-        if (tempTime > 4.0f)
+        if (tempTime > 6.0f)
         {
             tempTime = 0.0f;
             SpawnSubmarines(MRUK.Instance.GetCurrentRoom());

@@ -157,27 +157,27 @@ public class EnemySubmarinesManager : MonoBehaviour
             switch (enemySubmarineController.GetState())
             {
                 case EnemySubmarineController.SubmarineState.GETINROOM:
-                    ChangeMaterialsColor(enemySubmarineController.transform.GetChild(0).GetChild(0).GetComponent<MeshRenderer>().materials, Color.yellow);
+                    // ChangeMaterialsColor(enemySubmarineController.transform.GetChild(0).GetChild(0).GetComponent<MeshRenderer>().materials, Color.yellow);
                     // enemySubmarineController.transform.GetChild(0).GetChild(0).GetComponent<MeshRenderer>().materials .SetColor("_Color", Color.yellow);
                     GetInRoom(i);
                     break;
                 case EnemySubmarineController.SubmarineState.ROTATEAROUNDCENTRE:
-                    ChangeMaterialsColor(enemySubmarineController.transform.GetChild(0).GetChild(0).GetComponent<MeshRenderer>().materials, Color.green);
+                    // ChangeMaterialsColor(enemySubmarineController.transform.GetChild(0).GetChild(0).GetComponent<MeshRenderer>().materials, Color.green);
                     // enemySubmarineController.transform.GetChild(0).GetChild(0).GetComponent<MeshRenderer>().material.SetColor("_Color", Color.green);
                     RotateAroundCentre(i);
                     break;
                 case EnemySubmarineController.SubmarineState.SONARPING:
-                    ChangeMaterialsColor(enemySubmarineController.transform.GetChild(0).GetChild(0).GetComponent<MeshRenderer>().materials, Color.blue);
+                    // ChangeMaterialsColor(enemySubmarineController.transform.GetChild(0).GetChild(0).GetComponent<MeshRenderer>().materials, Color.blue);
                     // enemySubmarineController.transform.GetChild(0).GetChild(0).GetComponent<MeshRenderer>().material.SetColor("_Color", Color.blue);
                     SonarPing(i);
                     break;
                 case EnemySubmarineController.SubmarineState.FIRETORPEDO:
-                    ChangeMaterialsColor(enemySubmarineController.transform.GetChild(0).GetChild(0).GetComponent<MeshRenderer>().materials, Color.red);
+                    // ChangeMaterialsColor(enemySubmarineController.transform.GetChild(0).GetChild(0).GetComponent<MeshRenderer>().materials, Color.red);
                     // enemySubmarineController.transform.GetChild(0).GetChild(0).GetComponent<MeshRenderer>().material.SetColor("_Color", Color.red);
                     FireTorpedo(i);
                     break;
                 case EnemySubmarineController.SubmarineState.APPROACHPLAYER:
-                    ChangeMaterialsColor(enemySubmarineController.transform.GetChild(0).GetChild(0).GetComponent<MeshRenderer>().materials, Color.cyan);
+                    // ChangeMaterialsColor(enemySubmarineController.transform.GetChild(0).GetChild(0).GetComponent<MeshRenderer>().materials, Color.cyan);
                     // enemySubmarineController.transform.GetChild(0).GetChild(0).GetComponent<MeshRenderer>().material.SetColor("_Color", Color.cyan);
                     ApproachPlayer(i);
                     break;

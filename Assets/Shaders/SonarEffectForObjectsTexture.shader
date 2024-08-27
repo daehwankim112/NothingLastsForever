@@ -89,7 +89,8 @@ Shader "Custom/SonarEffectForObjectsTexture"
                 UNITY_SETUP_INSTANCE_ID(input);
                 UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(input);
                 fixed4 finalColor = input.color;
-                // finalColor.rgb = tex2D(_MainTex, input.uv).rgb * input.color.rgb;
+                // finalColor.rgb = tex2D(_MainTex, input.uv).rgb + input.color.rgb;
+                finalColor.rgb = tex2D(_MainTex, input.uv).rgb;
                 // finalColor.a = input.color.a;
                 // finalColor = tex2D(_MainTex, input.uv);
                 // finalColor.rgb = LinearEyeDepth(i.depth);

@@ -29,9 +29,9 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _MaxWaveDistance: 5
+    - _MaxWaveDistance: 7.5
     - _Threshold: 1
-    - _WaveDistance: 0.38864306
+    - _WaveDistance: 4.626877
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
