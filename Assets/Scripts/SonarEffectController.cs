@@ -70,6 +70,7 @@ public class SonarEffectController : MonoBehaviour
             && !pinging && !debug) || debugFromInspector)
         {
             Debug.Log("Ping gesture activated");
+            handPoseTrigger.pingGestureActivated = false;
             currentWaveDistance = 0.0f;
             StartCoroutine(SonarPing());
             if (debugFromInspector)
@@ -123,7 +124,6 @@ public class SonarEffectController : MonoBehaviour
         audioSource.PlayOneShot(audio);
         yield return new WaitForSeconds(pingingCooldown + 0.1f);
         pinging = false;
-        handPoseTrigger.pingGestureActivated = false;
         currentWaveDistance = 999f;
     }
 }

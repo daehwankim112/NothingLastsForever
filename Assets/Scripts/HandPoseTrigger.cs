@@ -19,34 +19,43 @@ public class HandPoseTrigger : MonoBehaviour
     void Start()
     {
         inventory = GetComponent<Inventory>();
+        pingGestureActivated = false;
+        holdingLeftHand = false;
+        holdingRightHand = false;
     }
 
 
 
-    public void LeftHandPing()
+    public void LeftHandHoldPing()
     {
-        Debug.Log("Left Ping!");
+        Debug.Log("Left Hold Ping!");
         holdingLeftHand = true;
     }
 
-    public void LeftHandUnping()
+    public void LeftHandReleasePing()
     {
-        Debug.Log("Left Unping!");
-        holdingLeftHand = false;
-        pingGestureActivated = true;
+        if (holdingLeftHand)
+        {
+            Debug.Log("Left Release Ping!");
+            holdingLeftHand = false;
+            pingGestureActivated = true;
+        }
     }
 
-    public void RightHandPing()
+    public void RightHandHoldPing()
     {
-        Debug.Log("Right Ping!");
+        Debug.Log("Right Hold Ping!");
         holdingRightHand = true;
     }
 
-    public void RightHandUnping()
+    public void RightHandReleasePing()
     {
-        Debug.Log("Right Unping!");
-        holdingRightHand = false;
-        pingGestureActivated = true;
+        if (holdingRightHand)
+        {
+            Debug.Log("Right Release Ping!");
+            holdingRightHand = false;
+            pingGestureActivated = true;
+        }
     }
 
     public void LeftHandFire()

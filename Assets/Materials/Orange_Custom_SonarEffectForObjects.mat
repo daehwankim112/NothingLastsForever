@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Custom_SonarEffectForObjects
+  m_Name: Orange_Custom_SonarEffectForObjects
   m_Shader: {fileID: 4800000, guid: 47c10a0af2706224589e10344084fab4, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -30,5 +30,5 @@ Material:
     - _WaveDistance: 3.4366212
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Color: {r: 1, g: 0.62634367, b: 0, a: 1}
   m_BuildTextureStacks: []

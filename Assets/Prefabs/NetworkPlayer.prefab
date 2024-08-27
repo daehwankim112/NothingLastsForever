@@ -32908,8 +32908,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5235231245023041029}
-        m_TargetAssemblyTypeName: HandPoseDetectionAndPing, Assembly-CSharp
-        m_MethodName: RightPing
+        m_TargetAssemblyTypeName: HandPoseTrigger, Assembly-CSharp
+        m_MethodName: RightHandHoldPing
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -32923,8 +32923,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5235231245023041029}
-        m_TargetAssemblyTypeName: HandPoseDetectionAndPing, Assembly-CSharp
-        m_MethodName: RightUnping
+        m_TargetAssemblyTypeName: HandPoseTrigger, Assembly-CSharp
+        m_MethodName: RightHandReleasePing
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -36565,8 +36565,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5235231245023041029}
-        m_TargetAssemblyTypeName: HandPoseDetectionAndPing, Assembly-CSharp
-        m_MethodName: LeftPing
+        m_TargetAssemblyTypeName: HandPoseTrigger, Assembly-CSharp
+        m_MethodName: LeftHandHoldPing
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -36580,8 +36580,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5235231245023041029}
-        m_TargetAssemblyTypeName: HandPoseDetectionAndPing, Assembly-CSharp
-        m_MethodName: LeftUnping
+        m_TargetAssemblyTypeName: HandPoseTrigger, Assembly-CSharp
+        m_MethodName: LeftHandReleasePing
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

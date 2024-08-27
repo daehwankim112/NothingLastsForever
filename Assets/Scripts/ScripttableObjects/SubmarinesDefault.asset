@@ -22,4 +22,4 @@ MonoBehaviour:
   testRadius: 0.15
   torpedoFireCooldown: 4
   numberOfTest: 10
-  torpedoPrefab: {fileID: 2569363520602517200, guid: b4e28ebebcde7f641b3642282470a765, type: 3}
+  torpedoPrefab: {fileID: 2170354486848387405, guid: 0c62b66afda33b148860598576b0ba7d, type: 3}
