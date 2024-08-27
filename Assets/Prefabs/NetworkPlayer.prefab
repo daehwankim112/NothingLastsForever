@@ -32586,12 +32586,16 @@ MonoBehaviour:
   sonarMaterial:
   - {fileID: 2100000, guid: 0472a6c355be96b4c9d9c6956b5dfb6c, type: 2}
   - {fileID: 2100000, guid: 3f2aba2c974bd08499c1343af213aae7, type: 2}
+  - {fileID: 2100000, guid: 5d2dfa2b3bccdc945ad8310aa7d888ff, type: 2}
+  - {fileID: 2100000, guid: be44664d9dfaf3044985dfba5f5d4569, type: 2}
+  - {fileID: 2100000, guid: 782f9de55cf07834ca7e3895b9adc330, type: 2}
   waveSpeed: 1
   mainCamera: {fileID: 5651418626666711070}
   handPoseTrigger: {fileID: 5235231245023041029}
   audio: {fileID: 8300000, guid: 61da875265019cb43a69a05e51860e54, type: 3}
   pingingCooldown: 2.5
   debug: 0
+  enemySubmarinesManager: {fileID: 0}
 --- !u!114 &981035157829997721
 MonoBehaviour:
   m_ObjectHideFlags: 0

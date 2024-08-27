@@ -5140,6 +5140,10 @@ PrefabInstance:
       value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 3906733160417276171, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
+      propertyPath: enemySubmarinesManager
+      value: 
+      objectReference: {fileID: 1957074769}
+    - target: {fileID: 3906733160417276171, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
       propertyPath: sonarMaterial.Array.size
       value: 2
       objectReference: {fileID: 0}
@@ -7226,6 +7230,7 @@ GameObject:
   - component: {fileID: 1957074767}
   - component: {fileID: 1957074766}
   - component: {fileID: 1957074764}
+  - component: {fileID: 1957074769}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -7245,7 +7250,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60a382b112bc1fc48a0d24f214ea3c1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numBoids: 100
+  numBoidsTarget: 0
+  numBoidsByEndOfSecond: 0
+  timeToEndOfSecond: 0
   boid: {fileID: 6677586760661799738, guid: 129ac79c073da8f4eae06a18e0c77a23, type: 3}
   boidManager: {fileID: 0}
 --- !u!114 &1957074766
@@ -7291,6 +7298,29 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1957074769
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1957074763}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11af4ad161a19ba4da4768fb7a8564b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  submarinesTuneParameter: {fileID: 11400000, guid: efae15be150b6d04c9afa8b30b947331, type: 2}
+  enemySubmarines: []
+  playerPingLocation: {fileID: 0}
+  sonarPingDistanceFromPlayer: 999
+  OVRRigMainCamera: {fileID: 1582696138}
+  timeBeforeSubmarinesStartEchoing: 4
+  lastTimeSincePlayerEchod: 0
+  lastTimeSinceSubmarineEchod: 0
+  submarineSonarPingCooldown: 2
+  rangeOfSonarPingngSubmarineNeighbours: 0.5
+  rangeOfSonarFiringTorpedo: 3
 --- !u!1 &1964302428
 GameObject:
   m_ObjectHideFlags: 0
@@ -8140,14 +8170,12 @@ VideoPlayer:
   m_TimeUpdateMode: 2
   m_PlaybackSpeed: 1
   m_AudioOutputMode: 0
-  m_TargetAudioSources:
-  - {fileID: 0}
-  m_DirectAudioVolumes:
-  - 1
+  m_TargetAudioSources: []
+  m_DirectAudioVolumes: []
   m_Url: 
-  m_EnabledAudioTracks: 01
-  m_DirectAudioMutes: 00
-  m_ControlledAudioTrackCount: 1
+  m_EnabledAudioTracks: 
+  m_DirectAudioMutes: 
+  m_ControlledAudioTrackCount: 0
   m_PlayOnAwake: 1
   m_SkipOnDrop: 1
   m_Looping: 1
