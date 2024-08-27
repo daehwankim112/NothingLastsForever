@@ -1,6 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
+
 using UnityEngine;
+
+
 
 public class BoidSpawner : MonoBehaviour
 {
@@ -27,24 +28,25 @@ public class BoidSpawner : MonoBehaviour
     private BoidManager boidManager;
 
 
-    // Start is called before the first frame update
+
     void Start()
     {
         gameManager.OnWave += OnWave;
     }
 
-    // Update is called once per frame
+
+
     void Update()
     {
         timeToEndOfSecond -= Time.deltaTime;
 
         int numBoidsToSpawnThisFrame = Mathf.CeilToInt((Time.deltaTime / timeToEndOfSecond) * (numBoidsByEndOfSecond - numBoids));
 
-        if (numBoidsToSpawnThisFrame < 0)
+        if (settings.BoidsRemovable && numBoidsToSpawnThisFrame < 0)
         {
-            RemoveBoids(numBoidsToSpawnThisFrame);
+            RemoveBoids(-numBoidsToSpawnThisFrame);
         }
-        else if (numBoidsToSpawnThisFrame > 0)
+        else if (numBoids < settings.BoidMax && numBoidsToSpawnThisFrame > 0)
         {
             SpawnMoreBoids(numBoidsToSpawnThisFrame);
         }

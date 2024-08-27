@@ -202,6 +202,8 @@ public class BoidManager : Singleton<BoidManager>, IDifficultySensor
 
     public float GetDifficulty()
     {
+        Debug.Log($"Boid Difficulty: {settings.BoidWeight * NumBoids}");
+
         return settings.BoidWeight * NumBoids;
     }
 
@@ -343,7 +345,6 @@ public class BoidManager : Singleton<BoidManager>, IDifficultySensor
 
                     Vector3 normal = (surfacePosition - boid.position).normalized;
                     boid.velocity = Vector3.Reflect(boid.velocity, normal);
-                    Debug.Log($"Boid at position {boid.position} is outside the room. Teleporting to {surfacePosition + (0.02f * normal)}.");
 
                     boid.position = surfacePosition + (0.02f * normal);
                 }

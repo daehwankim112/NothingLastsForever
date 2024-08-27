@@ -56,6 +56,7 @@ public class DifficultyController : MonoBehaviour
         ActionTimer -= Time.deltaTime;
 
         targetDifficulty += Time.deltaTime * difficultySlope;
+        currentDifficulty = GetDifficulty();
     }
 
 
@@ -68,7 +69,9 @@ public class DifficultyController : MonoBehaviour
     {
         currentDifficulty = GetDifficulty();
 
-        return targetDifficulty - GetDifficulty();
+        if (targetDifficulty < 0.0f) targetDifficulty = 0.0f;
+
+        return targetDifficulty - currentDifficulty;
     }
 
 
@@ -76,16 +79,15 @@ public class DifficultyController : MonoBehaviour
     public float CalculateControlSignal()
     {
         if (ActionTimer > 0.0f) return 0.0f;
+        ActionTimer = Random.Range(settings.MinActionTimer, settings.MaxActionTimer);
 
         float currentError = DifficultyError();
-
-        return Mathf.Abs(currentError) > actionThreshold ? currentError : 0.0f;
+        return Mathf.Abs(currentError) > 0.01 * actionThreshold * currentDifficulty ? currentError : 0.0f;
     }
 
 
 
     public void Wave(object obj, GameManager.OnWaveArgs args)
     {
-        ActionTimer = Random.Range(settings.MinActionTimer, settings.MaxActionTimer);
     }
 }

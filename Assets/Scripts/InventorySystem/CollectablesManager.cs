@@ -92,8 +92,8 @@ public class CollectablesManager : Singleton<CollectablesManager>, IDifficultySe
                                     - (settings.ChestHealthDifficultyValue * chest.GetComponent<Inventory>().Health));
 
         float collectableDifficulty = Collectables.Sum(collectable => settings.CollectableDifficultyValue
-                                    + (settings.CollectableTorpedoDifficultyValue * collectable.GetComponent<Inventory>().NumTorpedos)
-                                    + (settings.CollectableHealthDifficultyValue * collectable.GetComponent<Inventory>().Health));
+                                    - (settings.CollectableTorpedoDifficultyValue * collectable.GetComponent<Inventory>().NumTorpedos)
+                                    - (settings.CollectableHealthDifficultyValue * collectable.GetComponent<Inventory>().Health));
 
         return chestDifficulty + collectableDifficulty;
     }
