@@ -88,6 +88,7 @@ public class GameManager : Singleton<GameManager>
 
     public void MrukCreatedEvent()
     {
+        Debug.Log("MRUK Room Created");
         mrukRoomCreated = true;
         OnMruk?.Invoke(null, new OnMrukCreatedArgs());
     }
