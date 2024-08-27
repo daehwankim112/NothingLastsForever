@@ -23,7 +23,7 @@ public class PalmMenuInventoryUI : MonoBehaviour
     {
 
         // Update the text components with the value of someVariable
-        torpedoText.text = ourInventory.NumTorpedos.ToString();
-        healthText.text = ourInventory.Health.ToString();
+        torpedoText.text = $"{ourInventory.NumTorpedos.ToString()}/{ourInventory.MaxTorpedoes.ToString()}";
+        healthText.text = $"{ourInventory.Health.ToString()}/{ourInventory.MaxHealth.ToString()}";
     }
 }
