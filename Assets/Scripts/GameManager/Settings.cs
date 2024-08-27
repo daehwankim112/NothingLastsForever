@@ -22,6 +22,8 @@ public struct Settings
     #endregion
 
 
+    public float PlayerDamageMultiplyer;
+
 
     #region
     public float BoidWeight;

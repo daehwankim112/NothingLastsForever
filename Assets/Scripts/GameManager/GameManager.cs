@@ -125,11 +125,16 @@ public class GameManager : Singleton<GameManager>
     }
     public event EventHandler<OnGameOverArgs> OnGameOver;
 
-    private void EndGame()
+    public void EndGame()
     {
         currentGameState = GameState.GameOver;
 
         OnGameOver?.Invoke(null, new OnGameOverArgs());
+    }
+
+    public void PlayerDead()
+    {
+        EndGame();
     }
     #endregion
 
@@ -144,7 +149,7 @@ public class GameManager : Singleton<GameManager>
     }
     public event EventHandler<OnStartArgs> OnStart;
 
-    private void StartGame()
+    public void StartGame()
     {
         currentGameState = GameState.Playing;
 
