@@ -16,10 +16,10 @@ public class EnemySubmarinesManager : MonoBehaviour
 {
     UnityEvent onPlayerNotEchoingForSomeTime = new UnityEvent();
 
-    [SerializeField] private SubmarinesTuneParameter submarinesTuneParameter;
     [HideInInspector] public List<Transform> enemySubmarines = new List<Transform>();
     [HideInInspector] public Transform playerPingLocation; // To be replced with PlayerPingLocation in the Game Manager. 8/24/2024 David Kim
     [HideInInspector] public float sonarPingDistanceFromPlayer = 999;
+    [SerializeField] private SubmarinesTuneParameter submarinesTuneParameter;
     [SerializeField] private Transform OVRRigMainCamera;
     [SerializeField] private float timeBeforeSubmarinesStartEchoing = 4f;
     [SerializeField] private float lastTimeSincePlayerEchod = 0; // To be replaced with lastTimeEchoed in the Game Manager. 8/24/2024 David Kim
@@ -27,7 +27,6 @@ public class EnemySubmarinesManager : MonoBehaviour
     [SerializeField] private float submarineSonarPingCooldown = 2.0f;
     [SerializeField] private float rangeOfSonarPingngSubmarineNeighbours = 0.5f;
     [SerializeField] private float rangeOfSonarFiringTorpedo = 3f;
-    private List<Transform> neighbouringSubmarinesOnPursue = new List<Transform>();
     private Transform centreOfFloor;
     private Transform centreOfCeiling;
     private MRUKRoom room;
@@ -150,6 +149,7 @@ public class EnemySubmarinesManager : MonoBehaviour
                     playerPingLocation.position = new Vector3(OVRRigMainCamera.position.x, OVRRigMainCamera.position.y, OVRRigMainCamera.position.z);
                     Debug.Log("playerPingLocation: " + playerPingLocation.position);
                     enemySubmarineController.SetState(EnemySubmarineController.SubmarineState.FIRETORPEDO);
+                    lastTimeSincePlayerEchod = 0;
                 }
             }
 
@@ -267,7 +267,7 @@ public class EnemySubmarinesManager : MonoBehaviour
         {
             lastTimeSincePlayerEchod = 0f;
             // play sonar ping sound once
-            WhenOneSubmarinePingCheckNeighboursAndChangeNeighboursStateToPursue();
+            // WhenOneSubmarinePingCheckNeighboursAndChangeNeighboursStateToPursue();
             enemySubmarines[i].GetComponent<EnemySubmarineController>().PlaySonarSound();
         }
 
@@ -277,7 +277,8 @@ public class EnemySubmarinesManager : MonoBehaviour
             {
                 lastTimeSinceSubmarineEchod = 0f;
                 closestSubmarineIndex = i;
-                WhenOneSubmarinePingCheckNeighboursAndChangeNeighboursStateToPursue();
+                // WhenOneSubmarinePingCheckNeighboursAndChangeNeighboursStateToPursue();
+                CheckNeighbouringSubmarinesFromPlayer(i);
                 enemySubmarines[i].GetComponent<EnemySubmarineController>().PlaySonarSound();
                 // enemySubmarines[closestSubmarineIndex].GetComponent<EnemySubmarineController>().SetState(EnemySubmarineController.SubmarineState.SONARPING);
             }
@@ -469,7 +470,11 @@ public class EnemySubmarinesManager : MonoBehaviour
         var enemySubmarineController = enemySubmarines[i].GetComponent<EnemySubmarineController>();
         if (enemySubmarineController.GetState() != EnemySubmarineController.SubmarineState.GETINROOM && enemySubmarineController.GetState() != EnemySubmarineController.SubmarineState.SONARPING)
         {
-            if (Vector3.Distance(enemySubmarines[i].position, OVRRigMainCamera.position) > rangeOfSonarFiringTorpedo)
+            if (Vector3.Distance(enemySubmarines[i].position, OVRRigMainCamera.position) < rangeOfSonarFiringTorpedo)
+            {
+                enemySubmarineController.SetState(EnemySubmarineController.SubmarineState.FIRETORPEDO);
+            }
+            else
             {
                 enemySubmarineController.SetState(EnemySubmarineController.SubmarineState.APPROACHPLAYER);
             }
