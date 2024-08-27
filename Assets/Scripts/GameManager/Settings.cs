@@ -21,12 +21,23 @@ public struct Settings
     public float AdaptiveDifficultySeconds;
     #endregion
 
-    /// <summary>
-    /// Difficulty Weights
-    /// </summary>
+
+
     #region
     public float BoidWeight;
     public float BoidMaxSpawnRate;
     public float BoidMaxWaveContribution;
+
+
+    public float ChestDifficultyValue;
+    public float ChestTorpedoDifficultyValue;
+    public float ChestHealthDifficultyValue;
+    public int   ChestMaxSpawnPerWave;
+    public float ChestMaxWaveContribution;
+
+
+    public float CollectableDifficultyValue;
+    public float CollectableTorpedoDifficultyValue;
+    public float CollectableHealthDifficultyValue;
     #endregion
 }

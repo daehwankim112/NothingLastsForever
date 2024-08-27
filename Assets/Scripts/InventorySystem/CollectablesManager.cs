@@ -1,12 +1,14 @@
 
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 
 
-public class CollectablesManager : Singleton<CollectablesManager>
+public class CollectablesManager : Singleton<CollectablesManager>, IDifficultySensor
 {
     private GameManager gameManager => GameManager.Instance;
+    private Settings settings => gameManager.Settings;
 
     public GameObject TorpedoCollectablePrefab;
 
@@ -79,6 +81,21 @@ public class CollectablesManager : Singleton<CollectablesManager>
     public void AddChest(GameObject chest)
     {
         Chests.Add(chest);
+    }
+
+
+
+    public float GetDifficulty()
+    {
+        float chestDifficulty = Chests.Sum(chest => settings.ChestDifficultyValue
+                                    - (settings.ChestTorpedoDifficultyValue * chest.GetComponent<Inventory>().NumTorpedos)
+                                    - (settings.ChestHealthDifficultyValue * chest.GetComponent<Inventory>().Health));
+
+        float collectableDifficulty = Collectables.Sum(collectable => settings.CollectableDifficultyValue
+                                    + (settings.CollectableTorpedoDifficultyValue * collectable.GetComponent<Inventory>().NumTorpedos)
+                                    + (settings.CollectableHealthDifficultyValue * collectable.GetComponent<Inventory>().Health));
+
+        return chestDifficulty + collectableDifficulty;
     }
 
 
