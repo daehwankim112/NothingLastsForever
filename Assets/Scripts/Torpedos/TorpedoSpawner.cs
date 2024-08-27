@@ -1,6 +1,9 @@
 
 using UnityEngine;
 
+
+
+[System.Obsolete("This class is for testing only, please use TorpedoManager instead")]
 public class TorpedoSpawner : MonoBehaviour
 {
     private TorpedoManager torpedoManager => TorpedoManager.Instance;
