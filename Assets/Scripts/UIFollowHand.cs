@@ -6,18 +6,23 @@ public class UIFollowHMD : MonoBehaviour
 {
     public Transform targetTransform; // Reference to the target transform
     public Transform targetHMD; // Distance from the target transform
-    public Vector3 UIOffsetFromAnchor = Vector3.zero; // Offset from the target transform
+    public float height = 0.2f; // Offset from the target transform
 
-    void Update()
+    private void Start()
     {
         if (targetTransform == null)
         {
             Debug.LogWarning("Target Follow Transform is not assigned.");
             return;
         }
+        
+    }
+    
 
-        // Get the gaze direction from the target transform
-        Vector3 forwardDirection = targetTransform.position + UIOffsetFromAnchor;
+    void Update()
+    {
+        // Get the forward direction relative to the target transform
+        Vector3 forwardDirection = targetTransform.position + (-targetTransform.right.normalized * height) + (targetTransform.up.normalized * height);
 
         // Set the position of the UI element to follow the gaze
         transform.position = forwardDirection; // Adjust the distance as needed

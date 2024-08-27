@@ -1663,6 +1663,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 61049dfb4690be642a843757d529ca97, type: 3}
+--- !u!4 &154316039 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5807647779168917626, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
+  m_PrefabInstance: {fileID: 7042400944557242960}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &181241410
 GameObject:
   m_ObjectHideFlags: 0
@@ -2424,6 +2429,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 335471184}
+  - component: {fileID: 335471186}
+  - component: {fileID: 335471185}
   - component: {fileID: 335471183}
   - component: {fileID: 335471182}
   - component: {fileID: 335471181}
@@ -2464,19 +2471,7 @@ MonoBehaviour:
   _selector: {fileID: 335471181}
   _whenSelected:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 335471179}
-        m_TargetAssemblyTypeName: UIToggleOnOff, Assembly-CSharp
-        m_MethodName: ToggleOnOff
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   _whenUnselected:
     m_PersistentCalls:
       m_Calls:
@@ -2530,9 +2525,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fd1b3065097aea468ad88e800fbe29e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetTransform: {fileID: 1251905285}
+  targetTransform: {fileID: 154316039}
   targetHMD: {fileID: 1933161749}
-  UIOffsetFromAnchor: {x: 0, y: 0.2, z: 0.25}
+  height: 0.2
 --- !u!4 &335471184
 Transform:
   m_ObjectHideFlags: 0
@@ -2549,6 +2544,32 @@ Transform:
   - {fileID: 2142670332}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 30, y: 0, z: 0}
+--- !u!114 &335471185
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 335471178}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b14164f8f23faae4293baeb84485b3d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _hand: {fileID: 7042400944557242964}
+--- !u!114 &335471186
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 335471178}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b14164f8f23faae4293baeb84485b3d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _hand: {fileID: 7042400944557242965}
 --- !u!1 &351249233
 GameObject:
   m_ObjectHideFlags: 0
@@ -2942,7 +2963,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 419803360}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -0.01}
   m_LocalScale: {x: 0.005, y: 0.005, z: 0.005}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6188,11 +6209,6 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 960334454}
   m_SourcePrefab: {fileID: 100100000, guid: 5fca3702cdf1a214a94e69dcfa704e17, type: 3}
---- !u!4 &1251905285 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1730854095486227286, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
-  m_PrefabInstance: {fileID: 7042400944557242960}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1373146879 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5919106134362994299, guid: 5fca3702cdf1a214a94e69dcfa704e17, type: 3}

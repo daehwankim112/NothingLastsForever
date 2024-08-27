@@ -10,6 +10,13 @@ public class UIToggleOnOff : MonoBehaviour
     //toggle a game component on or off
     public void ToggleOnOff()
     {
-        gameObjectToToggle.SetActive(!gameObjectToToggle.activeSelf);
+        if (gameObjectToToggle.activeSelf)
+        {
+            gameObjectToToggle.SetActive(false);
+        }
+        else
+        {
+            gameObjectToToggle.SetActive(true);
+        }
     }
 }
