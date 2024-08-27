@@ -85,8 +85,7 @@ public class ChestSpawner : MonoBehaviour
     {
         GameObject newChest = Instantiate(ChestPrefab, GetRandomSpawnLocation(), Quaternion.AngleAxis(360.0f * Random.value, Vector3.up));
 
-        newChest.GetComponent<Inventory>().NumTorpedos = numTorpedos;
-        newChest.GetComponent<Inventory>().Health = health;
+        newChest.GetComponent<Inventory>().Initialize(numTorpedos, health, settings.ChestMaxTorpedoes, settings.ChestMaxHealth);
 
         collectablesManager.AddChest(newChest);
 
@@ -134,23 +133,23 @@ public class ChestSpawner : MonoBehaviour
             {
                 if (Random.value < 0.5f)
                 {
-                    chest.GetComponent<Inventory>().NumTorpedos++;
+                    chest.GetComponent<Inventory>().AddTorpedoes(1);
                     torpedoes--;
                 }
                 else
                 {
-                    chest.GetComponent<Inventory>().Health++;
+                    chest.GetComponent<Inventory>().AddHealth(1);
                     health--;
                 }
             }
             else if (health > 0)
             {
-                chest.GetComponent<Inventory>().Health++;
+                chest.GetComponent<Inventory>().AddHealth(1);
                 health--;
             }
             else if (torpedoes > 0)
             {
-                chest.GetComponent<Inventory>().NumTorpedos++;
+                chest.GetComponent<Inventory>().AddTorpedoes(1);
                 torpedoes--;
             }
         }
