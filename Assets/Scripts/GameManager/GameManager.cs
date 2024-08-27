@@ -3,6 +3,8 @@ using System;
 
 using UnityEngine;
 
+
+
 public class GameManager : Singleton<GameManager>
 {
     /// <summary>
@@ -41,10 +43,11 @@ public class GameManager : Singleton<GameManager>
     }
     #endregion
 
+
     /// <summary>
     /// Player Echo Event
     /// </summary>
-    #region Explosion Event
+    #region Echo Event
     public class OnEchoArgs : EventArgs
     {
     }
@@ -57,10 +60,162 @@ public class GameManager : Singleton<GameManager>
     #endregion
 
 
+    /// <summary>
+    /// Wave Event
+    /// </summary>
+    #region Wave Event
+    public class OnWaveArgs : EventArgs
+    {
+        public float DifficultyDelta;
+    }
+    public event EventHandler<OnWaveArgs> OnWave;
+
+    private void Wave(float difficultyDelta)
+    {
+        OnWave?.Invoke(null, new OnWaveArgs { DifficultyDelta = difficultyDelta });
+    }
+    #endregion
+
+
+
+    /// <summary>
+    /// Game Playing Event
+    /// </summary>
+    #region Play Event
+    public class OnPlayArgs : EventArgs
+    {
+    }
+    public event EventHandler<OnPlayArgs> OnPlay;
+
+    public void Play()
+    {
+        currentGameState = GameState.Playing;
+
+        OnPlay?.Invoke(null, new OnPlayArgs());
+    }
+    #endregion
+
+
+
+    /// <summary>
+    /// Game Pause Event
+    /// </summary>
+    #region Pause Event
+    public class OnPauseArgs : EventArgs
+    {
+    }
+    public event EventHandler<OnPauseArgs> OnPause;
+
+    public void Pause()
+    {
+        currentGameState = GameState.Paused;
+
+        OnPause?.Invoke(null, new OnPauseArgs());
+    }
+    #endregion
+
+
+
+    /// <summary>
+    /// Game Over Event
+    /// </summary>
+    #region Game Over Event
+    public class OnGameOverArgs : EventArgs
+    {
+    }
+    public event EventHandler<OnGameOverArgs> OnGameOver;
+
+    private void EndGame()
+    {
+        currentGameState = GameState.GameOver;
+
+        OnGameOver?.Invoke(null, new OnGameOverArgs());
+    }
+    #endregion
+
+
+
+    /// <summary>
+    /// Game Start Event
+    /// </summary>
+    #region Game Start Event
+    public class OnStartArgs : EventArgs
+    {
+    }
+    public event EventHandler<OnStartArgs> OnStart;
+
+    private void StartGame()
+    {
+        currentGameState = GameState.Playing;
+
+        OnStart?.Invoke(null, new OnStartArgs());
+    }
+    #endregion
+
+
 
     public enum Alliance
     {
         Player,
         Enemy
+    }
+
+
+
+    public enum GameState
+    {
+        Playing,
+        Paused,
+        GameOver
+    }
+
+
+    [SerializeField]
+    private GameState currentGameState;
+    public GameState CurrentGameState { get => currentGameState; }
+
+    [SerializeField]
+    private DifficultyController difficultyController;
+
+
+    [SerializeField]
+    private Settings settings;
+    public Settings Settings { get => settings; }
+
+
+
+    void Start()
+    {
+        StartGame();
+    }
+
+
+    void Update()
+    {
+        if (currentGameState == GameState.Playing)
+        {
+            float controlSignal = difficultyController.CalculateControlSignal();
+
+            if (controlSignal != 0.0f)
+            {
+                Wave(controlSignal);
+            }
+        }
+    }
+
+
+
+    public void LoadSettingsFromFile(string path)
+    {
+        settings = JsonUtility.FromJson<Settings>(path);
+    }
+
+
+
+    public void SaveSettingsToFile(string path)
+    {
+        string json = JsonUtility.ToJson(settings);
+
+        System.IO.File.WriteAllText(path, json);
     }
 }
