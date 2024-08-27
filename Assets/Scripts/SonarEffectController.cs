@@ -90,7 +90,6 @@ public class SonarEffectController : MonoBehaviour
                 sonarMaterial.SetFloat("_WaveDistance", waveSpeed * currentWaveDistance);
                 sonarMaterial.SetFloat("_Threshold", 1);
                 sonarMaterial.SetFloat("_MaxWaveDistance", waveSpeed * pingingCooldown);
-                enemySubmarinesManager.sonarPingDistanceFromPlayer = waveSpeed * currentWaveDistance;
             }
             if (currentWaveDistance > waveSpeed * pingingCooldown)
             {
@@ -103,7 +102,7 @@ public class SonarEffectController : MonoBehaviour
             currentWaveDistance = 999f;
             pinging = false;
         }
-        Debug.Log("current sonar ping distance: " + currentWaveDistance);
+        enemySubmarinesManager.sonarPingDistanceFromPlayer = waveSpeed * currentWaveDistance;
     }
 
     private void OnDestroy()

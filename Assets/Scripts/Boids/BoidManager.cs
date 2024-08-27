@@ -130,9 +130,11 @@ public class BoidManager : Singleton<BoidManager>
 
     private void OnDestroy()
     {
+        if (gameManager != null)
+        {
+            gameManager.OnExplosion -= OnTorpedoExploded;
+        }
         ReleaseBuffers();
-
-        gameManager.OnExplosion -= OnTorpedoExploded;
     }
 
 

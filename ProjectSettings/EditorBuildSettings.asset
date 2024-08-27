@@ -5,19 +5,19 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/SampleScene.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
   - enabled: 1
     path: Assets/Scenes/Submarines-David.unity
     guid: 35ba3dcc7186b484697fa51a8512e9dc
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Torpedos-Anthony.unity
     guid: e742d4755f270fa47a72d7cfad99da0e
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Boids-Anthony.unity
     guid: 4d1de1cde39a1d94b86dbefa7af1111e
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/InventoryAndCollectibles-Anthony.unity
     guid: 0258200cec8ea3a448b5c82f4e1f7ba0
   m_configObjects:

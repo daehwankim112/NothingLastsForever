@@ -39,8 +39,7 @@ public class GameManager : Singleton<GameManager>
     {
         OnExplosion?.Invoke(null, new OnExplosionArgs { Position = position, Power = power, ExplosionAlliance = alliance });
     }
-#
-
+    #endregion
 
     /// <summary>
     /// Player Echo Event

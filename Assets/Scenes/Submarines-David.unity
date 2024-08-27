@@ -970,7 +970,6 @@ GameObject:
   - component: {fileID: 150876688}
   - component: {fileID: 150876687}
   - component: {fileID: 150876689}
-  - component: {fileID: 150876690}
   - component: {fileID: 150876691}
   - component: {fileID: 150876692}
   - component: {fileID: 150876693}
@@ -1024,49 +1023,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   numBoids: 800
-  boidDrag: 1
   boid: {fileID: 7311501369167484682, guid: 2f1880483cf102a47829b011768bba02, type: 3}
   boidManager: {fileID: 150876691}
-  boids: []
---- !u!114 &150876690
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 150876686}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5d1ab908629309c42b5f9201311d503c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  BoidFactor: 1
-  SeparationFactor: 15
-  SeparationDistance: 0.05
-  SeparationUsesFov: 0
-  AlignmentFactor: 2
-  AlignmentDistance: 3
-  AlignmentUsesFov: 1
-  CohesionFactor: 5
-  CohesionDistance: 20
-  CohesionUsesFov: 1
-  TargetFactor: 0.05
-  MaxTargetDistance: 100000
-  TargetUsesFov: 1
-  targetMode: 1
-  targets:
-  - {fileID: 1842421998}
-  AvoidFactor: 0.1
-  MaxAvoidDistance: 1
-  AvoidUsesFov: 1
-  avoidMode: 0
-  avoids:
-  - {fileID: 797848843}
-  boundingDistance: 30
-  boundingEffectDistance: 20
-  maxForce: 2
-  minForce: 0.5
-  boidFov: 75
 --- !u!114 &150876691
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1082,6 +1040,8 @@ MonoBehaviour:
   CollisionAvoidanceFactor: 7
   CollisionAvoidanceRadius: 0.5
   FramesBetweenCollisionChecks: 10
+  ExplosionPowerDeathCertainty: 0
+  ExplosionPowerSurvivalCertainty: 0
   boidSettings:
     MaxSpeed: 0.7
     MinSpeed: 0.1
@@ -1142,7 +1102,7 @@ MonoBehaviour:
   playerPingLocation: {fileID: 0}
   sonarPingDistanceFromPlayer: 999
   OVRRigMainCamera: {fileID: 1571285976}
-  timeBeforeSubmarinesStartEchoing: 10
+  timeBeforeSubmarinesStartEchoing: 15
   lastTimeSincePlayerEchod: 0
   lastTimeSinceSubmarineEchod: 0
   submarineSonarPingCooldown: 4
@@ -2045,6 +2005,50 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &805517437
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 805517439}
+  - component: {fileID: 805517438}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &805517438
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 805517437}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0815203697d2ae3429c567727e3a71d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &805517439
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 805517437}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &839389202
 GameObject:
   m_ObjectHideFlags: 0
@@ -2589,7 +2593,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3906733160417276171, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
       propertyPath: pingingCooldown
-      value: 10
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 3906733160417276171, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
       propertyPath: enemySubmarinesManager
@@ -2879,3 +2883,4 @@ SceneRoots:
   - {fileID: 150876688}
   - {fileID: 7748697680198859458}
   - {fileID: 440905506}
+  - {fileID: 805517439}
