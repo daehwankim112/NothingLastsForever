@@ -7,6 +7,10 @@ public class TorpedoManager : Singleton<TorpedoManager>
 {
     private GameManager gameManager => GameManager.Instance;
 
+    [SerializeField]
+    private Transform torpedoPrefab;
+    public Transform TorpedoPrefab => torpedoPrefab;
+
     private struct Torpedo
     {
         public Vector3 position;

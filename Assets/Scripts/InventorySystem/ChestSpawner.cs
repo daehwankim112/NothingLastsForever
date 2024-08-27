@@ -1,9 +1,13 @@
+
 using Meta.XR.MRUtilityKit;
-using System.Collections;
+
 using System.Collections.Generic;
+
 using UnityEngine;
 
-public class ChestSpawner : MonoBehaviour
+
+
+public class ChestSpawner : Singleton<ChestSpawner>
 {
     private GameManager gameManager => GameManager.Instance;
     private Settings settings => gameManager.Settings;
@@ -32,6 +36,12 @@ public class ChestSpawner : MonoBehaviour
     void Start()
     {
         gameManager.OnWave += OnWave;
+
+        if (ChestPrefab == null)
+        {
+            Debug.LogError("Chest prefab is not set in ChestSpawner script. Disabling script.");
+            enabled = false;
+        }
     }
 
 
@@ -81,8 +91,7 @@ public class ChestSpawner : MonoBehaviour
     {
         GameObject newChest = Instantiate(ChestPrefab, GetRandomSpawnLocation(), Quaternion.AngleAxis(360.0f * Random.value, Vector3.up));
 
-        newChest.GetComponent<Inventory>().NumTorpedos = numTorpedos;
-        newChest.GetComponent<Inventory>().Health = health;
+        newChest.GetComponent<Inventory>().Initialize(numTorpedos, health, settings.ChestMaxTorpedoes, settings.ChestMaxHealth);
 
         collectablesManager.AddChest(newChest);
 
@@ -95,9 +104,9 @@ public class ChestSpawner : MonoBehaviour
     {
         List<GameObject> newChests = new(numChests);
 
-        for (int i = 0; i < numChests; i++)
+        for (int i = 0; i < numChests && i + collectablesManager.NumChests < settings.ChestMax; i++)
         {
-            newChests.Add(SpawnChest(numTorpedos, health));
+            newChests.Add(SpawnChest());
         }
 
         return newChests;
@@ -108,6 +117,8 @@ public class ChestSpawner : MonoBehaviour
     private void DistributeTorpedoesAndHealth(int health, int torpedoes, List<GameObject> chests)
     {
         int numChests = chests.Count;
+
+        if (numChests == 0) return;
 
         // Ensure that each chest has at least one item
         foreach (GameObject chest in chests)
@@ -128,23 +139,23 @@ public class ChestSpawner : MonoBehaviour
             {
                 if (Random.value < 0.5f)
                 {
-                    chest.GetComponent<Inventory>().NumTorpedos++;
+                    chest.GetComponent<Inventory>().AddTorpedoes(1);
                     torpedoes--;
                 }
                 else
                 {
-                    chest.GetComponent<Inventory>().Health++;
+                    chest.GetComponent<Inventory>().AddHealth(1);
                     health--;
                 }
             }
             else if (health > 0)
             {
-                chest.GetComponent<Inventory>().Health++;
+                chest.GetComponent<Inventory>().AddHealth(1);
                 health--;
             }
             else if (torpedoes > 0)
             {
-                chest.GetComponent<Inventory>().NumTorpedos++;
+                chest.GetComponent<Inventory>().AddTorpedoes(1);
                 torpedoes--;
             }
         }
@@ -176,19 +187,23 @@ public class ChestSpawner : MonoBehaviour
 
     private void OnWave(object sender, GameManager.OnWaveArgs waveArgs)
     {
+        if (collectablesManager.NumChests >= settings.ChestMax) return;
+
         float difficultyQuota = settings.ChestMaxWaveContribution * waveArgs.DifficultyDelta;
-        float maxSingleItemChestDifficultyValue = settings.ChestDifficultyValue - Mathf.Max(settings.ChestTorpedoDifficultyValue, settings.ChestHealthDifficultyValue);
-        int maxNumChestsToSpawn = Mathf.Clamp(Mathf.CeilToInt(difficultyQuota / maxSingleItemChestDifficultyValue), 1, settings.ChestMaxSpawnPerWave);
-        int numChestsToSpawn = Random.Range(1, maxNumChestsToSpawn + 1);
+        float maxSingleItemChestDifficultyValue = settings.ChestDifficultyValue - Mathf.Min(settings.ChestTorpedoDifficultyValue, settings.ChestHealthDifficultyValue);
+        int maxNumChestsToSpawn = Mathf.Clamp(Mathf.RoundToInt(difficultyQuota / maxSingleItemChestDifficultyValue), 1, settings.ChestMaxSpawnPerWave);
+        int numChestsToSpawn = Random.Range(0, maxNumChestsToSpawn + 1);
 
         float baseChestDifficultyValue = settings.ChestDifficultyValue * numChestsToSpawn;
         difficultyQuota -= baseChestDifficultyValue;
         float healthDifficultyRatio = Random.Range(0.0f, 1.0f);
 
-        int totalHealth = Mathf.CeilToInt(difficultyQuota * healthDifficultyRatio / settings.ChestHealthDifficultyValue);
-        int totalTorpedoes = Mathf.CeilToInt(difficultyQuota * (1.0f - healthDifficultyRatio) / settings.ChestTorpedoDifficultyValue);
+        int totalHealth = Mathf.Max(Mathf.CeilToInt(healthDifficultyRatio * numChestsToSpawn), Mathf.FloorToInt(difficultyQuota * healthDifficultyRatio / settings.ChestHealthDifficultyValue));
+        int totalTorpedoes = Mathf.Max(Mathf.CeilToInt((1.0f - healthDifficultyRatio) * numChestsToSpawn), Mathf.FloorToInt(difficultyQuota * (1.0f - healthDifficultyRatio) / settings.ChestTorpedoDifficultyValue));
 
         List<GameObject> newChests = SpawnChests(numChestsToSpawn, totalTorpedoes, totalHealth);
         DistributeTorpedoesAndHealth(totalHealth, totalTorpedoes, newChests);
+
+        Debug.Log($"Wave {waveArgs.DifficultyDelta} spawned {newChests.Count} chests with {totalTorpedoes} torpedoes and {totalHealth} health. Total collectables difficulty: {collectablesManager.GetDifficulty()}");
     }
 }

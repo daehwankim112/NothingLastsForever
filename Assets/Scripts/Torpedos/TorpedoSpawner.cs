@@ -3,11 +3,7 @@ using UnityEngine;
 
 public class TorpedoSpawner : MonoBehaviour
 {
-    [SerializeField]
-    private Transform torpedo;
-
-    [SerializeField]
-    private TorpedoManager torpedoManager;
+    private TorpedoManager torpedoManager => TorpedoManager.Instance;
 
     [SerializeField]
     private float spawnPeriod;
@@ -23,7 +19,7 @@ public class TorpedoSpawner : MonoBehaviour
         {
             timeSinceLastSpawn = 0.0f;
 
-            Transform newTorpedo = Instantiate(torpedo, transform.position + (0.2f * Random.onUnitSphere), transform.rotation);
+            Transform newTorpedo = Instantiate(torpedoManager.TorpedoPrefab, transform.position + (0.2f * Random.onUnitSphere), transform.rotation);
 
             torpedoManager.AddTorpedo(newTorpedo, 0.1f * Random.onUnitSphere, GameManager.Alliance.Enemy);
         }

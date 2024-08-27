@@ -4,6 +4,8 @@ using Oculus.Interaction.HandGrab;
 
 using UnityEngine;
 
+
+
 public class Collectable : MonoBehaviour
 {
     private CollectablesManager collectablesManager => CollectablesManager.Instance;
@@ -18,6 +20,12 @@ public class Collectable : MonoBehaviour
 
     void Start()
     {
+        if (HandGrabObject == null)
+        {
+            Debug.LogError("HandGrabObject is not set in Chest prefab");
+            HandGrabObject = GetComponentInParent<HandGrabInteractable>().gameObject;
+        }
+
         inventory = GetComponent<Inventory>();
 
         HandGrabable = HandGrabObject.GetComponent<HandGrabInteractable>();
