@@ -37,6 +37,8 @@ public struct Settings
     public int   ChestMaxSpawnPerWave;
     public float ChestMaxWaveContribution;
     public int   ChestMax;
+    public int ChestMaxTorpedoes;
+    public int ChestMaxHealth;
 
 
     public float CollectableDifficultyValue;

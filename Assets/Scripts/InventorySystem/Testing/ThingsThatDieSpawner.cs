@@ -1,8 +1,10 @@
 using Meta.XR.MRUtilityKit;
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+[Obsolete("This class was for testing purposes only.")]
 public class ThingsThatDieSpawner : MonoBehaviour
 {
     public GameObject ThingThatDiesPrefab;
@@ -48,7 +50,7 @@ public class ThingsThatDieSpawner : MonoBehaviour
 
             //newTtd.GetComponent<ThingThatDies>().DeathTimer = Random.Range(1, 20);
 
-            newTtd.GetComponent<Inventory>().NumTorpedos = Random.Range(1, 5);
+            //newTtd.GetComponent<Inventory>().NumTorpedos = Random.Range(1, 5);
         }
     }
 

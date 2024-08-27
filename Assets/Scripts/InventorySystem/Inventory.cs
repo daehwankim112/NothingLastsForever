@@ -29,10 +29,10 @@ public class Inventory : MonoBehaviour
 
 
 
-    public Inventory(int initalTorpedoes = 0, int initalHealth = 0, int maxTorpedoes = int.MaxValue, int maxHealth = int.MaxValue)
+    public void Initialize(int numTorpedoes = 0, int health = 0, int maxTorpedoes = int.MaxValue, int maxHealth = int.MaxValue)
     {
-        numTorpedos = initalTorpedoes;
-        health = initalHealth;
+        this.numTorpedos = numTorpedoes;
+        this.health = health;
         this.maxTorpedoes = maxTorpedoes;
         this.maxHealth = maxHealth;
     }
@@ -72,6 +72,27 @@ public class Inventory : MonoBehaviour
 
 
 
+    public void AddTorpedoes(int amount)
+    {
+        AddTorpedoes(amount, out _);
+    }
+
+
+
+    public void AddTorpedoes(int amount, out bool fullOfTorpedoes)
+    {
+        fullOfTorpedoes = false;
+        numTorpedos += amount;
+
+        if (numTorpedos >= maxTorpedoes)
+        {
+            numTorpedos = maxTorpedoes;
+            fullOfTorpedoes = true;
+        }
+    }
+
+
+
     public int TakeTorpedoes(int amount = 1)
     {
         return TakeTorpedoes(out _, amount);
@@ -96,6 +117,48 @@ public class Inventory : MonoBehaviour
 
 
 
+    public void SetMaxTorpedoes(int amount)
+    {
+        SetMaxTorpedoes(amount, out _);
+    }
+
+
+
+    public void SetMaxTorpedoes(int amount, out bool ejectedTorpedoes)
+    {
+        maxTorpedoes = amount;
+        ejectedTorpedoes = false;
+
+        if (NumTorpedos > maxTorpedoes)
+        {
+            numTorpedos = maxTorpedoes;
+            ejectedTorpedoes = true;
+        }
+    }
+
+
+
+    public void AddHealth(int amount)
+    {
+        AddHealth(amount, out _);
+    }
+
+
+
+    public void AddHealth(int amount, out bool fullOfHealth)
+    {
+        fullOfHealth = false;
+
+        health += amount;
+        if (health >= maxHealth)
+        {
+            health = maxHealth;
+            fullOfHealth = true;
+        }
+    }
+
+
+
     public void TakeHealth(int amount)
     {
         TakeHealth(amount, out _);
@@ -112,6 +175,27 @@ public class Inventory : MonoBehaviour
         {
             health = 0;
             outOfHealth = true;
+        }
+    }
+
+
+
+    public void SetMaxHealth(int amount)
+    {
+        SetMaxHealth(amount, out _);
+    }
+
+
+
+    public void SetMaxHealth(int amount, out bool removedHealth)
+    {
+        maxHealth = amount;
+        removedHealth = false;
+
+        if (health > maxHealth)
+        {
+            health = maxHealth;
+            removedHealth = true;
         }
     }
 }
