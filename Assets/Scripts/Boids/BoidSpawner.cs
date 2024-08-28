@@ -15,13 +15,10 @@ public class BoidSpawner : Singleton<BoidSpawner>
     [SerializeField]
     private int numBoidsTarget;
 
+    [SerializeField]
+    private int numBoidsToSpawn;
+
     private int numBoids => boidManager.NumBoids;
-
-    [SerializeField]
-    private int numBoidsByEndOfSecond;
-
-    [SerializeField]
-    private float timeToEndOfSecond;
 
     [SerializeField]
     private Transform boidPrefab;
@@ -44,28 +41,13 @@ public class BoidSpawner : Singleton<BoidSpawner>
 
     void Update()
     {
-        timeToEndOfSecond -= Time.deltaTime;
+        if (numBoidsToSpawn <= 0) return;
 
-        int numBoidsToSpawnThisFrame = Mathf.CeilToInt((Time.deltaTime / timeToEndOfSecond) * (numBoidsByEndOfSecond - numBoids));
+        int spawnThisFrame = Mathf.Min(Mathf.FloorToInt(numBoidsToSpawn * Time.deltaTime), Mathf.Max(1, Mathf.FloorToInt(settings.BoidMaxSpawnRate * Time.deltaTime)));
 
-        if (settings.BoidsRemovable && numBoidsToSpawnThisFrame < 0)
-        {
-            RemoveBoids(-numBoidsToSpawnThisFrame);
-        }
-        else if (numBoids < settings.BoidMax && numBoidsToSpawnThisFrame > 0)
-        {
-            SpawnMoreBoids(numBoidsToSpawnThisFrame);
-        }
+        SpawnMoreBoids(spawnThisFrame);
 
-        if (timeToEndOfSecond <= 0.0f)
-        {
-            int boidDifference = numBoidsTarget - numBoids;
-            int thisSecondSpawn = Mathf.CeilToInt(Mathf.Clamp(boidDifference, -settings.BoidMaxSpawnRate, settings.BoidMaxSpawnRate));
-
-            numBoidsByEndOfSecond = numBoids + thisSecondSpawn;
-
-            timeToEndOfSecond = 1.0f;
-        }
+        numBoidsToSpawn -= spawnThisFrame;
     }
 
 
@@ -96,6 +78,6 @@ public class BoidSpawner : Singleton<BoidSpawner>
 
     private void OnWave(object sender, GameManager.OnWaveArgs args)
     {
-        numBoidsTarget += Mathf.CeilToInt(settings.BoidMaxWaveContribution * args.DifficultyDelta / settings.BoidWeight);
+        numBoidsTarget += Mathf.FloorToInt(settings.BoidMaxWaveContribution * args.DifficultyDelta / settings.BoidWeight);
     }
 }

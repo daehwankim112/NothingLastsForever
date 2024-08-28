@@ -9,10 +9,13 @@ public struct Settings
     public float DifficultySlope;
     public float StartDifficulty;
 
+    public float DifficulyProportionWeight;
+    public float ActionMaxDifficulty;
+
     public float ActionThreshold;
 
-    public float MinActionTimer;
-    public float MaxActionTimer;
+    public float ActionTickPeriod;
+    public float TickWaveChance;
 
     public float GameStartGracePeriod;
 

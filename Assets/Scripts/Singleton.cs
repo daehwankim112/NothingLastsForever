@@ -19,10 +19,6 @@ public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
                 {
                     Debug.LogError($"An instance of {typeof(T)} is needed in the scene, but it isn't there.");
                 }
-                else
-                {
-                    //DontDestroyOnLoad(instance.gameObject);
-                }
             }
 
             return instance;
