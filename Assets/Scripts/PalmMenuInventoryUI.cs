@@ -11,8 +11,8 @@ public class PalmMenuInventoryUI : MonoBehaviour
     // Reference to the text component for health remaining
     public TextMeshProUGUI healthText;
 
-    //reference to the inventory
-    public Inventory ourInventory;
+    //reference to the inventory THIS IS SET AUTOMATICALLY
+    Inventory ourInventory;
 
     private void Start()
     {

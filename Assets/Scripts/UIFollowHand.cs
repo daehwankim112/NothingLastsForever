@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class UIFollowHMD : MonoBehaviour
 {
-    public Transform targetTransform; // Reference to the target transform
-    public Transform targetHMD; // Distance from the target transform
-    public float height = 0.2f; // Offset from the target transform
+    public Transform targetTransform; // Reference to the target transform USE THE LEFT HAND ANCHOR
+    public Transform targetHMD; // Distance from the target transform USE THE CENTER HMD CAMERA
+    public float height = 0.3f; // Offset from the target transform
 
     private void Start()
     {
