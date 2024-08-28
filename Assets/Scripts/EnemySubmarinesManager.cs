@@ -541,7 +541,7 @@ public class EnemySubmarinesManager : Singleton<EnemySubmarinesManager>
         if (submarine == null) return false;
 
         bool removeSuccess = enemySubmarines.Remove(submarine);
-
+        torpedoManager.Targets.Remove(submarine);
         Destroy(submarine.gameObject);
         
         return removeSuccess;
