@@ -25,9 +25,9 @@ Material:
     m_TexEnvs: []
     m_Ints: []
     m_Floats:
-    - _MaxWaveDistance: 7.5
+    - _MaxWaveDistance: 8
     - _Threshold: 1
-    - _WaveDistance: 3.8409083
+    - _WaveDistance: 7.222089
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 0.7192064, b: 0, a: 1}

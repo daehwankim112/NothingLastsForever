@@ -1,13 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
-public class SonarEffectController : MonoBehaviour
+public class SonarEffectController : Singleton<SonarEffectController>
 {
+    [HideInInspector] public UnityEvent onSonarPing;
     [SerializeField] private List<Material> sonarMaterial;
     [SerializeField] private float waveSpeed = 3f;
     [SerializeField] private Camera mainCamera;
-    [SerializeField] private HandPoseTrigger handPoseTrigger;
     [SerializeField] private AudioClip audio;
     [SerializeField] private float pingingCooldown = 2.5f;
     [SerializeField] private bool debug = false;
@@ -17,71 +18,45 @@ public class SonarEffectController : MonoBehaviour
     private AudioSource audioSource;
     private float currentWaveDistance = 999f;
     private bool debugFromInspector = false;
+    private IEnumerator sonarPingCoroutine;
 
-    void Start()
+    private void Start()
     {
         mainCamera.depthTextureMode |= DepthTextureMode.Depth;
         audioSource = GetComponent<AudioSource>();
+        onSonarPing.AddListener(PingGenstureActivated);
+        sonarPingCoroutine = SonarPing();
+        currentWaveDistance = 999f;
         if (debug)
         {
-            StartCoroutine(SonarPing());
+            StartCoroutine(sonarPingCoroutine);
         }
     }
 
-    void Update()
+    private void Update()
     {
-        OVRInput.Update();
+        // OVRInput.Update();
 
-        // Check if the ping gesture is activated or the A or X button is pressed. RawButton.A and RawButton.X are mapped as Button.One
-        // https://developer.oculus.com/documentation/unity/unity-ovrinput/
-        /*if (OVRInput.GetDown(OVRInput.Button.One))
-        {
-            OVRInput.SetControllerVibration(0.5f, 0.5f, OVRInput.Controller.RTouch);
-            OVRInput.SetControllerVibration(0.5f, 0.5f, OVRInput.Controller.LTouch);
-            Debug.Log("One button pressed");
-        }
-        if (OVRInput.GetUp(OVRInput.Button.One))
-        {
-            OVRInput.SetControllerVibration(0, 0, OVRInput.Controller.RTouch);
-            OVRInput.SetControllerVibration(0, 0, OVRInput.Controller.LTouch);
-        }
-        if (OVRInput.Get(OVRInput.RawButton.A))
-        {
-            OVRInput.SetControllerVibration(0.5f, 0.5f, OVRInput.Controller.RTouch);
-            Debug.Log("A button pressed");
-        }
-        else
-        {
-            OVRInput.SetControllerVibration(0, 0, OVRInput.Controller.RTouch);
-        }
-        if (OVRInput.Get(OVRInput.RawButton.X))
-        {
-            OVRInput.SetControllerVibration(0.5f, 0.5f, OVRInput.Controller.LTouch);
-            Debug.Log("X button pressed");
-        }
-        else
-        {
-            OVRInput.SetControllerVibration(0, 0, OVRInput.Controller.LTouch);
-        }*/
-
-
-        if (((handPoseTrigger.pingGestureActivated 
+        /*if (((handPoseTrigger.pingGestureActivated 
             || (OVRInput.Get(OVRInput.RawButton.A) || OVRInput.Get(OVRInput.RawButton.X))) 
             && !pinging && !debug) || debugFromInspector)
         {
             Debug.Log("Ping gesture activated");
             currentWaveDistance = 0.0f;
+            pinging = true;
             StartCoroutine(SonarPing());
             if (debugFromInspector)
             {
                 debugFromInspector = false;
             }
-        }
-        if (debug && !pinging)
+        }*/
+        /*if (debug && !pinging)
         {
             currentWaveDistance = 0.0f;
+            pinging = true;
             StartCoroutine(SonarPing());
-        }
+        }*/
+        Debug.Log("currentWaveDistance: " + currentWaveDistance);
         if (pinging)
         {
             currentWaveDistance += Time.deltaTime;
@@ -105,10 +80,21 @@ public class SonarEffectController : MonoBehaviour
         enemySubmarinesManager.sonarPingDistanceFromPlayer = waveSpeed * currentWaveDistance;
     }
 
+    private void PingGenstureActivated()
+    {
+        Debug.Log("Ping gesture activated");
+        audioSource.Stop();
+        StopCoroutine(sonarPingCoroutine);
+        pinging = true;
+        currentWaveDistance = 0.0f;
+        audioSource.PlayOneShot(audio);
+        StartCoroutine(sonarPingCoroutine);
+    }
+
     private void OnDestroy()
     {
         pinging = false;
-        StopAllCoroutines();
+        StopCoroutine(sonarPingCoroutine);
     }
 
     [ContextMenu("SonarPingDebugFromInspector")]
@@ -119,11 +105,8 @@ public class SonarEffectController : MonoBehaviour
 
     IEnumerator SonarPing()
     {
-        pinging = true;
-        audioSource.PlayOneShot(audio);
         yield return new WaitForSeconds(pingingCooldown + 0.1f);
-        pinging = false;
-        handPoseTrigger.pingGestureActivated = false;
         currentWaveDistance = 999f;
+        pinging = false;
     }
 }

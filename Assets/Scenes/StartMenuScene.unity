@@ -404,7 +404,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c75bf113f89f0c40902986b6afd8c7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneName: Integration-Anthony
+  sceneName: Integration-Anthony-David
 --- !u!4 &243230063
 Transform:
   m_ObjectHideFlags: 0
@@ -3665,7 +3665,7 @@ PrefabInstance:
       objectReference: {fileID: 1615611954}
     - target: {fileID: 3906733160417276171, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
       propertyPath: debug
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3906733160417276171, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
       propertyPath: waveSpeed
@@ -6110,8 +6110,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   numBoidsTarget: 0
-  numBoidsByEndOfSecond: 0
-  timeToEndOfSecond: 0
+  numBoidsToSpawn: 0
   boidPrefab: {fileID: 0}
 --- !u!114 &1957074766
 MonoBehaviour:
