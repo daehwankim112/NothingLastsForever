@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class UIFollowHMD : MonoBehaviour
 {
-    public Transform targetTransform; // Reference to the target transform
-    public Transform targetHMD; // Distance from the target transform
-    public float height = 0.2f; // Offset from the target transform
+    public Transform targetTransform; // Reference to the target transform USE THE LEFT HAND ANCHOR
+    public Transform targetHMD; // Distance from the target transform USE THE CENTER HMD CAMERA
+    public float height = 0.3f; // Offset from the target transform
 
     private void Start()
     {
@@ -22,7 +22,7 @@ public class UIFollowHMD : MonoBehaviour
     void Update()
     {
         // Get the forward direction relative to the target transform
-        Vector3 forwardDirection = targetTransform.position + (-targetTransform.right.normalized * height) + (targetTransform.up.normalized * height);
+        Vector3 forwardDirection = targetTransform.position + (targetTransform.right.normalized * height) + (targetTransform.up.normalized * height);
 
         // Set the position of the UI element to follow the gaze
         transform.position = forwardDirection; // Adjust the distance as needed
