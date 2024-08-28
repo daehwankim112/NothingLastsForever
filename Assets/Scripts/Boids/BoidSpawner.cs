@@ -79,5 +79,7 @@ public class BoidSpawner : Singleton<BoidSpawner>
     private void OnWave(object sender, GameManager.OnWaveArgs args)
     {
         numBoidsTarget += Mathf.FloorToInt(settings.BoidMaxWaveContribution * args.DifficultyDelta / settings.BoidWeight);
+
+        numBoidsTarget = Mathf.Clamp(numBoidsTarget, 0, settings.BoidMax);
     }
 }
