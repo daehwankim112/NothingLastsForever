@@ -8,6 +8,7 @@ using UnityEngine;
 
 public class DifficultyController : MonoBehaviour
 {
+    private GameManager gameManager => GameManager.Instance;
     private Settings settings => GameManager.Instance.Settings;
 
 
@@ -36,6 +37,18 @@ public class DifficultyController : MonoBehaviour
     private float difficultySlope;
 
 
+    [SerializeField]
+    private float nextControlOutput;
+
+
+    [SerializeField]
+    private float lastControlOutput;
+
+
+    [SerializeField]
+    private float currentError;
+
+
 
     void Start()
     {
@@ -55,10 +68,16 @@ public class DifficultyController : MonoBehaviour
 
     void Update()
     {
+        targetDifficulty += Time.deltaTime * difficultySlope;
+
         ActionTimer -= Time.deltaTime;
 
-        targetDifficulty += Time.deltaTime * difficultySlope;
-        currentDifficulty = GetDifficulty();
+        if (ActionTimer < 0.0f)
+        {
+            ActionTimer = settings.ActionTickPeriod;
+
+            DoActionTick();
+        }
     }
 
 
@@ -71,20 +90,31 @@ public class DifficultyController : MonoBehaviour
     {
         currentDifficulty = GetDifficulty();
 
-        if (targetDifficulty < 0.0f) targetDifficulty = 0.0f;
-
         return targetDifficulty - currentDifficulty;
     }
 
 
 
-    public float CalculateControlSignal()
+    private float CalculateControlSignal()
     {
-        if (ActionTimer > 0.0f) return 0.0f;
-        ActionTimer = Random.Range(settings.MinActionTimer, settings.MaxActionTimer);
+        currentError = DifficultyError();
+        return settings.DifficulyProportionWeight * currentError;
+    }
 
-        float currentError = DifficultyError();
-        return Mathf.Abs(currentError) > 0.01 * actionThreshold * currentDifficulty ? currentError : 0.0f;
+
+
+    private void DoActionTick()
+    {
+        currentDifficulty = GetDifficulty();
+        nextControlOutput = CalculateControlSignal();
+
+        if (Mathf.Abs(currentError) < 0.01 * actionThreshold * currentDifficulty) return;
+
+        if (Random.value < settings.TickWaveChance)
+        {
+            lastControlOutput = nextControlOutput;
+            gameManager.Wave(nextControlOutput);
+        }
     }
 
 

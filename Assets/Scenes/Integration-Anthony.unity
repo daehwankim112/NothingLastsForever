@@ -2440,6 +2440,9 @@ MonoBehaviour:
   actionThreshold: 0
   ActionTimer: 0
   difficultySlope: 0
+  nextControlOutput: 0
+  lastControlOutput: 0
+  currentError: 0
 --- !u!114 &866579846
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2456,10 +2459,11 @@ MonoBehaviour:
   difficultyController: {fileID: 866579845}
   settings:
     DifficultySlope: 0
-    StartDifficulty: 1
+    StartDifficulty: -100
+    DifficulyProportionWeight: 0.5
     ActionThreshold: 10
-    MinActionTimer: 1
-    MaxActionTimer: 2
+    ActionTickPeriod: 1
+    TickWaveChance: 0.3
     GameStartGracePeriod: 3
     AdaptiveDifficulty: 0
     AdaptiveDifficultyIdleTimeIncreaseLimit: 0
@@ -2476,9 +2480,9 @@ MonoBehaviour:
     ChestDifficultyValue: 0.5
     ChestTorpedoDifficultyValue: 0.1
     ChestHealthDifficultyValue: 0.05
-    ChestMaxSpawnPerWave: 1
+    ChestMaxSpawnPerWave: 2
     ChestMaxWaveContribution: 0.5
-    ChestMax: 5
+    ChestMax: 10
     ChestMaxTorpedoes: 10
     ChestMaxHealth: 50
     CollectableDifficultyValue: 0

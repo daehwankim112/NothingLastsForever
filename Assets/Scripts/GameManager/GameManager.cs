@@ -70,7 +70,7 @@ public class GameManager : Singleton<GameManager>
     }
     public event EventHandler<OnWaveArgs> OnWave;
 
-    private void Wave(float difficultyDelta)
+    public void Wave(float difficultyDelta)
     {
         OnWave?.Invoke(null, new OnWaveArgs { DifficultyDelta = difficultyDelta });
     }
@@ -224,16 +224,6 @@ public class GameManager : Singleton<GameManager>
 
     void Update()
     {
-        if (currentGameState == GameState.Playing)
-        {
-            float controlSignal = difficultyController.CalculateControlSignal();
-
-            if (controlSignal != 0.0f)
-            {
-                Wave(controlSignal);
-            }
-        }
-
         if (!mrukRoomCreated && Time.time > 10.0f)
         {
             Debug.LogWarning("MRUK Room not created within 10 seconds of game start. Is the event connected to GameManager?");
