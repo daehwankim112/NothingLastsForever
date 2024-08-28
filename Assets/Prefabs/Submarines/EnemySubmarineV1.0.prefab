@@ -1030,7 +1030,7 @@ MonoBehaviour:
   earlyReflectionsSendDb: 0
   reverbReach: 0.5
   directivityIntensity: 1
-  directivityPattern: 0
+  directivityPattern: 1
   directSoundEnabled: 1
 --- !u!1 &7583533775840635154
 GameObject:

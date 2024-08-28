@@ -8,7 +8,7 @@ public class SceneLoader : MonoBehaviour
     //load from current scene to this scene
     public void LoadScene()
     {
-        UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName);
+        UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(sceneName);
     }
 
     public void QuitGame()

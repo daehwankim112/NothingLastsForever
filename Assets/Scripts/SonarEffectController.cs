@@ -12,7 +12,7 @@ public class SonarEffectController : Singleton<SonarEffectController>
     [SerializeField] private AudioClip audio;
     [SerializeField] private float pingingCooldown = 2.5f;
     [SerializeField] private bool debug = false;
-    [SerializeField] private EnemySubmarinesManager enemySubmarinesManager;
+    [SerializeField] private EnemySubmarinesManager enemySubmarinesManager => EnemySubmarinesManager.Instance;
 
     private bool pinging = false;
     private AudioSource audioSource;
