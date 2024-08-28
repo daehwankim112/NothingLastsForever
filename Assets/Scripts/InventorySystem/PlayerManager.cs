@@ -26,6 +26,8 @@ public class PlayerManager : Singleton<PlayerManager>, IDifficultySensor
     private GameObject player;
     public GameObject Player => player;
 
+    public int NumBoidsAroundPlayer = 0;
+
 
 
     void Start()
@@ -50,6 +52,32 @@ public class PlayerManager : Singleton<PlayerManager>, IDifficultySensor
         }
 
         gameManager.OnExplosion += OnExplosion;
+    }
+
+
+
+    void LateUpdate()
+    {
+        if (NumBoidsAroundPlayer > settings.BoidsAroundPlayerThreshhold)
+        {
+            playerInventory.TakeHealth((int) settings.BoidsAroundPlayerDamage, out bool playerDead);
+
+            if (playerDead)
+            {
+                gameManager.Death(player, GameManager.Alliance.Player);
+                gameManager.PlayerDead();
+            }
+        }
+    }
+
+
+
+    void OnDestroy()
+    {
+        if (GameManager.InstanceExists)
+        {
+            gameManager.OnExplosion -= OnExplosion;
+        }
     }
 
 

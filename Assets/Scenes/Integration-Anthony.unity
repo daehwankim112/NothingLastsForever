@@ -1682,6 +1682,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerInventory: {fileID: 495265696}
   player: {fileID: 7042400944557242963}
+  NumBoidsAroundPlayer: 0
 --- !u!114 &495265696
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2464,6 +2465,9 @@ MonoBehaviour:
     AdaptiveDifficultyIdleTimeIncreaseLimit: 0
     AdaptiveDifficultySeconds: 0
     PlayerDamageMultiplyer: 1
+    BoidsAroundPlayerThreshhold: 10
+    BoidsAroundPlayerDamage: 1
+    BoidsAroundPlayerRadius: 0.5
     BoidWeight: 0.01
     BoidMaxSpawnRate: 1000
     BoidMaxWaveContribution: 0.5

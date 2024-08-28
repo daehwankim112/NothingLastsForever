@@ -278,6 +278,8 @@ public class BoidManager : Singleton<BoidManager>, IDifficultySensor
     /// </summary>
     private void UpdateBoids()
     {
+        int boidsNearPlayer = 0;
+
         // Update each boid's position and velocity
         for (int boidIndex = 0; boidIndex < NumBoids; boidIndex++)
         {
@@ -345,6 +347,13 @@ public class BoidManager : Singleton<BoidManager>, IDifficultySensor
             boid.transform.rotation = Quaternion.LookRotation(boid.velocity, Vector3.up);
 
             boids[boidIndex] = boid;
+
+            if (Vector3.Distance(boid.position, PlayerManager.Instance.transform.position) < settings.BoidsAroundPlayerRadius)
+            {
+                boidsNearPlayer++;
+            }
+
+            PlayerManager.Instance.NumBoidsAroundPlayer = boidsNearPlayer;
         }
     }
 

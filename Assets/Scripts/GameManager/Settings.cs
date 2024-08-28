@@ -23,6 +23,9 @@ public struct Settings
 
 
     public float PlayerDamageMultiplyer;
+    public float BoidsAroundPlayerThreshhold;
+    public float BoidsAroundPlayerDamage;
+    public float BoidsAroundPlayerRadius;
 
 
     #region
@@ -38,7 +41,7 @@ public struct Settings
     public float ChestHealthDifficultyValue;
     public int   ChestMaxSpawnPerWave;
     public float ChestMaxWaveContribution;
-    public int   ChestMax;
+    public int ChestMax;
     public int ChestMaxTorpedoes;
     public int ChestMaxHealth;
 
