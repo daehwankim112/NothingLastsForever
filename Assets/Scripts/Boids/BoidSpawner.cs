@@ -72,25 +72,14 @@ public class BoidSpawner : Singleton<BoidSpawner>
 
     private void SpawnMoreBoids(int numToSpawn)
     {
-        for (int i = 0; i < numToSpawn; i++)
+        for (int i = 0; i < numToSpawn && numBoids < settings.BoidMax; i++)
         {
             Vector3 randomLocationOnSphere = Random.onUnitSphere * 0.25f;
             Quaternion randomRotation = Random.rotation;
-            Color randomColor = Random.ColorHSV();
 
             Transform newBoid = Instantiate(boidPrefab, transform.position + randomLocationOnSphere, randomRotation);
-
-            // newBoid.GetComponent<MeshRenderer>().material.SetColor("_EmissionColor", randomColor);
-             newBoid.GetComponent<MeshRenderer>().material.SetColor("_BaseColor", randomColor);
-            newBoid.GetComponent<MeshRenderer>().material.color = randomColor;
-
-            // newBoid.GetComponent<Rigidbody>().velocity = Random.onUnitSphere * 5.0f;
-            // newBoid.GetComponent<Rigidbody>().drag = boidDrag;
-
             boidManager.AddBoid(newBoid, Random.onUnitSphere * 0.1f);
         }
-
-        Debug.Log($"Boid Difficulty: {settings.BoidWeight * numBoids}");
     }
 
 

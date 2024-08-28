@@ -77,6 +77,24 @@ public class GameManager : Singleton<GameManager>
     #endregion
 
 
+    /// <summary>
+    /// MRUK Event
+    /// </summary>
+    #region MRUK Event
+    public class OnMrukCreatedArgs : EventArgs
+    {
+    }
+    public event EventHandler<OnMrukCreatedArgs> OnMruk;
+
+    public void MrukCreatedEvent()
+    {
+        Debug.Log("MRUK Room Created");
+        mrukRoomCreated = true;
+        OnMruk?.Invoke(null, new OnMrukCreatedArgs());
+    }
+    #endregion
+
+
 
     /// <summary>
     /// Game Playing Event
@@ -187,6 +205,8 @@ public class GameManager : Singleton<GameManager>
     private Settings settings;
     public Settings Settings { get => settings; }
 
+    bool mrukRoomCreated = false;
+
 
 
     void Start()
@@ -201,6 +221,7 @@ public class GameManager : Singleton<GameManager>
     }
 
 
+
     void Update()
     {
         if (currentGameState == GameState.Playing)
@@ -211,6 +232,11 @@ public class GameManager : Singleton<GameManager>
             {
                 Wave(controlSignal);
             }
+        }
+
+        if (!mrukRoomCreated && Time.time > 10.0f)
+        {
+            Debug.LogWarning("MRUK Room not created within 10 seconds of game start. Is the event connected to GameManager?");
         }
     }
 

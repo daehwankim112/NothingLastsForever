@@ -95,7 +95,8 @@ public class EnemySubmarineController : MonoBehaviour
 
     void Start()
     {
-        
+        audioSource = GetComponent<AudioSource>();
+        audioSource.spatialize = true;
     }
 
     void Update()

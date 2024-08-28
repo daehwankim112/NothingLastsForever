@@ -1,15 +1,28 @@
 
-using System.Collections.Generic;
 using System.Linq;
+using System.Collections.Generic;
+
 using UnityEngine;
+using Meta.XR.MRUtilityKit;
+
+
 
 public class TorpedoManager : Singleton<TorpedoManager>
 {
     private GameManager gameManager => GameManager.Instance;
+    private Transform Player => PlayerManager.Instance.Player.transform;
 
     [SerializeField]
     private Transform torpedoPrefab;
     public Transform TorpedoPrefab => torpedoPrefab;
+
+    [SerializeField]
+    private Transform explosionEffect;
+    public Transform ExplosionEffect => explosionEffect;
+
+    private MRUK mruk => MRUK.Instance;
+    private MRUKRoom currentMrukRoom = null;
+
 
     private struct Torpedo
     {
@@ -37,17 +50,14 @@ public class TorpedoManager : Singleton<TorpedoManager>
         public float SearchRadius;
     }
 
+
     public TorpedoSettings PlayerTorpedoSettings;
     public TorpedoSettings EnemyTorpedoSettings;
 
     public List<Transform> Targets;
-    public Transform Player;
 
     private readonly List<Torpedo> torpedos = new();
     private readonly HashSet<Torpedo> torpedosToExplode = new();
-
-
-    public GameObject ExplosionEffect;
 
 
 
@@ -130,6 +140,13 @@ public class TorpedoManager : Singleton<TorpedoManager>
 
 
 
+    void Start()
+    {
+        gameManager.OnMruk += MrukRoomCreatedEvent;
+    }
+
+
+
     void FixedUpdate()
     {
         if (torpedos.Count == 0) return;
@@ -144,6 +161,16 @@ public class TorpedoManager : Singleton<TorpedoManager>
         if (torpedosToExplode.Count == 0) return;
 
         ExplodeTorpedos();
+    }
+
+
+
+    void OnDestroy()
+    {
+        if (GameManager.InstanceExists)
+        {
+            gameManager.OnMruk -= MrukRoomCreatedEvent;
+        }
     }
 
 
@@ -200,6 +227,15 @@ public class TorpedoManager : Singleton<TorpedoManager>
             {
                 torpedosToExplode.Add(torpedo);
                 continue;
+            }
+
+            if (currentMrukRoom)
+            {
+                if (!currentMrukRoom.IsPositionInRoom(torpedo.position))
+                {
+                    torpedosToExplode.Add(torpedo);
+                    continue;
+                }
             }
 
             // Update torpedo position, velocity, and rotation
@@ -312,5 +348,11 @@ public class TorpedoManager : Singleton<TorpedoManager>
             GameManager.Alliance.Enemy => EnemyTorpedoSettings,
             _ => new TorpedoSettings(),
         };
+    }
+
+
+    private void MrukRoomCreatedEvent(object sender, GameManager.OnMrukCreatedArgs args)
+    {
+        currentMrukRoom = mruk.GetCurrentRoom();
     }
 }

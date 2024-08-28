@@ -33,8 +33,6 @@ public class EnemySubmarineSpawner : MonoBehaviour
         Debug.Log("Spawning a submarine");
         if (room.HasAllLabels(MRUKAnchor.SceneLabels.DOOR_FRAME) || room.HasAllLabels(MRUKAnchor.SceneLabels.WINDOW_FRAME))
         {
-            Debug.Log($"Room has door frame: {room.HasAllLabels(MRUKAnchor.SceneLabels.DOOR_FRAME)}. room has window frame: {room.HasAllLabels(MRUKAnchor.SceneLabels.WINDOW_FRAME)}");
-            Debug.Log(labels.ToString());
             for (int j = 0; j < maxIterations; j++)
             {
                 Vector3 spawnPosition = Vector3.zero;
@@ -88,7 +86,7 @@ public class EnemySubmarineSpawner : MonoBehaviour
     private void Update()
     {
         tempTime += Time.deltaTime;
-        if (tempTime > 4.0f)
+        if (tempTime > 6.0f)
         {
             tempTime = 0.0f;
             SpawnSubmarines(MRUK.Instance.GetCurrentRoom());

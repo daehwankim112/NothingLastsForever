@@ -1,11 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
+
 using UnityEngine;
+
+
 
 public class HandPoseTrigger : MonoBehaviour
 {
     [HideInInspector] public bool pingGestureActivated = false;
-    [SerializeField] private Transform projectile;
     [SerializeField] private Transform leftHandPinchArea;
     [SerializeField] private Transform rightHandPinchArea;
 
@@ -13,12 +13,20 @@ public class HandPoseTrigger : MonoBehaviour
     private bool holdingRightHand = false;
 
     private TorpedoManager torpedoManager => TorpedoManager.Instance;
-    private Inventory inventory;
+    private Inventory inventory => PlayerManager.Instance.PlayerInventory;
 
 
     void Start()
     {
-        inventory = GetComponent<Inventory>();
+        if (leftHandPinchArea == null)
+        {
+            Debug.LogError("Left hand pinch area not set!");
+        }
+
+        if (rightHandPinchArea == null)
+        {
+            Debug.LogError("Right hand pinch area not set!");
+        }
     }
 
 
@@ -73,7 +81,7 @@ public class HandPoseTrigger : MonoBehaviour
             return;
         }
 
-        Transform newProjectile = Instantiate(projectile, hand.position, hand.rotation);
+        Transform newProjectile = Instantiate(torpedoManager.TorpedoPrefab, hand.position, hand.rotation);
 
         torpedoManager.AddTorpedo(newProjectile, hand.rotation * Vector3.forward, GameManager.Alliance.Player);
     }

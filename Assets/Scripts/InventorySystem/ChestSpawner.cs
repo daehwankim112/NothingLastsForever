@@ -11,19 +11,12 @@ public class ChestSpawner : Singleton<ChestSpawner>
 {
     private GameManager gameManager => GameManager.Instance;
     private Settings settings => gameManager.Settings;
-
     private CollectablesManager collectablesManager => CollectablesManager.Instance;
 
 
     public GameObject ChestPrefab;
 
-    public float SpawnInterval = 1.0f;
-
-    public int LeftToSpawn = 10;
-
     public float ChestSize = 0.5f;
-
-    private float timeSinceLastSpawn = 0.0f;
 
     private MRUKAnchor floorAnchor = null;
     private Vector2 floorSize;
@@ -36,6 +29,7 @@ public class ChestSpawner : Singleton<ChestSpawner>
     void Start()
     {
         gameManager.OnWave += OnWave;
+        gameManager.OnMruk += MrukRoomCreatedEvent;
 
         if (ChestPrefab == null)
         {
@@ -45,29 +39,25 @@ public class ChestSpawner : Singleton<ChestSpawner>
     }
 
 
-    void Update()
+    private void OnDestroy()
     {
-        //if (floorAnchor == null) return;
-
-        //timeSinceLastSpawn += Time.deltaTime;
-
-        //if (timeSinceLastSpawn >= SpawnInterval && LeftToSpawn > 0)
-        //{
-        //    timeSinceLastSpawn = 0.0f;
-        //    LeftToSpawn--;
-
-        //    GameObject newChest = Instantiate(ChestPrefab, GetRandomSpawnLocation(), Quaternion.AngleAxis(360.0f * Random.value, Vector3.up));
-
-        //    newChest.GetComponent<Inventory>().NumTorpedos = Random.Range(1, 5);
-
-        //    collectablesManager.AddChest(newChest);
-        //}
+        if (GameManager.InstanceExists)
+        {
+            gameManager.OnWave -= OnWave;
+            gameManager.OnMruk -= MrukRoomCreatedEvent;
+        }
     }
 
 
 
     private Vector3 GetRandomSpawnLocation()
     {
+        if (floorAnchor == null)
+        {
+            Debug.LogError("No floor anchor in chest spawner! Have you connected the MRUK events?");
+            return Vector3.zero;
+        }
+
         Vector3 randomPoint = new(1000.0f, 1000.0f, 1000.0f);
 
         for (int attempts = 0; attempts < 20; attempts++)
@@ -163,7 +153,7 @@ public class ChestSpawner : Singleton<ChestSpawner>
 
 
 
-    public void MrukRoomCreatedEvent()
+    private void MrukRoomCreatedEvent(object sender, GameManager.OnMrukCreatedArgs args)
     {
         mrukRoom = mruk.GetCurrentRoom();
 
