@@ -101,7 +101,7 @@ public class PlayerManager : Singleton<PlayerManager>, IDifficultySensor
 
         float damage = settings.PlayerDamageMultiplyer * e.Power / Vector3.SqrMagnitude(e.Position - player.transform.position);
 
-        if (damage <= 0) return;
+        if (damage <= 0 || damage > 10.0f) return;
 
         OnPlayerDamage?.Invoke(null, new OnPlayerDamageArgs { Damage = damage });
 

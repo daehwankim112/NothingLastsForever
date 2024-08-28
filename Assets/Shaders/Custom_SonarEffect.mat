@@ -27,7 +27,7 @@ Material:
     m_Floats:
     - _MaxWaveDistance: 8
     - _Threshold: 1
-    - _WaveDistance: 16.03039
+    - _WaveDistance: 16.02548
     m_Colors:
     - _BaseColor: {r: 0, g: 0, b: 0, a: 1}
     - _Color: {r: 0, g: 0, b: 0, a: 1}

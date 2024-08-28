@@ -32,7 +32,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/Integration-Anthony-David.unity
     guid: 5be017b5d5dc1634a9ad1635374474b4
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/IntegrationV1.0-Anthony-David.unity
     guid: 59953844f9b9d1e4aa9932462f7b4e72
   - enabled: 1

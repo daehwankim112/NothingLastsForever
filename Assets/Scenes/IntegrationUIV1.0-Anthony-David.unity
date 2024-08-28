@@ -343,17 +343,17 @@ MonoBehaviour:
   torpedoPrefab: {fileID: 6877429723076784121, guid: 63a21ba2e8a0f9e4fbbedeefcfc392ba, type: 3}
   explosionEffect: {fileID: 8839480493120960033, guid: 35a6f58e5afcaf74eae38763722ef38f, type: 3}
   PlayerTorpedoSettings:
-    EnginePower: 0.5
+    EnginePower: 1
     FuseTimer: 10
     ExplosionPower: 10
     ExplosionTriggerRadius: 0.3
     SearchFov: 90
     SearchRadius: 1
   EnemyTorpedoSettings:
-    EnginePower: 0.03
+    EnginePower: 0.5
     FuseTimer: 5
-    ExplosionPower: 10
-    ExplosionTriggerRadius: 0.3
+    ExplosionPower: 5
+    ExplosionTriggerRadius: 0.5
     SearchFov: 120
     SearchRadius: 5
   Targets: []
@@ -1177,6 +1177,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 72249538536671039, guid: 3be475e2ed1869f429ca20ebc1a72033, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 72249538536671039, guid: 3be475e2ed1869f429ca20ebc1a72033, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 28.7
+      objectReference: {fileID: 0}
     - target: {fileID: 2270143175798597309, guid: 3be475e2ed1869f429ca20ebc1a72033, type: 3}
       propertyPath: _hand
       value: 
@@ -1188,6 +1196,14 @@ PrefabInstance:
     - target: {fileID: 5676479264564819266, guid: 3be475e2ed1869f429ca20ebc1a72033, type: 3}
       propertyPath: m_Name
       value: PalmMenu
+      objectReference: {fileID: 0}
+    - target: {fileID: 7289204396950189267, guid: 3be475e2ed1869f429ca20ebc1a72033, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -15.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7289204396950189267, guid: 3be475e2ed1869f429ca20ebc1a72033, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 35.8
       objectReference: {fileID: 0}
     - target: {fileID: 8872189022758438499, guid: 3be475e2ed1869f429ca20ebc1a72033, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1662,6 +1678,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   numBoidsTarget: 0
   numBoidsToSpawn: 0
+  spawnThisFrame: 0
   boidPrefab: {fileID: 7311501369167484682, guid: 2f1880483cf102a47829b011768bba02, type: 3}
 --- !u!114 &493115300
 MonoBehaviour:
@@ -1764,10 +1781,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2430719af4f01fb49962e237189b42c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numTorpedos: 100
-  health: 10000000
-  maxTorpedoes: 10000
-  maxHealth: 10000000
+  numTorpedos: 15
+  health: 100
+  maxTorpedoes: 50
+  maxHealth: 100
 --- !u!4 &495265697
 Transform:
   m_ObjectHideFlags: 0
@@ -2327,42 +2344,42 @@ MonoBehaviour:
   currentGameState: 0
   difficultyController: {fileID: 866579845}
   settings:
-    DifficultySlope: 0
-    StartDifficulty: 1
+    DifficultySlope: 0.5
+    StartDifficulty: 100
     DifficulyProportionWeight: 0.5
-    ActionMaxDifficulty: 10
-    ActionThreshold: 10
+    ActionMaxDifficulty: 1000
+    ActionThreshold: 20
     ActionTickPeriod: 1
-    TickWaveChance: 0.8
-    GameStartGracePeriod: 3
+    TickWaveChance: 0.5
+    GameStartGracePeriod: 5
     AdaptiveDifficulty: 0
     AdaptiveDifficultyIdleTimeIncreaseLimit: 0
     AdaptiveDifficultySeconds: 0
     PlayerDamageMultiplyer: 1
-    BoidsAroundPlayerThreshhold: 0
-    BoidsAroundPlayerDamage: 0
-    BoidsAroundPlayerRadius: 0
-    BoidWeight: 0.01
+    BoidsAroundPlayerThreshhold: 10
+    BoidsAroundPlayerDamage: 0.2
+    BoidsAroundPlayerRadius: 0.5
+    BoidWeight: 1
     BoidMaxSpawnRate: 1000
     BoidMaxWaveContribution: 0.5
     BoidsRemovable: 0
-    BoidMax: 500
+    BoidMax: 300
     ChestDifficultyValue: 0.5
-    ChestTorpedoDifficultyValue: 0.1
-    ChestHealthDifficultyValue: 0.05
-    ChestMaxSpawnPerWave: 1
-    ChestMaxWaveContribution: 0.5
-    ChestMax: 5
+    ChestTorpedoDifficultyValue: 2
+    ChestHealthDifficultyValue: 1
+    ChestMaxSpawnPerWave: 2
+    ChestMaxWaveContribution: 1
+    ChestMax: 10
     ChestMaxTorpedoes: 10
     ChestMaxHealth: 50
-    CollectableDifficultyValue: 0
-    CollectableTorpedoDifficultyValue: 0
-    CollectableHealthDifficultyValue: 0
-    PlayerHealthDifficultyValue: 0
-    PlayerTorpedoDifficultyValue: 0
-    PlayerHealthThreshhold: 0
-    PlayerTorpedoThreshhold: 0
-    SubDifficultyValue: 0
+    CollectableDifficultyValue: 1
+    CollectableTorpedoDifficultyValue: 2
+    CollectableHealthDifficultyValue: 1
+    PlayerHealthDifficultyValue: 10
+    PlayerTorpedoDifficultyValue: 5
+    PlayerHealthThreshhold: 40
+    PlayerTorpedoThreshhold: 6
+    SubDifficultyValue: 10
 --- !u!4 &866579847
 Transform:
   m_ObjectHideFlags: 0
