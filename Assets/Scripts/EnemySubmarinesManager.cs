@@ -7,12 +7,13 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Profiling;
+using static GameManager;
 
 /// <summary>
 /// Enemy Submarine Manager manages the behaviour of the enemy submarines including: navigation, collision avoidance, and rotation.
 /// Each submarine has a controller script with its state machine. The state machine indicates the state the submarine is in but submarine manager is responsible for physics of the submarine.
 /// </summary>
-public class EnemySubmarinesManager : MonoBehaviour
+public class EnemySubmarinesManager : Singleton<EnemySubmarinesManager>
 {
     UnityEvent onPlayerNotEchoingForSomeTime = new UnityEvent();
 
@@ -25,10 +26,11 @@ public class EnemySubmarinesManager : MonoBehaviour
     [SerializeField] private float submarineSonarPingCooldown = 2.0f;
     [SerializeField] private float rangeOfSonarPingngSubmarineNeighbours = 0.5f;
     [SerializeField] private float rangeOfSonarFiringTorpedo = 3f;
-    private List<Transform> neighbouringSubmarinesOnPursue = new List<Transform>();
+    private List<Transform> submarinesToExplode = new List<Transform>();
     private Transform centreOfFloor;
     private Transform centreOfCeiling;
     private TorpedoManager torpedoManager => TorpedoManager.Instance;
+    private GameManager gameManager => GameManager.Instance;
     private MRUKRoom room;
     private float lastTimeSincePlayerEchod = 0; // To be replaced with lastTimeEchoed in the Game Manager. 8/24/2024 David Kim
     private float lastTimeSinceSubmarineEchod = 0;
@@ -131,7 +133,12 @@ public class EnemySubmarinesManager : MonoBehaviour
         }
     }
 
-    void FixedUpdate()
+    private void LateUpdate()
+    {
+        ExplodeSubmarines();
+    }
+
+    private void FixedUpdate()
     {
         // Debug.Log("enemySubmarines count: " + enemySubmarines.Count);
         for (int i = 0; i < enemySubmarines.Count; i++)
@@ -488,11 +495,43 @@ public class EnemySubmarinesManager : MonoBehaviour
         torpedoManager.AddTorpedo(torpedo, 0.5f * forward, GameManager.Alliance.Enemy);
     }
 
-    private void ChangeMaterialsColor(Material[] materials, Color color)
+    private void ExplodeSubmarines()
     {
-        foreach (var material in materials)
+        foreach(Transform submarine in submarinesToExplode)
         {
-            material.SetColor("_Color", color);
+            ExplodeSubmarine(submarine);
         }
+        submarinesToExplode.Clear();
+    }
+
+    private bool ExplodeSubmarine(Transform submarine)
+    {
+        return DestorySubmarine(submarine);
+    }
+
+    private void OnExplosionCheckSubmarineDamaged(object sender, OnExplosionArgs onExplosionArgs)
+    {
+        if (onExplosionArgs.ExplosionAlliance != GameManager.Alliance.Player) return;
+        for (int i = 0; i < enemySubmarines.Count; i++)
+        {
+            float distance = Vector3.Distance(enemySubmarines[i].position, onExplosionArgs.Position);
+            if (distance < onExplosionArgs.Power)
+            {
+                enemySubmarines[i].GetComponent<Inventory>().TakeHealth(onExplosionArgs.Power * Vector3.SqrMagnitude(enemySubmarines[i].position - onExplosionArgs.Position), out bool submarineOutOfHealth);
+                if (submarineOutOfHealth)
+                {
+                    submarinesToExplode.Add(enemySubmarines[i]);
+                }
+            }
+        }
+    }
+
+    private bool DestorySubmarine(Transform submarine)
+    {
+        if (submarine == null) return false;
+
+        Destroy(submarine.gameObject);
+        
+        return enemySubmarines.Remove(submarine);
     }
 }

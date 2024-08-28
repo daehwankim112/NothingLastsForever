@@ -1065,7 +1065,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23f3a8741eb938a4e958089937689407, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemySubmarinePrefab: {fileID: 7121084586105167513, guid: b6d5b820a2ce03c4b88e68ec8c3f58cf, type: 3}
+  enemySubmarinePrefab: {fileID: 7121084586105167513, guid: 9966581881a00304da0731ca4b014337, type: 3}
   numberOfSubmarines: 5
   maxIterations: 1000
   labels: 96
@@ -1508,8 +1508,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   numBoidsTarget: 0
-  numBoidsByEndOfSecond: 0
-  timeToEndOfSecond: 0
+  numBoidsToSpawn: 0
   boidPrefab: {fileID: 7311501369167484682, guid: 2f1880483cf102a47829b011768bba02, type: 3}
 --- !u!114 &493115300
 MonoBehaviour:
@@ -1599,6 +1598,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerInventory: {fileID: 495265696}
   player: {fileID: 7042400944557242963}
+  NumBoidsAroundPlayer: 0
 --- !u!114 &495265696
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2156,6 +2156,9 @@ MonoBehaviour:
   actionThreshold: 0
   ActionTimer: 0
   difficultySlope: 0
+  nextControlOutput: 0
+  lastControlOutput: 0
+  currentError: 0
 --- !u!114 &866579846
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2173,14 +2176,19 @@ MonoBehaviour:
   settings:
     DifficultySlope: 0
     StartDifficulty: 0
+    DifficulyProportionWeight: 0
+    ActionMaxDifficulty: 0
     ActionThreshold: 10
-    MinActionTimer: 1
-    MaxActionTimer: 2
+    ActionTickPeriod: 0
+    TickWaveChance: 0
     GameStartGracePeriod: 3
     AdaptiveDifficulty: 0
     AdaptiveDifficultyIdleTimeIncreaseLimit: 0
     AdaptiveDifficultySeconds: 0
     PlayerDamageMultiplyer: 1
+    BoidsAroundPlayerThreshhold: 0
+    BoidsAroundPlayerDamage: 0
+    BoidsAroundPlayerRadius: 0
     BoidWeight: 0.01
     BoidMaxSpawnRate: 1000
     BoidMaxWaveContribution: 0.5

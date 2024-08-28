@@ -66,6 +66,7 @@ public class EnemySubmarineSpawner : MonoBehaviour
                     Transform instantiatedEnemySubmarinePrefab = Instantiate(enemySubmarinePrefab, spawnPosition, spawnRotation, transform);
                     enemySubmarinesManager.AddToEnemySubmarinesList(instantiatedEnemySubmarinePrefab);
                     instantiatedEnemySubmarinePrefab.GetComponent<EnemySubmarineController>().SetState(EnemySubmarineController.SubmarineState.GETINROOM);
+                    instantiatedEnemySubmarinePrefab.GetComponent<Inventory>().Initialize(1, 1, 1, 1);
                     return;
                 }
                 else
