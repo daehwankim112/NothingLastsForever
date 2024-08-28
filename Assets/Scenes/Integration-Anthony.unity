@@ -1089,8 +1089,6 @@ MonoBehaviour:
   sonarPingDistanceFromPlayer: 999
   OVRRigMainCamera: {fileID: 1571285976}
   timeBeforeSubmarinesStartEchoing: 15
-  lastTimeSincePlayerEchod: 0
-  lastTimeSinceSubmarineEchod: 0
   submarineSonarPingCooldown: 4
   rangeOfSonarPingngSubmarineNeighbours: 1.5
   rangeOfSonarFiringTorpedo: 4
@@ -1695,9 +1693,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   numTorpedos: 100
-  health: 10000000
+  health: 1000
   maxTorpedoes: 10000
-  maxHealth: 10000000
+  maxHealth: 2000
 --- !u!4 &495265697
 Transform:
   m_ObjectHideFlags: 0
@@ -2477,10 +2475,10 @@ MonoBehaviour:
     BoidMaxWaveContribution: 0.5
     BoidsRemovable: 0
     BoidMax: 500
-    ChestDifficultyValue: 0.5
-    ChestTorpedoDifficultyValue: 0.1
+    ChestDifficultyValue: 0.1
+    ChestTorpedoDifficultyValue: 0.2
     ChestHealthDifficultyValue: 0.05
-    ChestMaxSpawnPerWave: 2
+    ChestMaxSpawnPerWave: 5
     ChestMaxWaveContribution: 0.5
     ChestMax: 10
     ChestMaxTorpedoes: 10
