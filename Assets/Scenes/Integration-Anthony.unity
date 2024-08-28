@@ -1591,8 +1591,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   numBoidsTarget: 0
-  numBoidsByEndOfSecond: 0
-  timeToEndOfSecond: 0
+  numBoidsToSpawn: 0
   boidPrefab: {fileID: 7311501369167484682, guid: 2f1880483cf102a47829b011768bba02, type: 3}
 --- !u!114 &493115300
 MonoBehaviour:
@@ -2461,6 +2460,7 @@ MonoBehaviour:
     DifficultySlope: 0
     StartDifficulty: -100
     DifficulyProportionWeight: 0.5
+    ActionMaxDifficulty: 10
     ActionThreshold: 10
     ActionTickPeriod: 1
     TickWaveChance: 0.3

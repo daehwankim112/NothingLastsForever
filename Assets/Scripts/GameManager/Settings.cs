@@ -10,6 +10,7 @@ public struct Settings
     public float StartDifficulty;
 
     public float DifficulyProportionWeight;
+    public float ActionMaxDifficulty;
 
     public float ActionThreshold;
 

@@ -60,8 +60,6 @@ public class DifficultyController : MonoBehaviour
         //difficultySensors = difficultySensorComponents.Select(component => component as IDifficultySensor).ToList();
 
         difficultySensors = new() { PlayerManager.Instance, CollectablesManager.Instance, BoidManager.Instance };
-
-        GameManager.Instance.OnWave += Wave;
     }
 
 
@@ -98,7 +96,7 @@ public class DifficultyController : MonoBehaviour
     private float CalculateControlSignal()
     {
         currentError = DifficultyError();
-        return settings.DifficulyProportionWeight * currentError;
+        return Mathf.Clamp(settings.DifficulyProportionWeight * currentError, -settings.ActionMaxDifficulty, settings.ActionMaxDifficulty);
     }
 
 
@@ -115,11 +113,5 @@ public class DifficultyController : MonoBehaviour
             lastControlOutput = nextControlOutput;
             gameManager.Wave(nextControlOutput);
         }
-    }
-
-
-
-    public void Wave(object obj, GameManager.OnWaveArgs args)
-    {
     }
 }
