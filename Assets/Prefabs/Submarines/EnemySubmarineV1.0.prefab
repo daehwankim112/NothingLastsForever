@@ -844,6 +844,8 @@ GameObject:
   - component: {fileID: 7539446634200604031}
   - component: {fileID: 117736345327435523}
   - component: {fileID: 8512289371704925486}
+  - component: {fileID: -7528764629842311421}
+  - component: {fileID: 8880435414529620622}
   m_Layer: 0
   m_Name: EnemySubmarineV1.0
   m_TagString: Untagged
@@ -880,9 +882,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audioSource: {fileID: 0}
-  SubmarineSonarSound: {fileID: 8300000, guid: 61da875265019cb43a69a05e51860e54, type: 3}
-  TorpedoFiringSound: {fileID: 0}
-  SubmarineExplosionSound: {fileID: 0}
+  SubmarineSonarSound: {fileID: 8300000, guid: 1615c07907634b24dbcd942efe90eed9, type: 3}
+  TorpedoFiringSound: {fileID: 8300000, guid: 8a677715c883808409477c7824246212, type: 3}
+  SubmarineExplosionSound: {fileID: 8300000, guid: 5bab4831208da7540a269199e860ad62, type: 3}
 --- !u!82 &117736345327435523
 AudioSource:
   m_ObjectHideFlags: 0
@@ -995,6 +997,41 @@ MonoBehaviour:
   health: 0
   maxTorpedoes: 0
   maxHealth: 0
+--- !u!114 &-7528764629842311421
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6306607837812769302}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a07f270ac36c49789466c75ceb88424c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enableSpatialization: 1
+  gainBoostDb: 0
+  enableAcoustics: 1
+  reverbSendDb: 0
+--- !u!114 &8880435414529620622
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6306607837812769302}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 796f04c5a94947649c2235acef0008ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hrtfIntensity: 1
+  volumetricRadius: 0
+  earlyReflectionsSendDb: 0
+  reverbReach: 0.5
+  directivityIntensity: 1
+  directivityPattern: 0
+  directSoundEnabled: 1
 --- !u!1 &7583533775840635154
 GameObject:
   m_ObjectHideFlags: 0

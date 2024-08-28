@@ -44,9 +44,9 @@ ParticleSystem:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 717426838407661557}
   serializedVersion: 8
-  lengthInSec: 0.2
+  lengthInSec: 0.5
   simulationSpeed: 1
-  stopAction: 2
+  stopAction: 0
   cullingMode: 0
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
@@ -119,7 +119,7 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.2
+      scalar: 0.3
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -172,7 +172,7 @@ ParticleSystem:
     startSpeed:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.5
+      scalar: 0.2
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -290,7 +290,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.05
+      scalar: 0.04
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -873,7 +873,7 @@ ParticleSystem:
     rateOverTime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 200
+      scalar: 100
       minScalar: 10
       maxCurve:
         serializedVersion: 2
@@ -4843,7 +4843,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 8a677715c883808409477c7824246212, type: 3}
+  m_audioClip: {fileID: 8300000, guid: bd2b766f7fcb20b4885107312f83fdba, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
@@ -4958,9 +4958,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hrtfIntensity: 1
-  volumetricRadius: 0.5
+  volumetricRadius: 0.2
   earlyReflectionsSendDb: 0
   reverbReach: 0.5
-  directivityIntensity: 0
+  directivityIntensity: 0.496
   directivityPattern: 0
   directSoundEnabled: 1
