@@ -59,7 +59,7 @@ public class DifficultyController : MonoBehaviour
 
         //difficultySensors = difficultySensorComponents.Select(component => component as IDifficultySensor).ToList();
 
-        difficultySensors = new() { PlayerManager.Instance, CollectablesManager.Instance, BoidManager.Instance };
+        difficultySensors = new() { PlayerManager.Instance, CollectablesManager.Instance, BoidManager.Instance, EnemySubmarinesManager.Instance };
     }
 
 
