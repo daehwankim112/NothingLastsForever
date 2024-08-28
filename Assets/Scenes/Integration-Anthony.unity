@@ -1609,15 +1609,15 @@ MonoBehaviour:
   CollisionAvoidanceFactor: 7
   CollisionAvoidanceRadius: 0.5
   FramesBetweenCollisionChecks: 10
-  ExplosionPowerDeathCertainty: 0
-  ExplosionPowerSurvivalCertainty: 0
+  ExplosionPowerDeathCertainty: 5
+  ExplosionPowerSurvivalCertainty: 1
   boidSettings:
     MaxSpeed: 0.7
     MinSpeed: 0.1
     MaxTurning: 5
     boidFov: 90
     SeparationFactor: 1.2
-    SeparationRadius: 0.2
+    SeparationRadius: 0.1
     SeparationUsesFov: 0
     AlignmentFactor: 1
     AlignmentRadius: 1
@@ -2054,7 +2054,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ChestPrefab: {fileID: 2929434610889685477, guid: c81f07f78830ee84ebb8044d74d7ab51, type: 3}
-  ChestSize: 0.5
+  ChestSize: 0.25
 --- !u!4 &708500410
 Transform:
   m_ObjectHideFlags: 0
@@ -2455,7 +2455,7 @@ MonoBehaviour:
   difficultyController: {fileID: 866579845}
   settings:
     DifficultySlope: 0
-    StartDifficulty: 0
+    StartDifficulty: 1
     ActionThreshold: 10
     MinActionTimer: 1
     MaxActionTimer: 2

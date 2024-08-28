@@ -21,7 +21,7 @@ public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
                 }
                 else
                 {
-                    DontDestroyOnLoad(instance.gameObject);
+                    //DontDestroyOnLoad(instance.gameObject);
                 }
             }
 

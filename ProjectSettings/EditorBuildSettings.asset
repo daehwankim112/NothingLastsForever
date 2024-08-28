@@ -11,7 +11,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/SampleScene.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Submarines-David.unity
     guid: 35ba3dcc7186b484697fa51a8512e9dc
   - enabled: 0
@@ -23,7 +23,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/InventoryAndCollectibles-Anthony.unity
     guid: 0258200cec8ea3a448b5c82f4e1f7ba0
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/SpatialSound-Anthony.unity
     guid: 0ba5ab399ede38b4eb1cd6c05a355c77
   - enabled: 1

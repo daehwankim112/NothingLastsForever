@@ -88,7 +88,7 @@ public class BoidManager : Singleton<BoidManager>, IDifficultySensor
     public List<Transform> avoids;
 
     [SerializeField]
-    private readonly List<Boid> boids = new();
+    private List<Boid> boids = new();
 
     private readonly List<int> deadBoidIndicies = new();
 
@@ -137,6 +137,7 @@ public class BoidManager : Singleton<BoidManager>, IDifficultySensor
             gameManager.OnExplosion -= OnTorpedoExploded;
             gameManager.OnMruk -= MrukRoomCreatedEvent;
         }
+
         ReleaseBuffers();
     }
 
@@ -341,6 +342,8 @@ public class BoidManager : Singleton<BoidManager>, IDifficultySensor
                 }
             }
 
+            boid.transform.rotation = Quaternion.LookRotation(boid.velocity, Vector3.up);
+
             boids[boidIndex] = boid;
         }
     }
@@ -440,24 +443,27 @@ public class BoidManager : Singleton<BoidManager>, IDifficultySensor
     {
         foreach (int deadBoidIndex in deadBoidIndicies)
         {
-            RemoveBoid(deadBoidIndex, true);
+            Destroy(boids[deadBoidIndex].transform.gameObject);
         }
-    }
 
+        List<Boid> newBoids = new();
+        for (int boidIndex = 0; boidIndex < boids.Count; boidIndex++)
+        {
+            if (!deadBoidIndicies.Contains(boidIndex))
+            {
+                newBoids.Add(boids[boidIndex]);
+            }
+        }
 
+        boids = newBoids;
 
-    private bool RemoveBoid(Boid boid, bool destroyGameobject = false)
-    {
-        int index = boids.FindIndex(b => b.Equals(boid));
-        bool successful = index >= 0;
-
-        return successful && RemoveBoid(index, destroyGameobject);
+        deadBoidIndicies.Clear();
     }
 
 
 
     /// <summary>
-    /// This is the ONLY function that will actually remove a boid from the boid manager.
+    /// This is the function that will actually remove a boid from the boid manager.
     /// </summary>
     /// <param name="boidIndex"></param>
     /// <param name="destroyGameobject"></param>
@@ -474,6 +480,16 @@ public class BoidManager : Singleton<BoidManager>, IDifficultySensor
         }
 
         return true;
+    }
+
+
+
+    private bool RemoveBoid(Boid boid, bool destroyGameobject = false)
+    {
+        int index = boids.FindIndex(b => b.Equals(boid));
+        bool successful = index >= 0;
+
+        return successful && RemoveBoid(index, destroyGameobject);
     }
 
 

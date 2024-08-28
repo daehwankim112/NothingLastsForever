@@ -20,7 +20,7 @@ public class CollectablesManager : Singleton<CollectablesManager>, IDifficultySe
     private readonly List<GameObject> chests = new();
     public int NumChests => chests.Count;
 
-    private readonly List<GameObject> stuffToRemove = new();
+    private readonly Queue<GameObject> stuffToRemove = new();
 
     public GameObject TorpedoCollectablePrefab;
 
@@ -39,9 +39,11 @@ public class CollectablesManager : Singleton<CollectablesManager>, IDifficultySe
 
     void LateUpdate()
     {
-        foreach (GameObject thingToRemove in stuffToRemove)
+        while (stuffToRemove.TryDequeue(out GameObject thingToRemove))
         {
             bool removable = false;
+
+            if (thingToRemove == null) continue;
 
             if (thingToRemove.TryGetComponent<Chest>(out _))
             {
@@ -80,7 +82,7 @@ public class CollectablesManager : Singleton<CollectablesManager>, IDifficultySe
             playerInventory.MergeContents(inventory);
         }
 
-        stuffToRemove.Add(collectable);
+        stuffToRemove.Enqueue(collectable);
     }
 
 
@@ -124,7 +126,7 @@ public class CollectablesManager : Singleton<CollectablesManager>, IDifficultySe
 
             if (deathArgs.DeadThing.TryGetComponent<Chest>(out _))
             {
-                stuffToRemove.Add(deathArgs.DeadThing);
+                stuffToRemove.Enqueue(deathArgs.DeadThing);
             }
         }
     }
