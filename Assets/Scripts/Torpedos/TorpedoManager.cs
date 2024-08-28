@@ -266,7 +266,8 @@ public class TorpedoManager : Singleton<TorpedoManager>
 
         if (ExplosionEffect != null)
         {
-            Instantiate(ExplosionEffect, torpedo.position, torpedo.transform.rotation);
+            var instantiatedEffect = Instantiate(ExplosionEffect, torpedo.position, torpedo.transform.rotation);
+            Destroy(instantiatedEffect.gameObject, instantiatedEffect.GetComponent<AudioSource>().clip.length);
         }
 
         return DestroyTorpedo(torpedo.transform);
