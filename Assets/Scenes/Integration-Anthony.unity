@@ -1070,7 +1070,6 @@ MonoBehaviour:
   maxIterations: 1000
   labels: 96
   surfaceClearanceDistance: 0.5
-  enemySubmarinesManager: {fileID: 150876693}
 --- !u!114 &150876693
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1692,10 +1691,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2430719af4f01fb49962e237189b42c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numTorpedos: 100
-  health: 1000
-  maxTorpedoes: 10000
-  maxHealth: 2000
+  numTorpedos: 15
+  health: 100
+  maxTorpedoes: 100
+  maxHealth: 100
 --- !u!4 &495265697
 Transform:
   m_ObjectHideFlags: 0
@@ -2456,7 +2455,7 @@ MonoBehaviour:
   difficultyController: {fileID: 866579845}
   settings:
     DifficultySlope: 0
-    StartDifficulty: -100
+    StartDifficulty: 0
     DifficulyProportionWeight: 0.5
     ActionMaxDifficulty: 10
     ActionThreshold: 10
@@ -2468,7 +2467,7 @@ MonoBehaviour:
     AdaptiveDifficultySeconds: 0
     PlayerDamageMultiplyer: 1
     BoidsAroundPlayerThreshhold: 10
-    BoidsAroundPlayerDamage: 1
+    BoidsAroundPlayerDamage: 0.2
     BoidsAroundPlayerRadius: 0.5
     BoidWeight: 0.01
     BoidMaxSpawnRate: 1000
@@ -2478,18 +2477,19 @@ MonoBehaviour:
     ChestDifficultyValue: 0.1
     ChestTorpedoDifficultyValue: 0.2
     ChestHealthDifficultyValue: 0.05
-    ChestMaxSpawnPerWave: 5
+    ChestMaxSpawnPerWave: 1
     ChestMaxWaveContribution: 0.5
-    ChestMax: 10
+    ChestMax: 3
     ChestMaxTorpedoes: 10
     ChestMaxHealth: 50
     CollectableDifficultyValue: 0
     CollectableTorpedoDifficultyValue: 0
     CollectableHealthDifficultyValue: 0
-    PlayerHealthDifficultyValue: 0
-    PlayerTorpedoDifficultyValue: 0
-    PlayerHealthThreshhold: 0
-    PlayerTorpedoThreshhold: 0
+    PlayerHealthDifficultyValue: 3
+    PlayerTorpedoDifficultyValue: 1
+    PlayerHealthThreshhold: 30
+    PlayerTorpedoThreshhold: 5
+    SubDifficultyValue: 0
 --- !u!4 &866579847
 Transform:
   m_ObjectHideFlags: 0

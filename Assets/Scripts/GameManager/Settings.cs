@@ -59,6 +59,7 @@ public struct Settings
     public float PlayerHealthThreshhold;
     public float PlayerTorpedoThreshhold;
 
+
     public float SubDifficultyValue;
     #endregion
 }

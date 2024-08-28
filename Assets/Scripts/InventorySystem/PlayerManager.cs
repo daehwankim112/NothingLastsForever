@@ -87,7 +87,10 @@ public class PlayerManager : Singleton<PlayerManager>, IDifficultySensor
         int numTorpedos = PlayerInventory.NumTorpedos;
         float health = PlayerInventory.Health;
 
-        return settings.PlayerTorpedoDifficultyValue * (settings.PlayerTorpedoThreshhold - numTorpedos) + settings.PlayerHealthDifficultyValue * (settings.PlayerHealthThreshhold - health);
+        float torpedoDifficulty = settings.PlayerTorpedoDifficultyValue * Mathf.Max(settings.PlayerTorpedoThreshhold - numTorpedos, 0.0f);
+        float healthDifficulty = settings.PlayerHealthDifficultyValue * Mathf.Max(settings.PlayerHealthThreshhold - health, 0.0f);
+
+        return torpedoDifficulty + healthDifficulty;
     }
 
 

@@ -41,6 +41,8 @@ public class BoidSpawner : Singleton<BoidSpawner>
 
     void Update()
     {
+        numBoidsToSpawn = numBoidsTarget - numBoids;
+
         if (numBoidsToSpawn <= 0) return;
 
         int spawnThisFrame = Mathf.Min(Mathf.FloorToInt(numBoidsToSpawn * Time.deltaTime), Mathf.Max(1, Mathf.FloorToInt(settings.BoidMaxSpawnRate * Time.deltaTime)));
