@@ -22,15 +22,16 @@ public class EnemySubmarinesManager : MonoBehaviour
     [HideInInspector] public float sonarPingDistanceFromPlayer = 999;
     [SerializeField] private Transform OVRRigMainCamera;
     [SerializeField] private float timeBeforeSubmarinesStartEchoing = 4f;
-    [SerializeField] private float lastTimeSincePlayerEchod = 0; // To be replaced with lastTimeEchoed in the Game Manager. 8/24/2024 David Kim
-    [SerializeField] private float lastTimeSinceSubmarineEchod = 0;
     [SerializeField] private float submarineSonarPingCooldown = 2.0f;
     [SerializeField] private float rangeOfSonarPingngSubmarineNeighbours = 0.5f;
     [SerializeField] private float rangeOfSonarFiringTorpedo = 3f;
     private List<Transform> neighbouringSubmarinesOnPursue = new List<Transform>();
     private Transform centreOfFloor;
     private Transform centreOfCeiling;
+    private TorpedoManager torpedoManager => TorpedoManager.Instance;
     private MRUKRoom room;
+    private float lastTimeSincePlayerEchod = 0; // To be replaced with lastTimeEchoed in the Game Manager. 8/24/2024 David Kim
+    private float lastTimeSinceSubmarineEchod = 0;
     private int closestSubmarineIndex = 0;
     private int sonarPingingSubmarineIndex = 0;
     private bool submarinesChasingPlayer = false;
@@ -303,7 +304,7 @@ public class EnemySubmarinesManager : MonoBehaviour
         }
         if (enemySubmarineController.GetTimeSinceLastTorpedoFired() > torpedoFireCooldown)
         {
-            FireTorpedoIntantiateTorpedoPrefab(enemySubmarines[i].position, enemySubmarines[i].forward);
+            FireTorpedoIntantiateTorpedoPrefab(enemySubmarines[i].transform, enemySubmarines[i].forward);
             enemySubmarineController.FiredTorpedoSound();
         }
 
@@ -481,10 +482,10 @@ public class EnemySubmarinesManager : MonoBehaviour
         }
     }
 
-    private Transform FireTorpedoIntantiateTorpedoPrefab(Vector3 position, Vector3 forward)
+    private void FireTorpedoIntantiateTorpedoPrefab(Transform position, Vector3 forward)
     {
-        Transform torpedo = Instantiate(torpedoPrefab, position, Quaternion.LookRotation(forward));
-        return torpedo;
+        Transform torpedo = Instantiate(torpedoPrefab, position.position, Quaternion.LookRotation(forward));
+        torpedoManager.AddTorpedo(torpedo, 0.5f * forward, GameManager.Alliance.Enemy);
     }
 
     private void ChangeMaterialsColor(Material[] materials, Color color)

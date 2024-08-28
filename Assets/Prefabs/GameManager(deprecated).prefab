@@ -1,0 +1,260 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5534518637926379874
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1675792959190132064}
+  - component: {fileID: 7578948749922423709}
+  - component: {fileID: 3582882990883442090}
+  - component: {fileID: 6981174191256118218}
+  - component: {fileID: 2203399285345082716}
+  - component: {fileID: 2711833944851465623}
+  - component: {fileID: 7116485910242548226}
+  - component: {fileID: 4500647663540920848}
+  - component: {fileID: 2921451548819365869}
+  - component: {fileID: 1232509130581326935}
+  m_Layer: 0
+  m_Name: GameManager(deprecated)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1675792959190132064
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5534518637926379874}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.956, z: 0.265}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7578948749922423709
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5534518637926379874}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f328a37841374e8409e6369885883dc8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TorpedoCollectablePrefab: {fileID: 346658356286899382, guid: 7353a39450e514c4a8df320544cc4ee3, type: 3}
+--- !u!114 &3582882990883442090
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5534518637926379874}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7335213d3559c574ebdc1fe4fce914e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ChestPrefab: {fileID: 2929434610889685477, guid: c81f07f78830ee84ebb8044d74d7ab51, type: 3}
+  ChestSize: 0.5
+--- !u!114 &6981174191256118218
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5534518637926379874}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80c2b34408ffe0c4ea3beec3bb21b15d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  torpedoPrefab: {fileID: 6877429723076784121, guid: 63a21ba2e8a0f9e4fbbedeefcfc392ba, type: 3}
+  explosionEffect: {fileID: 0}
+  PlayerTorpedoSettings:
+    EnginePower: 1
+    FuseTimer: 5
+    ExplosionPower: 20
+    ExplosionTriggerRadius: 0.25
+    SearchFov: 120
+    SearchRadius: 5
+  EnemyTorpedoSettings:
+    EnginePower: 0
+    FuseTimer: 0
+    ExplosionPower: 0
+    ExplosionTriggerRadius: 0
+    SearchFov: 0
+    SearchRadius: 0
+  Targets:
+  - {fileID: 0}
+--- !u!114 &2203399285345082716
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5534518637926379874}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e414332a90dc619458197ab4c5b343fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  difficultySensorComponents:
+  - {fileID: 7578948749922423709}
+  - {fileID: 7116485910242548226}
+  - {fileID: 0}
+  targetDifficulty: 0
+  currentDifficulty: 0
+  actionThreshold: 0
+  ActionTimer: 0
+  difficultySlope: 0
+--- !u!114 &2711833944851465623
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5534518637926379874}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0815203697d2ae3429c567727e3a71d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentGameState: 0
+  difficultyController: {fileID: 2203399285345082716}
+  settings:
+    DifficultySlope: 0
+    StartDifficulty: 0
+    ActionThreshold: 0.5
+    MinActionTimer: 1
+    MaxActionTimer: 1
+    GameStartGracePeriod: 0
+    AdaptiveDifficulty: 0
+    AdaptiveDifficultyIdleTimeIncreaseLimit: 0
+    AdaptiveDifficultySeconds: 0
+    PlayerDamageMultiplyer: 0
+    BoidWeight: 0.01
+    BoidMaxSpawnRate: 50
+    BoidMaxWaveContribution: 0.1
+    BoidsRemovable: 0
+    BoidMax: 500
+    ChestDifficultyValue: 0.5
+    ChestTorpedoDifficultyValue: 0.2
+    ChestHealthDifficultyValue: 0.1
+    ChestMaxSpawnPerWave: 5
+    ChestMaxWaveContribution: 0.9
+    ChestMax: 10
+    ChestMaxTorpedoes: 0
+    ChestMaxHealth: 0
+    CollectableDifficultyValue: 0.1
+    CollectableTorpedoDifficultyValue: 0.2
+    CollectableHealthDifficultyValue: 0.1
+    PlayerHealthDifficultyValue: 0
+    PlayerTorpedoDifficultyValue: 0
+    PlayerHealthThreshhold: 0
+    PlayerTorpedoThreshhold: 0
+--- !u!114 &7116485910242548226
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5534518637926379874}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de964c1f4de50064a9bbe56da134f06f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionAvoidanceFactor: 5
+  CollisionAvoidanceRadius: 1
+  FramesBetweenCollisionChecks: 10
+  ExplosionPowerDeathCertainty: 100
+  ExplosionPowerSurvivalCertainty: 4
+  boidSettings:
+    MaxSpeed: 1
+    MinSpeed: 0.1
+    MaxTurning: 2
+    boidFov: 90
+    SeparationFactor: 1
+    SeparationRadius: 0.1
+    SeparationUsesFov: 0
+    AlignmentFactor: 10
+    AlignmentRadius: 1
+    AlignmentUsesFov: 1
+    CohesionFactor: 1
+    CohesionRadius: 1
+    CohesionUsesFov: 1
+    TargetFactor: 1
+    TargetRadius: 1
+    TargetUsesFov: 0
+    AvoidFactor: 0
+    AvoidRadius: 1
+    AvoidUsesFov: 1
+  targets: []
+  avoids: []
+  BoidComputeShader: {fileID: 7200000, guid: b48d0693ac2fa36449ebfa4123ba09c0, type: 3}
+--- !u!114 &4500647663540920848
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5534518637926379874}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60a382b112bc1fc48a0d24f214ea3c1d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  numBoidsTarget: 0
+  numBoidsByEndOfSecond: 0
+  timeToEndOfSecond: 0
+  boidPrefab: {fileID: 7311501369167484682, guid: 2f1880483cf102a47829b011768bba02, type: 3}
+--- !u!114 &2921451548819365869
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5534518637926379874}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23f3a8741eb938a4e958089937689407, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemySubmarinePrefab: {fileID: 7121084586105167513, guid: b6d5b820a2ce03c4b88e68ec8c3f58cf, type: 3}
+  numberOfSubmarines: 5
+  maxIterations: 1000
+  labels: 96
+  surfaceClearanceDistance: 0.3
+  enemySubmarinesManager: {fileID: 0}
+--- !u!114 &1232509130581326935
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5534518637926379874}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11af4ad161a19ba4da4768fb7a8564b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  submarinesTuneParameter: {fileID: 11400000, guid: efae15be150b6d04c9afa8b30b947331, type: 2}
+  enemySubmarines: []
+  playerPingLocation: {fileID: 0}
+  sonarPingDistanceFromPlayer: 999
+  OVRRigMainCamera: {fileID: 0}
+  timeBeforeSubmarinesStartEchoing: 20
+  submarineSonarPingCooldown: 8
+  rangeOfSonarPingngSubmarineNeighbours: 0.5
+  rangeOfSonarFiringTorpedo: 3

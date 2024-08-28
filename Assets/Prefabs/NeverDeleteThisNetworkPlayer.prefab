@@ -39926,7 +39926,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6120759425548519856}
   m_Layer: 0
-  m_Name: NetworkPlayer
+  m_Name: NeverDeleteThisNetworkPlayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
