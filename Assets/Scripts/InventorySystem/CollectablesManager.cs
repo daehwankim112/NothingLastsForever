@@ -65,7 +65,10 @@ public class CollectablesManager : Singleton<CollectablesManager>, IDifficultySe
 
     void OnDestroy()
     {
-        gameManager.OnDeath -= OnDeath;
+        if (GameManager.InstanceExists)
+        {
+            gameManager.OnDeath -= OnDeath;
+        }
     }
 
 

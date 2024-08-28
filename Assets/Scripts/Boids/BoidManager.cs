@@ -102,10 +102,8 @@ public class BoidManager : Singleton<BoidManager>, IDifficultySensor
 
     private void Start()
     {
-        var torpedoManager = FindObjectOfType<TorpedoManager>();
-        if (torpedoManager == null) return;
-
         gameManager.OnExplosion += OnTorpedoExploded;
+        gameManager.OnMruk += MrukRoomCreatedEvent;
     }
 
 
@@ -134,9 +132,10 @@ public class BoidManager : Singleton<BoidManager>, IDifficultySensor
 
     private void OnDestroy()
     {
-        if (gameManager != null)
+        if (GameManager.InstanceExists)
         {
             gameManager.OnExplosion -= OnTorpedoExploded;
+            gameManager.OnMruk -= MrukRoomCreatedEvent;
         }
         ReleaseBuffers();
     }
@@ -157,17 +156,11 @@ public class BoidManager : Singleton<BoidManager>, IDifficultySensor
         Boid newBoid = new()
         {
             position = boidTransform.position,
-            velocity = Vector3.zero,
+            velocity = initialVelocity.GetValueOrDefault(Vector3.zero),
             AvoidCollisionDirection = Vector3.zero,
             FramesSinceLastCollisionCheck = collisionCheckStagger % FramesBetweenCollisionChecks,
             transform = boidTransform
         };
-
-
-        if (initialVelocity != null)
-        {
-            newBoid.velocity = (Vector3)initialVelocity;
-        }
 
         boids.Add(newBoid);
 
@@ -511,7 +504,8 @@ public class BoidManager : Singleton<BoidManager>, IDifficultySensor
     }
 
 
-    public void MrukRoomLoaded()
+
+    private void MrukRoomCreatedEvent(object sender, GameManager.OnMrukCreatedArgs args)
     {
         currentMrukRoom = mruk.GetCurrentRoom();
     }

@@ -33,6 +33,15 @@ public class PlayerManager : Singleton<PlayerManager>, IDifficultySensor
         if (playerInventory == null)
         {
             Debug.LogError("PlayerInventory is not set in the PlayerManager");
+
+            if (TryGetComponent<Inventory>(out playerInventory))
+            {
+                Debug.LogWarning("PlayerInventory was automatically set in the PlayerManager, please set in the editor to ensure the correct inventory is selected");
+            }
+            else
+            {
+                Debug.LogWarning("PlayerInventory could not be found on the PlayerManager please set it in the editor");
+            }
         }
 
         if (player == null)

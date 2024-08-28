@@ -28,4 +28,10 @@ public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
             return instance;
         }
     }
+
+
+    /// <summary>
+    /// Check if an instance of this singleton exists. Does not search for an instance if one does not exist.
+    /// </summary>
+    public static bool InstanceExists => instance != null;
 }
