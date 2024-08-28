@@ -18,6 +18,9 @@ public class BoidSpawner : Singleton<BoidSpawner>
     [SerializeField]
     private int numBoidsToSpawn;
 
+    [SerializeField]
+    private int spawnThisFrame;
+
     private int numBoids => boidManager.NumBoids;
 
     [SerializeField]
@@ -45,7 +48,7 @@ public class BoidSpawner : Singleton<BoidSpawner>
 
         if (numBoidsToSpawn <= 0) return;
 
-        int spawnThisFrame = Mathf.Min(Mathf.FloorToInt(numBoidsToSpawn * Time.deltaTime), Mathf.Max(1, Mathf.FloorToInt(settings.BoidMaxSpawnRate * Time.deltaTime)));
+        spawnThisFrame = Mathf.Min(Mathf.CeilToInt(numBoidsToSpawn * Time.deltaTime), Mathf.Max(1, Mathf.FloorToInt(settings.BoidMaxSpawnRate * Time.deltaTime)));
 
         SpawnMoreBoids(spawnThisFrame);
 

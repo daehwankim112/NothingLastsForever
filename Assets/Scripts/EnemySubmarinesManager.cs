@@ -13,7 +13,7 @@ using static GameManager;
 /// Enemy Submarine Manager manages the behaviour of the enemy submarines including: navigation, collision avoidance, and rotation.
 /// Each submarine has a controller script with its state machine. The state machine indicates the state the submarine is in but submarine manager is responsible for physics of the submarine.
 /// </summary>
-public class EnemySubmarinesManager : Singleton<EnemySubmarinesManager>
+public class EnemySubmarinesManager : Singleton<EnemySubmarinesManager>, IDifficultySensor
 {
     UnityEvent onPlayerNotEchoingForSomeTime = new UnityEvent();
 
@@ -545,5 +545,10 @@ public class EnemySubmarinesManager : Singleton<EnemySubmarinesManager>
         Destroy(submarine.gameObject);
         
         return removeSuccess;
+    }
+
+    public float GetDifficulty()
+    {
+        return gameManager.Settings.SubDifficultyValue * enemySubmarines.Count;
     }
 }
