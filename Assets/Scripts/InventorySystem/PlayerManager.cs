@@ -9,7 +9,7 @@ public class PlayerManager : Singleton<PlayerManager>, IDifficultySensor
 {
     public class OnPlayerDamageArgs : EventArgs
     {
-        public int Damage;
+        public float Damage;
     }
     public event EventHandler<OnPlayerDamageArgs> OnPlayerDamage;
 
@@ -60,7 +60,7 @@ public class PlayerManager : Singleton<PlayerManager>, IDifficultySensor
     {
         if (NumBoidsAroundPlayer > settings.BoidsAroundPlayerThreshhold)
         {
-            playerInventory.TakeHealth((int) settings.BoidsAroundPlayerDamage, out bool playerDead);
+            playerInventory.TakeHealth(settings.BoidsAroundPlayerDamage * NumBoidsAroundPlayer * Time.deltaTime, out bool playerDead);
 
             if (playerDead)
             {
@@ -85,7 +85,7 @@ public class PlayerManager : Singleton<PlayerManager>, IDifficultySensor
     public float GetDifficulty()
     {
         int numTorpedos = PlayerInventory.NumTorpedos;
-        int health = PlayerInventory.Health;
+        float health = PlayerInventory.Health;
 
         return settings.PlayerTorpedoDifficultyValue * (settings.PlayerTorpedoThreshhold - numTorpedos) + settings.PlayerHealthDifficultyValue * (settings.PlayerHealthThreshhold - health);
     }
@@ -96,7 +96,7 @@ public class PlayerManager : Singleton<PlayerManager>, IDifficultySensor
     {
         if (e.ExplosionAlliance == GameManager.Alliance.Player) return;
 
-        int damage = Mathf.FloorToInt(settings.PlayerDamageMultiplyer * e.Power / Vector3.SqrMagnitude(e.Position - player.transform.position));
+        float damage = settings.PlayerDamageMultiplyer * e.Power / Vector3.SqrMagnitude(e.Position - player.transform.position);
 
         if (damage <= 0) return;
 

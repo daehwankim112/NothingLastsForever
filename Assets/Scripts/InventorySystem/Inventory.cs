@@ -13,9 +13,9 @@ public class Inventory : MonoBehaviour
     public bool OutOfTorpedoes { get => NumTorpedos <= 0; }
 
     [SerializeField]
-    private int health = 0;
-    public int Health { get => health; }
-    public bool OutOfHealth { get => Health <= 0; }
+    private float health = 0.0f;
+    public float Health { get => health; }
+    public bool OutOfHealth { get => Health <= 0.0f; }
 
     [SerializeField]
     private int maxTorpedoes = 0;
@@ -23,13 +23,13 @@ public class Inventory : MonoBehaviour
     public bool MaxTorpedoesReached { get => NumTorpedos >= MaxTorpedoes; }
 
     [SerializeField]
-    private int maxHealth = 0;
-    public int MaxHealth { get => maxHealth; }
+    private float maxHealth = float.MaxValue;
+    public float MaxHealth { get => maxHealth; }
     public bool MaxHealthReached { get => Health >= MaxHealth; }
 
 
 
-    public void Initialize(int numTorpedoes = 0, int health = 0, int maxTorpedoes = int.MaxValue, int maxHealth = int.MaxValue)
+    public void Initialize(int numTorpedoes = 0, float health = 0.0f, int maxTorpedoes = int.MaxValue, float maxHealth = float.MaxValue)
     {
         this.numTorpedos = numTorpedoes;
         this.health = health;
@@ -138,14 +138,14 @@ public class Inventory : MonoBehaviour
 
 
 
-    public void AddHealth(int amount)
+    public void AddHealth(float amount)
     {
         AddHealth(amount, out _);
     }
 
 
 
-    public void AddHealth(int amount, out bool fullOfHealth)
+    public void AddHealth(float amount, out bool fullOfHealth)
     {
         fullOfHealth = false;
 
@@ -159,35 +159,35 @@ public class Inventory : MonoBehaviour
 
 
 
-    public void TakeHealth(int amount)
+    public void TakeHealth(float amount)
     {
         TakeHealth(amount, out _);
     }
 
 
 
-    public void TakeHealth(int amount, out bool outOfHealth)
+    public void TakeHealth(float amount, out bool outOfHealth)
     {
         outOfHealth = false;
 
         health -= amount;
-        if (health <= 0)
+        if (health <= 0.0f)
         {
-            health = 0;
+            health = 0.0f;
             outOfHealth = true;
         }
     }
 
 
 
-    public void SetMaxHealth(int amount)
+    public void SetMaxHealth(float amount)
     {
         SetMaxHealth(amount, out _);
     }
 
 
 
-    public void SetMaxHealth(int amount, out bool removedHealth)
+    public void SetMaxHealth(float amount, out bool removedHealth)
     {
         maxHealth = amount;
         removedHealth = false;
