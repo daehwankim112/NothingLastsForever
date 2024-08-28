@@ -284,12 +284,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   torpedoPrefab: {fileID: 6877429723076784121, guid: 86da79d873d9d5740b4b8479b0b97b71, type: 3}
-  explosionEffect: {fileID: 8839480493120960033, guid: 1ea96d85958a4a64a87160a40627c801, type: 3}
+  explosionEffect: {fileID: 8839480493120960033, guid: 35a6f58e5afcaf74eae38763722ef38f, type: 3}
   PlayerTorpedoSettings:
     EnginePower: 0.5
     FuseTimer: 10
     ExplosionPower: 10
-    ExplosionTriggerRadius: 0.1
+    ExplosionTriggerRadius: 0.3
     SearchFov: 90
     SearchRadius: 1
   EnemyTorpedoSettings:
@@ -1070,7 +1070,6 @@ MonoBehaviour:
   maxIterations: 1000
   labels: 96
   surfaceClearanceDistance: 0.5
-  enemySubmarinesManager: {fileID: 150876693}
 --- !u!114 &150876693
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1806,7 +1805,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!54 &797848839
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2384,7 +2383,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!54 &1842421994
 Rigidbody:
   m_ObjectHideFlags: 0

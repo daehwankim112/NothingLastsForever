@@ -26,7 +26,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/SpatialSound-Anthony.unity
     guid: 0ba5ab399ede38b4eb1cd6c05a355c77
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Integration-Anthony.unity
     guid: af4284f326a53094193d29bbc0ff4990
   - enabled: 1
