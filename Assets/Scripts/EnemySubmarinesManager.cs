@@ -57,7 +57,7 @@ public class EnemySubmarinesManager : Singleton<EnemySubmarinesManager>
     /// <summary>
     /// Initialize the Enemy Submarine Manager with the parameters from the Submarines Tune Parameter Scriptable Object.
     /// </summary>
-    void Start()
+    private void Start()
     {
         // Initialize the parameters according to the scriptable object
         enemySubmarineMaxSpeed = submarinesTuneParameter.enemySubmarineMaxSpeed;
@@ -88,9 +88,18 @@ public class EnemySubmarinesManager : Singleton<EnemySubmarinesManager>
         }
 
         onPlayerNotEchoingForSomeTime.AddListener(ClosestSubmarineToPingAndTransitionNeighboursToPursue);
+        gameManager.OnExplosion += OnExplosionCheckSubmarineDamaged;
     }
 
-    
+    private void OnDestroy()
+    {
+        if (gameManager != null)
+        {
+            gameManager.OnExplosion -= OnExplosionCheckSubmarineDamaged;
+        }
+    }
+
+
 
     /// <summary>
     /// Initialize the room
@@ -506,6 +515,7 @@ public class EnemySubmarinesManager : Singleton<EnemySubmarinesManager>
 
     private bool ExplodeSubmarine(Transform submarine)
     {
+        Debug.LogWarning("Exploding submarine. Name: " + submarine.name);
         return DestorySubmarine(submarine);
     }
 
@@ -517,7 +527,7 @@ public class EnemySubmarinesManager : Singleton<EnemySubmarinesManager>
             float distance = Vector3.Distance(enemySubmarines[i].position, onExplosionArgs.Position);
             if (distance < onExplosionArgs.Power)
             {
-                enemySubmarines[i].GetComponent<Inventory>().TakeHealth(onExplosionArgs.Power * Vector3.SqrMagnitude(enemySubmarines[i].position - onExplosionArgs.Position), out bool submarineOutOfHealth);
+                enemySubmarines[i].GetComponent<Inventory>().TakeHealth(onExplosionArgs.Power / Vector3.SqrMagnitude(enemySubmarines[i].position - onExplosionArgs.Position), out bool submarineOutOfHealth);
                 if (submarineOutOfHealth)
                 {
                     submarinesToExplode.Add(enemySubmarines[i]);
@@ -530,8 +540,10 @@ public class EnemySubmarinesManager : Singleton<EnemySubmarinesManager>
     {
         if (submarine == null) return false;
 
+        bool removeSuccess = enemySubmarines.Remove(submarine);
+
         Destroy(submarine.gameObject);
         
-        return enemySubmarines.Remove(submarine);
+        return removeSuccess;
     }
 }
