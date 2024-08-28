@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: efb6db0a5ae9b4f4db38986ea42831dc, type: 3}
   m_Name: SubmarinesDefault
   m_EditorClassIdentifier: 
-  enemySubmarineMaxSpeed: 0.005
+  enemySubmarineMaxSpeed: 0.002
   towardTheTargetWeight: 1
   rotateAroundTheTargetWeight: 1
   avoidCollisionWeight: 1

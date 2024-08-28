@@ -11,6 +11,7 @@ public class HandPoseTrigger : MonoBehaviour
 
     private bool holdingLeftHand = false;
     private bool holdingRightHand = false;
+    private SonarEffectController sonarEffectController => SonarEffectController.Instance;
 
     private TorpedoManager torpedoManager => TorpedoManager.Instance;
     private Inventory inventory => PlayerManager.Instance.PlayerInventory;
@@ -31,30 +32,38 @@ public class HandPoseTrigger : MonoBehaviour
 
 
 
-    public void LeftHandPing()
+    public void LeftHandHoldPing()
     {
         Debug.Log("Left Ping!");
         holdingLeftHand = true;
     }
 
-    public void LeftHandUnping()
+    public void LeftHandReleasePing()
     {
-        Debug.Log("Left Unping!");
-        holdingLeftHand = false;
-        pingGestureActivated = true;
+        if (holdingLeftHand)
+        {
+            Debug.Log("Left Unping!");
+            holdingLeftHand = false;
+            // pingGestureActivated = true;
+            sonarEffectController.onSonarPing.Invoke();
+        }
     }
 
-    public void RightHandPing()
+    public void RightHandHoldPing()
     {
         Debug.Log("Right Ping!");
         holdingRightHand = true;
     }
 
-    public void RightHandUnping()
+    public void RightHandReleasePing()
     {
-        Debug.Log("Right Unping!");
-        holdingRightHand = false;
-        pingGestureActivated = true;
+        if (holdingRightHand)
+        {
+            Debug.Log("Right Unping!");
+            holdingRightHand = false;
+            // pingGestureActivated = true;
+            sonarEffectController.onSonarPing.Invoke();
+        }
     }
 
     public void LeftHandFire()

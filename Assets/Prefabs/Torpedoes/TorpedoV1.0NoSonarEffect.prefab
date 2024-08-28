@@ -61,7 +61,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: be44664d9dfaf3044985dfba5f5d4569, type: 2}
+  - {fileID: 2100000, guid: afe9e1c7c395e7988b5bd54a941f1fad, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -144,8 +144,8 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: be44664d9dfaf3044985dfba5f5d4569, type: 2}
-  - {fileID: 2100000, guid: 20c2b6c4b70b31b4e92bcf9c1e6dacf7, type: 2}
+  - {fileID: 2100000, guid: afe9e1c7c395e7988b5bd54a941f1fad, type: 2}
+  - {fileID: 2100000, guid: a8e77915257ee9340acf62215110088d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -177,7 +177,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6877429723076784121}
   m_Layer: 0
-  m_Name: TorpedoV1.0
+  m_Name: TorpedoV1.0NoSonarEffect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -260,7 +260,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: be44664d9dfaf3044985dfba5f5d4569, type: 2}
+  - {fileID: 2100000, guid: afe9e1c7c395e7988b5bd54a941f1fad, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -378,7 +378,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: be44664d9dfaf3044985dfba5f5d4569, type: 2}
+  - {fileID: 2100000, guid: afe9e1c7c395e7988b5bd54a941f1fad, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

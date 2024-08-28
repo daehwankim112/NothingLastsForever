@@ -284,19 +284,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   torpedoPrefab: {fileID: 6877429723076784121, guid: 63a21ba2e8a0f9e4fbbedeefcfc392ba, type: 3}
-  explosionEffect: {fileID: 8839480493120960033, guid: 1ea96d85958a4a64a87160a40627c801, type: 3}
+  explosionEffect: {fileID: 8839480493120960033, guid: 35a6f58e5afcaf74eae38763722ef38f, type: 3}
   PlayerTorpedoSettings:
     EnginePower: 0.5
     FuseTimer: 10
-    ExplosionPower: 25
-    ExplosionTriggerRadius: 0.2
+    ExplosionPower: 10
+    ExplosionTriggerRadius: 0.3
     SearchFov: 90
     SearchRadius: 1
   EnemyTorpedoSettings:
-    EnginePower: 0.1
+    EnginePower: 0.03
     FuseTimer: 5
     ExplosionPower: 10
-    ExplosionTriggerRadius: 0.5
+    ExplosionTriggerRadius: 0.3
     SearchFov: 120
     SearchRadius: 5
   Targets: []
@@ -1070,7 +1070,6 @@ MonoBehaviour:
   maxIterations: 1000
   labels: 96
   surfaceClearanceDistance: 0.5
-  enemySubmarinesManager: {fileID: 150876693}
 --- !u!114 &150876693
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1508,8 +1507,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   numBoidsTarget: 0
-  numBoidsByEndOfSecond: 0
-  timeToEndOfSecond: 0
+  numBoidsToSpawn: 0
   boidPrefab: {fileID: 7311501369167484682, guid: 2f1880483cf102a47829b011768bba02, type: 3}
 --- !u!114 &493115300
 MonoBehaviour:
@@ -1599,6 +1597,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerInventory: {fileID: 495265696}
   player: {fileID: 7042400944557242963}
+  NumBoidsAroundPlayer: 0
 --- !u!114 &495265696
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1806,7 +1805,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!54 &797848839
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1939,7 +1938,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!65 &831948040
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2156,6 +2155,9 @@ MonoBehaviour:
   actionThreshold: 0
   ActionTimer: 0
   difficultySlope: 0
+  nextControlOutput: 0
+  lastControlOutput: 0
+  currentError: 0
 --- !u!114 &866579846
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2173,14 +2175,19 @@ MonoBehaviour:
   settings:
     DifficultySlope: 0
     StartDifficulty: 0
+    DifficulyProportionWeight: 0
+    ActionMaxDifficulty: 0
     ActionThreshold: 10
-    MinActionTimer: 1
-    MaxActionTimer: 2
+    ActionTickPeriod: 0
+    TickWaveChance: 0
     GameStartGracePeriod: 3
     AdaptiveDifficulty: 0
     AdaptiveDifficultyIdleTimeIncreaseLimit: 0
     AdaptiveDifficultySeconds: 0
     PlayerDamageMultiplyer: 1
+    BoidsAroundPlayerThreshhold: 0
+    BoidsAroundPlayerDamage: 0
+    BoidsAroundPlayerRadius: 0
     BoidWeight: 0.01
     BoidMaxSpawnRate: 1000
     BoidMaxWaveContribution: 0.5
@@ -2376,7 +2383,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!54 &1842421994
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2566,6 +2573,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 839880036850529065, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
+      propertyPath: _shapes.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: 55734ff6ac9c48443ab37831fdd69d7b, type: 2}
     - target: {fileID: 1694365762080836684, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
       propertyPath: _whenSelected.m_PersistentCalls.m_Calls.Array.size
       value: 1
@@ -2590,6 +2601,22 @@ PrefabInstance:
       propertyPath: _whenSelected.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 2119155567705240570, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
+      propertyPath: _whenSelected.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: RightHandHoldPing
+      objectReference: {fileID: 0}
+    - target: {fileID: 2119155567705240570, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
+      propertyPath: _whenUnselected.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: RightHandReleasePing
+      objectReference: {fileID: 0}
+    - target: {fileID: 2119155567705240570, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
+      propertyPath: _whenSelected.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: HandPoseTrigger, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 2119155567705240570, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
+      propertyPath: _whenUnselected.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: HandPoseTrigger, Assembly-CSharp
+      objectReference: {fileID: 0}
     - target: {fileID: 2295125246925255522, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
       propertyPath: requestScenePermissionOnStartup
       value: 1
@@ -2604,11 +2631,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3906733160417276171, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
       propertyPath: waveSpeed
-      value: 1.5
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3906733160417276171, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
       propertyPath: pingingCooldown
-      value: 5
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 3906733160417276171, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
       propertyPath: enemySubmarinesManager
@@ -2658,6 +2685,10 @@ PrefabInstance:
       propertyPath: _whenSelected.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 5421940938289872570, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
+      propertyPath: _shapes.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: 55734ff6ac9c48443ab37831fdd69d7b, type: 2}
     - target: {fileID: 6120759425548519856, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -2701,6 +2732,22 @@ PrefabInstance:
     - target: {fileID: 6151239523002255458, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
       propertyPath: m_Name
       value: NetworkPlayer
+      objectReference: {fileID: 0}
+    - target: {fileID: 6868261776216942794, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
+      propertyPath: _whenSelected.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: LeftHandHoldPing
+      objectReference: {fileID: 0}
+    - target: {fileID: 6868261776216942794, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
+      propertyPath: _whenUnselected.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: LeftHandReleasePing
+      objectReference: {fileID: 0}
+    - target: {fileID: 6868261776216942794, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
+      propertyPath: _whenSelected.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: HandPoseTrigger, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 6868261776216942794, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
+      propertyPath: _whenUnselected.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: HandPoseTrigger, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 6924148029735964686, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
       propertyPath: _shapes.Array.data[0]

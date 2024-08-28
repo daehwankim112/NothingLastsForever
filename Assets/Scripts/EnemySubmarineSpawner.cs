@@ -11,7 +11,8 @@ public class EnemySubmarineSpawner : MonoBehaviour
     [SerializeField] private int maxIterations = 1000;
     [SerializeField] private MRUKAnchor.SceneLabels labels = ~(MRUKAnchor.SceneLabels)0;
     [SerializeField] private float surfaceClearanceDistance = 0.3f;
-    [SerializeField] private EnemySubmarinesManager enemySubmarinesManager;
+    private EnemySubmarinesManager enemySubmarinesManager => EnemySubmarinesManager.Instance;
+    private TorpedoManager torpedoManager => TorpedoManager.Instance;
 
     private float tempTime = 0.0f;
 
@@ -66,6 +67,8 @@ public class EnemySubmarineSpawner : MonoBehaviour
                     Transform instantiatedEnemySubmarinePrefab = Instantiate(enemySubmarinePrefab, spawnPosition, spawnRotation, transform);
                     enemySubmarinesManager.AddToEnemySubmarinesList(instantiatedEnemySubmarinePrefab);
                     instantiatedEnemySubmarinePrefab.GetComponent<EnemySubmarineController>().SetState(EnemySubmarineController.SubmarineState.GETINROOM);
+                    instantiatedEnemySubmarinePrefab.GetComponent<Inventory>().Initialize(9, 100, 9, 100);
+                    torpedoManager.Targets.Add(instantiatedEnemySubmarinePrefab);
                     return;
                 }
                 else
