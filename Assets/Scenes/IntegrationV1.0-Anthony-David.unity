@@ -2150,7 +2150,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   difficultySensorComponents: []
-  targetDifficulty: 0
+  targetDifficulty: 1
   currentDifficulty: 0
   actionThreshold: 0
   ActionTimer: 0
@@ -2174,12 +2174,12 @@ MonoBehaviour:
   difficultyController: {fileID: 866579845}
   settings:
     DifficultySlope: 0
-    StartDifficulty: 0
-    DifficulyProportionWeight: 0
-    ActionMaxDifficulty: 0
+    StartDifficulty: 1
+    DifficulyProportionWeight: 0.5
+    ActionMaxDifficulty: 10
     ActionThreshold: 10
-    ActionTickPeriod: 0
-    TickWaveChance: 0
+    ActionTickPeriod: 1
+    TickWaveChance: 0.8
     GameStartGracePeriod: 3
     AdaptiveDifficulty: 0
     AdaptiveDifficultyIdleTimeIncreaseLimit: 0
@@ -2208,6 +2208,7 @@ MonoBehaviour:
     PlayerTorpedoDifficultyValue: 0
     PlayerHealthThreshhold: 0
     PlayerTorpedoThreshhold: 0
+    SubDifficultyValue: 0
 --- !u!4 &866579847
 Transform:
   m_ObjectHideFlags: 0
