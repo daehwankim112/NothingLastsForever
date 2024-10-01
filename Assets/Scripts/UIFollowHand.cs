@@ -22,7 +22,7 @@ public class UIFollowHMD : MonoBehaviour
     void Update()
     {
         // Get the forward direction relative to the target transform
-        Vector3 forwardDirection = targetTransform.position + (targetTransform.right.normalized * height) + (targetTransform.up.normalized * height);
+        Vector3 forwardDirection = targetTransform.position + (targetTransform.right.normalized * height * 2) + (targetTransform.up.normalized * height);
 
         // Set the position of the UI element to follow the gaze
         transform.position = forwardDirection; // Adjust the distance as needed
