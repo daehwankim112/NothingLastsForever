@@ -60,7 +60,6 @@ public class CollectablesManager : Singleton<CollectablesManager>, IDifficultySe
                 Destroy(thingToRemove);
             }
         }
-
         stuffToRemove.Clear();
     }
 

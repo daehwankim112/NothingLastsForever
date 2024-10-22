@@ -37,7 +37,7 @@ MonoBehaviour:
   ChestHealthDifficultyValue: 1
   ChestMaxSpawnPerWave: 1
   ChestMaxWaveContribution: 1
-  ChestMax: 10
+  ChestMax: 150
   ChestMaxTorpedoes: 1
   ChestMaxHealth: 0
   CollectableDifficultyValue: 1
