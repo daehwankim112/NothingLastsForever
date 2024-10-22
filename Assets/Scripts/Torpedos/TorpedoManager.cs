@@ -10,6 +10,7 @@ using Meta.XR.MRUtilityKit;
 public class TorpedoManager : Singleton<TorpedoManager>
 {
     private GameManager gameManager => GameManager.Instance;
+    
     private Transform Player => PlayerManager.Instance.Player.transform;
 
     [SerializeField]
@@ -57,6 +58,7 @@ public class TorpedoManager : Singleton<TorpedoManager>
     public List<Transform> Targets;
 
     private readonly List<Torpedo> torpedos = new();
+    private readonly List<Torpedo> fallingTorpedos = new();
     private readonly HashSet<Torpedo> torpedosToExplode = new();
 
 
@@ -92,6 +94,31 @@ public class TorpedoManager : Singleton<TorpedoManager>
 
         return true;
     }
+    
+    public bool AddFallingTorpedo(Transform torpedoTransform, Vector3 initialVelocity, GameManager.Alliance torpedoAlliance)
+    {
+        if (transform == null) return false;
+
+        TorpedoSettings torpedoSettings = torpedoAlliance switch
+        {
+            GameManager.Alliance.Player => PlayerTorpedoSettings,
+            GameManager.Alliance.Enemy => EnemyTorpedoSettings,
+            _ => new TorpedoSettings()
+        };
+
+        Torpedo newTorpedo = new()
+        {
+            position = torpedoTransform.position,
+            velocity = initialVelocity,
+            fuseTimer = torpedoSettings.FuseTimer,
+            alliance = torpedoAlliance,
+            transform = torpedoTransform
+        };
+
+        fallingTorpedos.Add(newTorpedo);
+
+        return true;
+    }
 
 
 
@@ -121,8 +148,17 @@ public class TorpedoManager : Singleton<TorpedoManager>
         if (torpedoTransform == null) return false;
 
         Torpedo torpedo = torpedos.Find(t => t.transform == torpedoTransform);
+        
+        return ExplodeTorpedo(torpedo, torpedoTransform.position);
+    }
 
-        return ExplodeTorpedo(torpedo);
+    public bool ExplodeFallingTorpedo(Transform torpedoTransform)
+    {
+        if (torpedoTransform == null) return false;
+
+        Torpedo torpedo = fallingTorpedos.Find(t => t.transform == torpedoTransform);
+        
+        return ExplodeTorpedo(torpedo, torpedoTransform.position);
     }
 
 
@@ -192,14 +228,14 @@ public class TorpedoManager : Singleton<TorpedoManager>
 
             TorpedoSettings torpedoSettings = GetTorpedoSettings(torpedo.alliance);
 
-            torpedo.fuseTimer -= Time.fixedDeltaTime;
+            // torpedo.fuseTimer -= Time.fixedDeltaTime;
 
             // Explode if fuse timer is up
-            if (torpedo.fuseTimer <= 0.0f)
+            /*if (torpedo.fuseTimer <= 0.0f)
             {
                 torpedosToExplode.Add(torpedo);
                 continue;
-            }
+            }*/
 
             bool withinExplodeRadius = false;
             Vector3 aimDirection = torpedo.velocity.normalized;
@@ -252,7 +288,7 @@ public class TorpedoManager : Singleton<TorpedoManager>
     {
         foreach (Torpedo torpedo in torpedosToExplode)
         {
-            ExplodeTorpedo(torpedo);
+            ExplodeTorpedo(torpedo, torpedo.position);
         }
 
         torpedosToExplode.Clear();
@@ -260,13 +296,13 @@ public class TorpedoManager : Singleton<TorpedoManager>
 
 
 
-    private bool ExplodeTorpedo(Torpedo torpedo)
+    private bool ExplodeTorpedo(Torpedo torpedo, Vector3 position)
     {
         gameManager.Explosion(torpedo.position, GetTorpedoSettings(torpedo.alliance).ExplosionPower, torpedo.alliance);
 
         if (ExplosionEffect != null)
         {
-            var instantiatedEffect = Instantiate(ExplosionEffect, torpedo.position, torpedo.transform.rotation);
+            var instantiatedEffect = Instantiate(ExplosionEffect, position, torpedo.transform.rotation);
             Destroy(instantiatedEffect.gameObject, instantiatedEffect.GetComponent<AudioSource>().clip.length);
         }
 

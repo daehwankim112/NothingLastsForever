@@ -10,6 +10,7 @@ public class ChestEmpty : MonoBehaviour
 {
     private GameManager gameManager => GameManager.Instance;
 
+
     void Start()
     {
         GetCollected();
@@ -18,6 +19,6 @@ public class ChestEmpty : MonoBehaviour
     [ContextMenu("Get Collected")]
     private void GetCollected()
     {
-        gameManager.Death(gameObject, GameManager.Alliance.Player);
+        gameManager.Death(gameObject, GameManager.Alliance.Enemy);
     }
 }

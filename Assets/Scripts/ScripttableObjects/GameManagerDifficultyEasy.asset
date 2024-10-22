@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8d8d8b43447205b469bafb86d9d6865c, type: 3}
-  m_Name: GameManagerDifficultyDefault
+  m_Name: GameManagerDifficultyEasy
   m_EditorClassIdentifier: 
-  DifficultySlope: 0.5
-  StartDifficulty: 100
+  DifficultySlope: 0.1
+  StartDifficulty: 10
   DifficulyProportionWeight: 0.5
   ActionMaxDifficulty: 1000
   ActionThreshold: 20
@@ -33,15 +33,15 @@ MonoBehaviour:
   BoidsRemovable: 0
   BoidMax: 300
   ChestDifficultyValue: 0.5
-  ChestTorpedoDifficultyValue: 2
+  ChestTorpedoDifficultyValue: 1
   ChestHealthDifficultyValue: 1
-  ChestMaxSpawnPerWave: 2
+  ChestMaxSpawnPerWave: 1
   ChestMaxWaveContribution: 1
   ChestMax: 10
   ChestMaxTorpedoes: 1
-  ChestMaxHealth: 10
+  ChestMaxHealth: 0
   CollectableDifficultyValue: 1
-  CollectableTorpedoDifficultyValue: 2
+  CollectableTorpedoDifficultyValue: 1
   CollectableHealthDifficultyValue: 1
   PlayerHealthDifficultyValue: 10
   PlayerTorpedoDifficultyValue: 5

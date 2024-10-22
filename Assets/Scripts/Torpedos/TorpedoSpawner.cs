@@ -22,8 +22,10 @@ public class TorpedoSpawner : MonoBehaviour
         {
             timeSinceLastSpawn = 0.0f;
 
-            Transform newTorpedo = Instantiate(torpedoManager.TorpedoPrefab, transform.position + (0.2f * Random.onUnitSphere), transform.rotation);
-
+            Transform newTorpedo = Instantiate(torpedoManager.TorpedoPrefab, transform.position + (0.2f * Random.onUnitSphere), Random.rotation);
+            
+            newTorpedo.parent = transform;
+            
             torpedoManager.AddTorpedo(newTorpedo, 0.1f * Random.onUnitSphere, GameManager.Alliance.Enemy);
         }
     }
