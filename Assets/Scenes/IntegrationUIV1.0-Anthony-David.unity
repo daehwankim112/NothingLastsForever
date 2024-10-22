@@ -26396,6 +26396,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7335213d3559c574ebdc1fe4fce914e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isEmptyChest: 0
   ChestPrefab: {fileID: 2929434610889685477, guid: c81f07f78830ee84ebb8044d74d7ab51, type: 3}
   ChestSize: 0.5
 --- !u!4 &708500410
@@ -32445,43 +32446,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentGameState: 0
   difficultyController: {fileID: 866579845}
-  settings:
-    DifficultySlope: 0.5
-    StartDifficulty: 100
-    DifficulyProportionWeight: 0.5
-    ActionMaxDifficulty: 1000
-    ActionThreshold: 20
-    ActionTickPeriod: 1
-    TickWaveChance: 0.5
-    GameStartGracePeriod: 5
-    AdaptiveDifficulty: 0
-    AdaptiveDifficultyIdleTimeIncreaseLimit: 0
-    AdaptiveDifficultySeconds: 0
-    PlayerDamageMultiplyer: 1
-    BoidsAroundPlayerThreshhold: 10
-    BoidsAroundPlayerDamage: 0.2
-    BoidsAroundPlayerRadius: 0.5
-    BoidWeight: 1
-    BoidMaxSpawnRate: 1000
-    BoidMaxWaveContribution: 0.5
-    BoidsRemovable: 0
-    BoidMax: 300
-    ChestDifficultyValue: 0.5
-    ChestTorpedoDifficultyValue: 2
-    ChestHealthDifficultyValue: 1
-    ChestMaxSpawnPerWave: 2
-    ChestMaxWaveContribution: 1
-    ChestMax: 10
-    ChestMaxTorpedoes: 10
-    ChestMaxHealth: 50
-    CollectableDifficultyValue: 1
-    CollectableTorpedoDifficultyValue: 2
-    CollectableHealthDifficultyValue: 1
-    PlayerHealthDifficultyValue: 10
-    PlayerTorpedoDifficultyValue: 5
-    PlayerHealthThreshhold: 40
-    PlayerTorpedoThreshhold: 6
-    SubDifficultyValue: 10
+  settings: {fileID: 11400000, guid: 393145c3b1cb20c43ae333caf05105e4, type: 2}
 --- !u!4 &866579847
 Transform:
   m_ObjectHideFlags: 0

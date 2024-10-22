@@ -228,9 +228,6 @@ public class EnemySubmarinesManager : Singleton<EnemySubmarinesManager>, IDiffic
     /// <param name="i">submarine index</param>
     private void GetInRoom(int i)
     {
-        /*Debug.Log(i + " submarine is in GETINROOM state");
-        Debug.Log("centre of the floor: " + centreOfFloor.position);
-        Debug.Log("centre of the ceiling: " + centreOfCeiling.position);*/
         towardTheTarget[i] = TowardTarget( (centreOfFloor.position + centreOfCeiling.position) / 2, enemySubmarines[i].position);
         rotateAroundTheTarget[i] = Vector3.zero;
         avoidCollision[i] = AvoidCollision(enemySubmarines[i].position, enemySubmarines[i].forward, enemySubmarines[i].right, enemySubmarines[i].up, LayerMask.GetMask("Nothing"));
@@ -241,7 +238,6 @@ public class EnemySubmarinesManager : Singleton<EnemySubmarinesManager>, IDiffic
         if (room.IsPositionInRoom(enemySubmarines[i].position + (enemySubmarines[i].position - (centreOfFloor.position + centreOfCeiling.position) / 2) / 10f))
         {
             enemySubmarineController.SetState(EnemySubmarineController.SubmarineState.ROTATEAROUNDCENTRE);
-            // Debug.Log(i + " submarine is in ROTATEAROUNDCENTRE state");
         }
         enemySubmarineController.SetSubmarineSonarTrackingTime(true);
         enemySubmarineController.SetSubmarineTorpedoTrackingTime(true);
@@ -253,7 +249,6 @@ public class EnemySubmarinesManager : Singleton<EnemySubmarinesManager>, IDiffic
     private void RotateAroundCentre(int i)
     {
         var enemySubmarineController = enemySubmarines[i].GetComponent<EnemySubmarineController>();
-        // Debug.Log(i + " submarine is in GETINROOM state");
 
         towardTheTarget[i] = TowardTarget(((centreOfCeiling.position - centreOfFloor.position) / 2), enemySubmarines[i].position); // Replace OVRRigMainCamera with Centre of the room ((centreOfCeiling.position - centreOfFloor.position) / 2). 8/24/2024 David Kim
         rotateAroundTheTarget[i] = RotateTarget(((centreOfCeiling.position - centreOfFloor.position) / 2), enemySubmarines[i].position);
@@ -285,13 +280,6 @@ public class EnemySubmarinesManager : Singleton<EnemySubmarinesManager>, IDiffic
     private void SonarPing(int i)
     {
         // Make a Unity Function in GameManager that invoke submaries to stop sonar pinging when a player echos.
-        /*if (lastTimeSincePlayerEchod > timeBeforeSubmarinesStartEchoing)
-        {
-            lastTimeSincePlayerEchod = 0f;
-            // play sonar ping sound once
-            WhenOneSubmarinePingCheckNeighboursAndChangeNeighboursStateToPursue();
-            enemySubmarines[i].GetComponent<EnemySubmarineController>().PlaySonarSound();
-        }*/
 
         if (submarinesChasingPlayer)
         {
@@ -344,7 +332,6 @@ public class EnemySubmarinesManager : Singleton<EnemySubmarinesManager>, IDiffic
         
 
         // Later check if the closest submarine has been destroyed or not.
-        
     }
 
     /// <summary>
@@ -442,8 +429,6 @@ public class EnemySubmarinesManager : Singleton<EnemySubmarinesManager>, IDiffic
     {
         playerPingLocation = OVRRigMainCamera;
         submarinesChasingPlayer = true; // set to false when the chasing submarine explodes
-        // lastTimeSincePlayerEchod = timeBeforeSubmarinesStartEchoing;
-        // play sonar ping sound once
         float closestDistance = float.MaxValue;
 
         if (enemySubmarines.Count == 0)
