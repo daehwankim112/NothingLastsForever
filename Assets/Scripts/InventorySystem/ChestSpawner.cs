@@ -2,7 +2,7 @@
 using Meta.XR.MRUtilityKit;
 
 using System.Collections.Generic;
-
+using UnityEditor;
 using UnityEngine;
 
 
@@ -15,6 +15,7 @@ public class ChestSpawner : Singleton<ChestSpawner>
     // private Settings settings => gameManager.Settings;
     private CollectablesManager collectablesManager => CollectablesManager.Instance;
     private int numChests => collectablesManager.NumChests;
+    private int numCollectibles => collectablesManager.NumCollectables;
 
 
     public GameObject ChestPrefab;
@@ -233,7 +234,7 @@ public class ChestSpawner : Singleton<ChestSpawner>
 
         float difficultyQuota = -waveArgs.DifficultyDelta * settings.ChestMaxWaveContribution;
         int numChestsToSpawn = Mathf.Max(Mathf.Min(settings.ChestMaxSpawnPerWave, Mathf.FloorToInt(difficultyQuota / (settings.ChestDifficultyValue + 2 * settings.ChestTorpedoDifficultyValue))), 1);
-        if (numChestsToSpawn + numChests > settings.ChestMax) numChestsToSpawn = settings.ChestMax - numChests;
+        // if (numChestsToSpawn + numChests > settings.ChestMax) numChestsToSpawn = settings.ChestMax - numChests;
 
         //Debug.Log($"Attempt spawning {numChestsToSpawn} chests with quota {difficultyQuota}");
 
@@ -241,6 +242,8 @@ public class ChestSpawner : Singleton<ChestSpawner>
 
         float remainingDifficulty = difficultyQuota - (numChestsToSpawn * settings.ChestDifficultyValue);
 
+        if (numCollectibles > settings.ChestMax) numChestsToSpawn = 0;
+        
         List<GameObject> newChests = SpawnChests(numChestsToSpawn);
         DistributeTorpedoesAndHealth(remainingDifficulty, newChests);
 

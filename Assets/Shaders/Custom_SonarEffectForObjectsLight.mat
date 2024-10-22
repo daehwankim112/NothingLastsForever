@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: SubmarineRed_Custom_SonarEffectForEnemySubmarineTexture 1
-  m_Shader: {fileID: 4800000, guid: 9676bbe64db5dfe4a9ac1eabf63ebd47, type: 3}
+  m_Name: Custom_SonarEffectForObjectsLight
+  m_Shader: {fileID: 4800000, guid: 6993f7ba567572047a516979114ec0a4, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -24,14 +24,14 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 69587be7d8f6ce74187cac7a0217815f, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
     - _MaxWaveDistance: 8
     - _Threshold: 1
-    - _WaveDistance: 8.247692
+    - _WaveDistance: 9.607267
     m_Colors:
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Color: {r: 0.7012578, g: 1, b: 0.933455, a: 1}
   m_BuildTextureStacks: []

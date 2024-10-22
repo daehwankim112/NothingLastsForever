@@ -11,6 +11,7 @@ public class EnemySubmarineSpawner : MonoBehaviour
     [SerializeField] private int maxIterations = 1000;
     [SerializeField] private MRUKAnchor.SceneLabels labels = ~(MRUKAnchor.SceneLabels)0;
     [SerializeField] private float surfaceClearanceDistance = 0.3f;
+    [SerializeField] private float timeBetweenSpawns = 8f;
     private EnemySubmarinesManager enemySubmarinesManager => EnemySubmarinesManager.Instance;
     private TorpedoManager torpedoManager => TorpedoManager.Instance;
 
@@ -89,10 +90,11 @@ public class EnemySubmarineSpawner : MonoBehaviour
     private void Update()
     {
         tempTime += Time.deltaTime;
-        if (tempTime > 6.0f)
+        if (tempTime > timeBetweenSpawns)
         {
             tempTime = 0.0f;
             SpawnSubmarines(MRUK.Instance.GetCurrentRoom());
         }
+    }
     }
 }

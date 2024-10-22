@@ -32,15 +32,15 @@ MonoBehaviour:
   BoidMaxWaveContribution: 0.5
   BoidsRemovable: 0
   BoidMax: 300
-  ChestDifficultyValue: 0.5
+  ChestDifficultyValue: 5
   ChestTorpedoDifficultyValue: 1
   ChestHealthDifficultyValue: 1
   ChestMaxSpawnPerWave: 1
   ChestMaxWaveContribution: 1
-  ChestMax: 150
+  ChestMax: 3
   ChestMaxTorpedoes: 1
   ChestMaxHealth: 0
-  CollectableDifficultyValue: 1
+  CollectableDifficultyValue: 5
   CollectableTorpedoDifficultyValue: 1
   CollectableHealthDifficultyValue: 1
   PlayerHealthDifficultyValue: 10

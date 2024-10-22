@@ -5292,7 +5292,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23f3a8741eb938a4e958089937689407, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemySubmarinePrefab: {fileID: 7121084586105167513, guid: b6d5b820a2ce03c4b88e68ec8c3f58cf, type: 3}
+  enemySubmarinePrefab: {fileID: 7121084586105167513, guid: 7971a5d3dca7ee9429ae9c2ec912342b, type: 3}
   numberOfSubmarines: 5
   maxIterations: 1000
   labels: 96
@@ -5310,6 +5310,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   submarinesTuneParameter: {fileID: 11400000, guid: efae15be150b6d04c9afa8b30b947331, type: 2}
+  boidMaterial: {fileID: 2100000, guid: fb5f38c942e317145b68581e35dbc5e1, type: 2}
   enemySubmarines: []
   playerPingLocation: {fileID: 0}
   sonarPingDistanceFromPlayer: 999
@@ -18302,10 +18303,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60a382b112bc1fc48a0d24f214ea3c1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numBoidsTarget: 0
+  numBoidsTarget: 400
   numBoidsToSpawn: 0
   spawnThisFrame: 0
-  boidPrefab: {fileID: 7311501369167484682, guid: 2f1880483cf102a47829b011768bba02, type: 3}
+  boidPrefab: {fileID: 7311501369167484682, guid: 3bbb9adad085d914186a30b84e50dcf7, type: 3}
 --- !u!114 &493115300
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31294,7 +31295,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!108 &839389203
 Light:
   m_ObjectHideFlags: 0
@@ -62768,6 +62769,7 @@ MonoBehaviour:
   - {fileID: 2100000, guid: be44664d9dfaf3044985dfba5f5d4569, type: 2}
   - {fileID: 2100000, guid: 782f9de55cf07834ca7e3895b9adc330, type: 2}
   - {fileID: 2100000, guid: 20c2b6c4b70b31b4e92bcf9c1e6dacf7, type: 2}
+  - {fileID: 2100000, guid: 3173d0bad1acb3540bfd99cc7f540fce, type: 2}
   waveSpeed: 2
   mainCamera: {fileID: 182910724}
   audio: {fileID: 8300000, guid: 1615c07907634b24dbcd942efe90eed9, type: 3}

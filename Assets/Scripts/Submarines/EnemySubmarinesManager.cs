@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
@@ -18,6 +19,7 @@ public class EnemySubmarinesManager : Singleton<EnemySubmarinesManager>, IDiffic
     UnityEvent onPlayerNotEchoingForSomeTime = new UnityEvent();
 
     [SerializeField] private SubmarinesTuneParameter submarinesTuneParameter;
+    [SerializeField] private Material boidMaterial;
     [HideInInspector] public List<Transform> enemySubmarines = new List<Transform>();
     [HideInInspector] public Transform playerPingLocation; // To be replced with PlayerPingLocation in the Game Manager. 8/24/2024 David Kim
     [HideInInspector] public float sonarPingDistanceFromPlayer = 999;
@@ -37,6 +39,7 @@ public class EnemySubmarinesManager : Singleton<EnemySubmarinesManager>, IDiffic
     private int closestSubmarineIndex = 0;
     private int sonarPingingSubmarineIndex = 0;
     private bool submarinesChasingPlayer = false;
+    private ComputeBuffer objectPositionsBuffer;
 
     // Parameters from Submarines Tune Parameter Scriptable Object
     private float enemySubmarineMaxSpeed;
@@ -89,13 +92,17 @@ public class EnemySubmarinesManager : Singleton<EnemySubmarinesManager>, IDiffic
 
         onPlayerNotEchoingForSomeTime.AddListener(ClosestSubmarineToPingAndTransitionNeighboursToPursue);
         gameManager.OnExplosion += OnExplosionCheckSubmarineDamaged;
-    }
+        }
 
     private void OnDestroy()
     {
         if (gameManager != null)
         {
             gameManager.OnExplosion -= OnExplosionCheckSubmarineDamaged;
+        }
+        if (objectPositionsBuffer != null)
+        {
+            objectPositionsBuffer.Release();
         }
     }
 
@@ -217,6 +224,33 @@ public class EnemySubmarinesManager : Singleton<EnemySubmarinesManager>, IDiffic
             enemySubmarines[i].position += enemySubmarines[i].forward * enemySubmarineMaxSpeed;
             // Debug.Log($"index: {i}\nToward the player: {towardThePlayer[i]}\nRotate around the player: {rotateAroundThePlayer[i]}\nAvoid collision: {avoidCollision[i]}");
         }
+
+        if (enemySubmarines.Count > 0)
+        {
+            if (objectPositionsBuffer != null && objectPositionsBuffer.count != enemySubmarines.Count)
+            {
+
+                // Release old buffer if it exists
+                objectPositionsBuffer?.Release();
+
+                // Create a new buffer with the updated size
+                objectPositionsBuffer = new ComputeBuffer(enemySubmarines.Count, sizeof(float) * 3);
+
+                // Fill the buffer with object positions
+                Vector3[] objectPositions = new Vector3[enemySubmarines.Count];
+                for (int i = 0; i < enemySubmarines.Count; i++)
+                {
+                    objectPositions[i] = enemySubmarines[i].position;
+                }
+
+                objectPositionsBuffer.SetData(objectPositions);
+
+
+                // Pass the buffer to the shader
+                boidMaterial.SetBuffer("_SubmarinesPositions", objectPositionsBuffer);
+            }
+        }
+
     }
 
     
