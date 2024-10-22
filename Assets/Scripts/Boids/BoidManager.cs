@@ -13,7 +13,8 @@ public class BoidManager : Singleton<BoidManager>, IDifficultySensor
 {
     private GameManager gameManager => GameManager.Instance;
 
-    private Settings settings => gameManager.Settings;
+    private GameManagerTuneParameter settings => gameManager.Settings;
+    // private Settings settings => gameManager.Settings;
 
     private MRUK mruk => MRUK.Instance;
     private MRUKRoom currentMrukRoom = null;

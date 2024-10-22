@@ -9,7 +9,8 @@ using UnityEngine;
 public class DifficultyController : MonoBehaviour
 {
     private GameManager gameManager => GameManager.Instance;
-    private Settings settings => GameManager.Instance.Settings;
+    private GameManagerTuneParameter settings => GameManager.Instance.Settings;
+    // private Settings settings => GameManager.Instance.Settings;
 
 
     [SerializeField]

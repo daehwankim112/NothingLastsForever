@@ -16,7 +16,8 @@ public class PlayerManager : Singleton<PlayerManager>, IDifficultySensor
 
 
     private GameManager gameManager => GameManager.Instance;
-    private Settings settings => gameManager.Settings;
+    private GameManagerTuneParameter settings => gameManager.Settings;
+    // private Settings settings => gameManager.Settings;
 
     [SerializeField]
     private Inventory playerInventory;

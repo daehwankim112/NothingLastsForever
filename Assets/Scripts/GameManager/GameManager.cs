@@ -201,9 +201,10 @@ public class GameManager : Singleton<GameManager>
     [SerializeField]
     private DifficultyController difficultyController;
 
-    [SerializeField]
-    private Settings settings;
-    public Settings Settings { get => settings; }
+    [SerializeField] private GameManagerTuneParameter settings;
+    public GameManagerTuneParameter Settings { get => settings; }
+    // private Settings settings;
+    // public Settings Settings { get => settings; }
 
     bool mrukRoomCreated = false;
 
@@ -232,7 +233,7 @@ public class GameManager : Singleton<GameManager>
 
 
 
-    public void LoadSettingsFromFile(string path)
+    /*public void LoadSettingsFromFile(string path)
     {
         settings = JsonUtility.FromJson<Settings>(path);
     }
@@ -244,5 +245,5 @@ public class GameManager : Singleton<GameManager>
         string json = JsonUtility.ToJson(settings);
 
         System.IO.File.WriteAllText(path, json);
-    }
+    }*/
 }

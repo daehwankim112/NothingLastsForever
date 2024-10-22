@@ -7,7 +7,8 @@ public class BoidSpawner : Singleton<BoidSpawner>
 {
     private GameManager gameManager => GameManager.Instance;
 
-    private Settings settings => gameManager.Settings;
+    private GameManagerTuneParameter settings => gameManager.Settings;
+    // private Settings settings => gameManager.Settings;
 
     private BoidManager boidManager => BoidManager.Instance;
 

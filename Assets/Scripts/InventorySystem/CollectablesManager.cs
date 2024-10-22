@@ -8,7 +8,8 @@ using UnityEngine;
 public class CollectablesManager : Singleton<CollectablesManager>, IDifficultySensor
 {
     private GameManager gameManager => GameManager.Instance;
-    private Settings settings => gameManager.Settings;
+    private GameManagerTuneParameter settings => gameManager.Settings;
+    // private Settings settings => gameManager.Settings;
 
     private Inventory playerInventory => PlayerManager.Instance.PlayerInventory;
 
@@ -99,15 +100,16 @@ public class CollectablesManager : Singleton<CollectablesManager>, IDifficultySe
 
     public float GetDifficulty()
     {
-        float chestDifficulty = chests.Sum(chest => settings.ChestDifficultyValue
+        /*float chestDifficulty = chests.Sum(chest => settings.ChestDifficultyValue
                                     - (settings.ChestTorpedoDifficultyValue * chest.GetComponent<Inventory>().NumTorpedos)
-                                    - (settings.ChestHealthDifficultyValue * chest.GetComponent<Inventory>().Health));
+                                    - (settings.ChestHealthDifficultyValue * chest.GetComponent<Inventory>().Health));*/
 
         float collectableDifficulty = collectables.Sum(collectable => settings.CollectableDifficultyValue
                                     - (settings.CollectableTorpedoDifficultyValue * collectable.GetComponent<Inventory>().NumTorpedos)
                                     - (settings.CollectableHealthDifficultyValue * collectable.GetComponent<Inventory>().Health));
 
-        return chestDifficulty + collectableDifficulty;
+        // return chestDifficulty + collectableDifficulty;
+        return collectableDifficulty;
     }
 
 

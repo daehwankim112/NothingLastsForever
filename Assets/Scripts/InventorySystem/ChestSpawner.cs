@@ -9,8 +9,10 @@ using UnityEngine;
 
 public class ChestSpawner : Singleton<ChestSpawner>
 {
+    [SerializeField] private bool isEmptyChest;
     private GameManager gameManager => GameManager.Instance;
-    private Settings settings => gameManager.Settings;
+    private GameManagerTuneParameter settings => gameManager.Settings;
+    // private Settings settings => gameManager.Settings;
     private CollectablesManager collectablesManager => CollectablesManager.Instance;
     private int numChests => collectablesManager.NumChests;
 
@@ -20,8 +22,11 @@ public class ChestSpawner : Singleton<ChestSpawner>
     public float ChestSize = 0.5f;
 
     private MRUKAnchor floorAnchor = null;
+    private MRUKAnchor ceilingAnchor = null;
     private Vector2 floorSize;
+    private Vector2 ceilingSize;
     private List<Vector2> floorPlaneBoundry;
+    private List<Vector2> ceilingPlaneBoundry;
     private MRUKRoom mrukRoom;
 
     private MRUK mruk => MRUK.Instance;
@@ -53,27 +58,54 @@ public class ChestSpawner : Singleton<ChestSpawner>
 
     private Vector3 GetRandomSpawnLocation()
     {
-        if (floorAnchor == null)
+        if (isEmptyChest)
         {
-            Debug.LogError("No floor anchor in chest spawner! Have you connected the MRUK events?");
-            return Vector3.zero;
-        }
-
-        Vector3 randomPoint = new(1000.0f, 1000.0f, 1000.0f);
-
-        for (int attempts = 0; attempts < 20; attempts++)
-        {
-            mrukRoom.GenerateRandomPositionOnSurface(MRUK.SurfaceType.FACING_UP, ChestSize, LabelFilter.Excluded(MRUKAnchor.SceneLabels.CEILING), out randomPoint, out Vector3 normal);
-
-            randomPoint += normal * 0.2f;
-
-            if (mrukRoom.IsPositionInRoom(randomPoint) && !mrukRoom.IsPositionInSceneVolume(randomPoint))
+            if (ceilingAnchor == null)
             {
-                return randomPoint;
+                Debug.LogError("No ceiling anchor found in ChestSpawner script! Have you connected the MRUK events");
+                return Vector3.zero;
             }
-        }
+            
+            Vector3 randomPoint = new(1000.0f, 1000.0f, 1000.0f);
 
-        return floorAnchor.GetAnchorCenter();
+            for (int attempts = 0; attempts < 20; attempts++)
+            {
+                mrukRoom.GenerateRandomPositionOnSurface(MRUK.SurfaceType.FACING_DOWN, ChestSize, LabelFilter.Excluded(MRUKAnchor.SceneLabels.FLOOR), out randomPoint, out Vector3 normal);
+
+                randomPoint -= normal * 0.2f;
+
+                if (mrukRoom.IsPositionInRoom(randomPoint) && !mrukRoom.IsPositionInSceneVolume(randomPoint))
+                {
+                    return randomPoint;
+                }
+            }
+            
+            return ceilingAnchor.GetAnchorCenter();
+
+        }
+        else
+        {
+            if (floorAnchor == null)
+            {
+                Debug.LogError("No floor anchor in chest spawner! Have you connected the MRUK events?");
+                return Vector3.zero;
+            }
+
+            Vector3 randomPoint = new(1000.0f, 1000.0f, 1000.0f);
+
+            for (int attempts = 0; attempts < 20; attempts++)
+            {
+                mrukRoom.GenerateRandomPositionOnSurface(MRUK.SurfaceType.FACING_UP, ChestSize, LabelFilter.Excluded(MRUKAnchor.SceneLabels.CEILING), out randomPoint, out Vector3 normal);
+
+                randomPoint += normal * 0.2f;
+
+                if (mrukRoom.IsPositionInRoom(randomPoint) && !mrukRoom.IsPositionInSceneVolume(randomPoint))
+                {
+                    return randomPoint;
+                }
+            }
+            return floorAnchor.GetAnchorCenter();
+        }
     }
 
 
@@ -82,7 +114,14 @@ public class ChestSpawner : Singleton<ChestSpawner>
     {
         GameObject newChest = Instantiate(ChestPrefab, GetRandomSpawnLocation(), Quaternion.AngleAxis(360.0f * Random.value, Vector3.up));
 
-        newChest.GetComponent<Inventory>().Initialize(numTorpedos, health, settings.ChestMaxTorpedoes, settings.ChestMaxHealth);
+        if (isEmptyChest)
+        {
+            newChest.GetComponent<Inventory>().Initialize(numTorpedos, health, 1, settings.ChestMaxHealth);
+        }
+        else
+        {
+            newChest.GetComponent<Inventory>().Initialize(numTorpedos, health, settings.ChestMaxTorpedoes, settings.ChestMaxHealth);
+        }
 
         collectablesManager.AddChest(newChest);
 
@@ -164,10 +203,13 @@ public class ChestSpawner : Singleton<ChestSpawner>
         if (!mrukRoom.HasAllLabels(MRUKAnchor.SceneLabels.FLOOR)) return;
 
         floorAnchor = mrukRoom.FloorAnchor;
+        ceilingAnchor = mrukRoom.CeilingAnchor;
 
         floorSize = floorAnchor.PlaneRect.Value.size;
+        ceilingSize = ceilingAnchor.PlaneRect.Value.size;
 
         floorPlaneBoundry = floorAnchor.PlaneBoundary2D;
+        ceilingPlaneBoundry = ceilingAnchor.PlaneBoundary2D;
     }
 
 
@@ -175,6 +217,7 @@ public class ChestSpawner : Singleton<ChestSpawner>
     public void MrukRoomRemovedEvent()
     {
         floorAnchor = null;
+        ceilingAnchor = null;
     }
 
 
