@@ -313,6 +313,67 @@ MonoBehaviour:
   installationRoutineCheckpoint:
     _installationRoutineId: 
     _installationVariants: []
+--- !u!1001 &53946697
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 3062787662919619768, guid: 45cd4757622b90e49bfae52a3f5773db, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3062787662919619768, guid: 45cd4757622b90e49bfae52a3f5773db, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3062787662919619768, guid: 45cd4757622b90e49bfae52a3f5773db, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3062787662919619768, guid: 45cd4757622b90e49bfae52a3f5773db, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3062787662919619768, guid: 45cd4757622b90e49bfae52a3f5773db, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3062787662919619768, guid: 45cd4757622b90e49bfae52a3f5773db, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3062787662919619768, guid: 45cd4757622b90e49bfae52a3f5773db, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3062787662919619768, guid: 45cd4757622b90e49bfae52a3f5773db, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3062787662919619768, guid: 45cd4757622b90e49bfae52a3f5773db, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3062787662919619768, guid: 45cd4757622b90e49bfae52a3f5773db, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3111403103301195114, guid: 45cd4757622b90e49bfae52a3f5773db, type: 3}
+      propertyPath: m_Name
+      value: NetworkPlayer Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 3111403103301195114, guid: 45cd4757622b90e49bfae52a3f5773db, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 45cd4757622b90e49bfae52a3f5773db, type: 3}
 --- !u!1 &231062541
 GameObject:
   m_ObjectHideFlags: 0
@@ -384,7 +445,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 243230063}
-  - component: {fileID: 243230062}
+  - component: {fileID: 243230064}
   m_Layer: 0
   m_Name: SceneLoader
   m_TagString: Untagged
@@ -392,19 +453,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &243230062
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 243230061}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5c75bf113f89f0c40902986b6afd8c7e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sceneName: IntegrationUIV1.0-Anthony-David
 --- !u!4 &243230063
 Transform:
   m_ObjectHideFlags: 0
@@ -420,10 +468,32 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &243230064
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 243230061}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c4c1b38c49ffa449b585d54fcdc4a8c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &288013288 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4233851766456540463, guid: 5fca3702cdf1a214a94e69dcfa704e17, type: 3}
   m_PrefabInstance: {fileID: 5824888959555518098}
+  m_PrefabAsset: {fileID: 0}
+--- !u!20 &288712191 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 3467107806606955798, guid: 45cd4757622b90e49bfae52a3f5773db, type: 3}
+  m_PrefabInstance: {fileID: 53946697}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &288712193 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1605977025517691315, guid: 45cd4757622b90e49bfae52a3f5773db, type: 3}
+  m_PrefabInstance: {fileID: 53946697}
   m_PrefabAsset: {fileID: 0}
 --- !u!114 &444985469
 MonoBehaviour:
@@ -2161,18 +2231,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Oculus.Interaction.AudioTrigger, Oculus.Interaction.Samples
-        m_MethodName: 
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
   _whenUnselect:
     m_PersistentCalls:
       m_Calls:
@@ -2321,6 +2379,11 @@ MonoBehaviour:
   installationRoutineCheckpoint:
     _installationRoutineId: 
     _installationVariants: []
+--- !u!4 &1084055891 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3380113701868094834, guid: 45cd4757622b90e49bfae52a3f5773db, type: 3}
+  m_PrefabInstance: {fileID: 53946697}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1139076503
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2527,18 +2590,6 @@ MonoBehaviour:
       - m_Target: {fileID: 1067015592}
         m_TargetAssemblyTypeName: Oculus.Interaction.AudioTrigger, Oculus.Interaction.Samples
         m_MethodName: PlayAudio
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 243230062}
-        m_TargetAssemblyTypeName: SceneLoader, Assembly-CSharp
-        m_MethodName: QuitGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3668,6 +3719,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3906733160417276171, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3906733160417276171, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
       propertyPath: waveSpeed
       value: 4
       objectReference: {fileID: 0}
@@ -3754,6 +3809,10 @@ PrefabInstance:
     - target: {fileID: 6151239523002255458, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
       propertyPath: m_Name
       value: NetworkPlayer
+      objectReference: {fileID: 0}
+    - target: {fileID: 6151239523002255458, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6924148029735964686, guid: 7b058e8ce7d70e54683c045cf2add8f9, type: 3}
       propertyPath: _shapes.Array.data[0]
@@ -6090,6 +6149,7 @@ GameObject:
   - component: {fileID: 1957074767}
   - component: {fileID: 1957074766}
   - component: {fileID: 1957074764}
+  - component: {fileID: 1957074769}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -6111,6 +6171,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   numBoidsTarget: 0
   numBoidsToSpawn: 0
+  spawnThisFrame: 0
   boidPrefab: {fileID: 0}
 --- !u!114 &1957074766
 MonoBehaviour:
@@ -6155,6 +6216,27 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1957074769
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1957074763}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11af4ad161a19ba4da4768fb7a8564b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  submarinesTuneParameter: {fileID: 11400000, guid: efae15be150b6d04c9afa8b30b947331, type: 2}
+  enemySubmarines: []
+  playerPingLocation: {fileID: 0}
+  sonarPingDistanceFromPlayer: 999
+  OVRRigMainCamera: {fileID: 1582696138}
+  timeBeforeSubmarinesStartEchoing: 4
+  submarineSonarPingCooldown: 2
+  rangeOfSonarPingngSubmarineNeighbours: 0.5
+  rangeOfSonarFiringTorpedo: 3
 --- !u!114 &1964785667
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6167,8 +6249,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fd1b3065097aea468ad88e800fbe29e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetTransform: {fileID: 1615611962}
-  targetHMD: {fileID: 1582696138}
+  targetTransform: {fileID: 1084055891}
+  targetHMD: {fileID: 288712193}
   height: 0.2
 --- !u!114 &2024770531
 MonoBehaviour:
@@ -6912,16 +6994,16 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 243230062}
-        m_TargetAssemblyTypeName: SceneLoader, Assembly-CSharp
-        m_MethodName: LoadScene
-        m_Mode: 1
+      - m_Target: {fileID: 243230064}
+        m_TargetAssemblyTypeName: Oculus.Interaction.Samples.SceneLoader, Oculus.Interaction.OVR.Samples
+        m_MethodName: Load
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: IntegrationUIV1.0-Anthony-David
           m_BoolArgument: 0
         m_CallState: 2
   _whenUnselect:
@@ -7738,7 +7820,7 @@ PrefabInstance:
     - target: {fileID: 2955226273202849149, guid: 85486d7b7b7dc2e459f51041c698c728, type: 3}
       propertyPath: HMDCamera
       value: 
-      objectReference: {fileID: 1582696137}
+      objectReference: {fileID: 288712191}
     - target: {fileID: 2997382312905449374, guid: 85486d7b7b7dc2e459f51041c698c728, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -8143,3 +8225,4 @@ SceneRoots:
   - {fileID: 9023240532167457175}
   - {fileID: 1231966906}
   - {fileID: 243230063}
+  - {fileID: 53946697}

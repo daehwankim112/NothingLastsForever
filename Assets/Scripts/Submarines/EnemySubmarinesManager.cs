@@ -132,7 +132,7 @@ public class EnemySubmarinesManager : Singleton<EnemySubmarinesManager>, IDiffic
     private void Update()
     {
         lastTimeSincePlayerEchod += Time.deltaTime; // To be replaced with lastTimeEchoed in the Game Manager. 8/24/2024 David Kim
-        if (submarinesChasingPlayer)
+        if (!submarinesChasingPlayer)
         {
             lastTimeSinceSubmarineEchod = 0f;
         }
@@ -272,8 +272,8 @@ public class EnemySubmarinesManager : Singleton<EnemySubmarinesManager>, IDiffic
                 Debug.Log("Player has not been echoing for some time. Time: " + lastTimeSincePlayerEchod);
                 lastTimeSincePlayerEchod = 0f;
                 ClosestSubmarineToPingAndTransitionNeighboursToPursue();
-                // enemySubmarineController.SetState(EnemySubmarineController.SubmarineState.SONARPING);
-                // onPlayerNotEchoingForSomeTime.Invoke();
+                enemySubmarineController.SetState(EnemySubmarineController.SubmarineState.SONARPING);
+                onPlayerNotEchoingForSomeTime.Invoke();
             }
         }
     }
@@ -285,23 +285,24 @@ public class EnemySubmarinesManager : Singleton<EnemySubmarinesManager>, IDiffic
     private void SonarPing(int i)
     {
         // Make a Unity Function in GameManager that invoke submaries to stop sonar pinging when a player echos.
-        if (lastTimeSincePlayerEchod > timeBeforeSubmarinesStartEchoing)
+        /*if (lastTimeSincePlayerEchod > timeBeforeSubmarinesStartEchoing)
         {
             lastTimeSincePlayerEchod = 0f;
             // play sonar ping sound once
             WhenOneSubmarinePingCheckNeighboursAndChangeNeighboursStateToPursue();
             enemySubmarines[i].GetComponent<EnemySubmarineController>().PlaySonarSound();
-        }
+        }*/
 
         if (submarinesChasingPlayer)
         {
             if (lastTimeSinceSubmarineEchod > submarineSonarPingCooldown)
             {
+                Debug.Log($"Sonar ping after {lastTimeSincePlayerEchod} seconds");
                 lastTimeSinceSubmarineEchod = 0f;
                 closestSubmarineIndex = i;
                 WhenOneSubmarinePingCheckNeighboursAndChangeNeighboursStateToPursue();
                 enemySubmarines[i].GetComponent<EnemySubmarineController>().PlaySonarSound();
-                // enemySubmarines[closestSubmarineIndex].GetComponent<EnemySubmarineController>().SetState(EnemySubmarineController.SubmarineState.SONARPING);
+                enemySubmarines[closestSubmarineIndex].GetComponent<EnemySubmarineController>().SetState(EnemySubmarineController.SubmarineState.SONARPING);
             }
         }
 
@@ -328,7 +329,11 @@ public class EnemySubmarinesManager : Singleton<EnemySubmarinesManager>, IDiffic
         rotateAroundTheTarget[i] = RotateTarget(playerPingLocation.position, enemySubmarines[i].position);
         avoidCollision[i] = AvoidCollision(enemySubmarines[i].position, enemySubmarines[i].forward, enemySubmarines[i].right, enemySubmarines[i].up, LayerMask.GetMask("Default"));
 
-        enemySubmarineController.SetState(EnemySubmarineController.SubmarineState.APPROACHPLAYER);
+        if (submarinesChasingPlayer && i == sonarPingingSubmarineIndex) {}
+        else
+        {
+            enemySubmarineController.SetState(EnemySubmarineController.SubmarineState.APPROACHPLAYER);
+        }
     }
 
     private void ApproachPlayer(int i)
@@ -471,7 +476,9 @@ public class EnemySubmarinesManager : Singleton<EnemySubmarinesManager>, IDiffic
                 Debug.Log("Neighbouring submarine detected");
                 if (Vector3.Distance(enemySubmarines[i].position, OVRRigMainCamera.position) < rangeOfSonarFiringTorpedo)
                 {
-                    enemySubmarineController.SetState(EnemySubmarineController.SubmarineState.FIRETORPEDO);
+                    StartCoroutine(FireTorpedoAfterGivenTime(enemySubmarineController,
+                        Vector3.Distance(enemySubmarines[i].position, OVRRigMainCamera.position) * 5f));
+                    // enemySubmarineController.SetState(EnemySubmarineController.SubmarineState.FIRETORPEDO);
                 }
                 else
                 {
@@ -479,8 +486,19 @@ public class EnemySubmarinesManager : Singleton<EnemySubmarinesManager>, IDiffic
                 }
             }
         }
-        enemySubmarines[closestSubmarineIndex].GetComponent<EnemySubmarineController>().SetState(EnemySubmarineController.SubmarineState.SONARPING);
+        // enemySubmarines[closestSubmarineIndex].GetComponent<EnemySubmarineController>().SetState(EnemySubmarineController.SubmarineState.SONARPING);
     }
+    
+    private IEnumerator FireTorpedoAfterGivenTime(EnemySubmarineController enemySubmarine, float time)
+    {
+        yield return new WaitForSeconds(time);
+        Debug.Log($"Waiting time before firing torpedo: {time}");
+        if (enemySubmarine != null)
+        {
+            enemySubmarine.SetState(EnemySubmarineController.SubmarineState.FIRETORPEDO);
+        }
+    }
+    
 
     /// <summary>
     /// public function to check neighbouring submarines from the player
@@ -550,5 +568,12 @@ public class EnemySubmarinesManager : Singleton<EnemySubmarinesManager>, IDiffic
     public float GetDifficulty()
     {
         return gameManager.Settings.SubDifficultyValue * enemySubmarines.Count;
+    }
+
+    public void SetsubmarinesChasingPlayer(bool chasing)
+    {
+        submarinesChasingPlayer = chasing;
+        lastTimeSincePlayerEchod = 0f;
+        lastTimeSinceSubmarineEchod = 0f;
     }
 }

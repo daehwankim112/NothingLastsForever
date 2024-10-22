@@ -102,7 +102,7 @@ public class BoidManager : Singleton<BoidManager>, IDifficultySensor
 
     private void Start()
     {
-        gameManager.OnExplosion += OnTorpedoExploded;
+        // gameManager.OnExplosion += OnTorpedoExploded;
         gameManager.OnMruk += MrukRoomCreatedEvent;
     }
 
@@ -134,7 +134,7 @@ public class BoidManager : Singleton<BoidManager>, IDifficultySensor
     {
         if (GameManager.InstanceExists)
         {
-            gameManager.OnExplosion -= OnTorpedoExploded;
+            // gameManager.OnExplosion -= OnTorpedoExploded;
             gameManager.OnMruk -= MrukRoomCreatedEvent;
         }
 

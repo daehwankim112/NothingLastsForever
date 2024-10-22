@@ -27,6 +27,7 @@ public class SonarEffectController : Singleton<SonarEffectController>
         onSonarPing.AddListener(PingGenstureActivated);
         sonarPingCoroutine = SonarPing();
         currentWaveDistance = 999f;
+        enemySubmarinesManager.sonarPingDistanceFromPlayer = waveSpeed * 999f;
         if (debug)
         {
             StartCoroutine(sonarPingCoroutine);

@@ -70,7 +70,8 @@ public class HandPoseTrigger : MonoBehaviour
     {
         Debug.Log("Left Fire!");
 
-        torpedoManager.ExplodeAllTorpedos(GameManager.Alliance.Player);
+        SpawnNewProjectile(leftHandPinchArea);
+        // torpedoManager.ExplodeAllTorpedos(GameManager.Alliance.Player);
     }
 
     public void RightHandFire()
